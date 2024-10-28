@@ -38,6 +38,7 @@ eventsModelNoEvents =
     , viewportWidth = 1920
     }
 
+
 eventsModelNoPreviousEvents =
     { filterBy = Paginator.Past
     , visibleEvents = []
