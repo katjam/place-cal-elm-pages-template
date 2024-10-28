@@ -4,6 +4,7 @@ module Helpers.TransDate exposing
     , humanDayFromPosix
     , humanShortMonthFromPosix
     , humanTimeFromPosix
+    , humanYearFromPosix
     , isAfterDate
     , isOnOrBeforeDate
     , isSameDay
@@ -12,7 +13,7 @@ module Helpers.TransDate exposing
 
 import DateFormat
 import Iso8601
-import OptimizedDecoder
+import Json.Decode
 import Time
 
 
@@ -27,12 +28,12 @@ defaultPosix =
 -----------------
 
 
-isoDateStringDecoder : OptimizedDecoder.Decoder Time.Posix
+isoDateStringDecoder : Json.Decode.Decoder Time.Posix
 isoDateStringDecoder =
-    OptimizedDecoder.string
-        |> OptimizedDecoder.andThen
+    Json.Decode.string
+        |> Json.Decode.andThen
             (\isoString ->
-                OptimizedDecoder.succeed <|
+                Json.Decode.succeed <|
                     -- It would be better if this returned the timezone as well
                     -- and we tracked the timezone around the app instead of
                     -- assuming UTC due to this.
@@ -156,5 +157,17 @@ humanTimeFromPosix timestamp =
             , DateFormat.minuteFixed
             , DateFormat.amPmLowercase
             ]
+            convertedIsoDateZone
+            timestamp
+
+
+humanYearFromPosix : Time.Posix -> String
+humanYearFromPosix timestamp =
+    if timestamp == defaultPosix then
+        "Invalid year"
+
+    else
+        DateFormat.format
+            [ DateFormat.yearNumber ]
             convertedIsoDateZone
             timestamp

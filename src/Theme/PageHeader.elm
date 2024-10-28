@@ -5,14 +5,14 @@ import Copy.Text exposing (t)
 import Css exposing (Style, alignItems, alignSelf, auto, backgroundColor, batch, block, border, borderBottomColor, borderBottomStyle, borderBottomWidth, borderBox, borderRadius, boxSizing, center, color, column, columnReverse, cursor, display, displayFlex, flexDirection, flexGrow, flexWrap, fontSize, fontWeight, hover, int, justifyContent, lighter, margin, margin2, marginLeft, marginRight, none, padding, padding2, padding4, paddingBottom, paddingLeft, pointer, rem, row, solid, spaceBetween, textAlign, textDecoration, transparent, unset, wrap, zero)
 import Css.Transitions exposing (transition)
 import Helpers.TransRoutes as TransRoutes exposing (..)
-import Html.Styled exposing (Html, a, button, div, h1, header, li, nav, p, span, text, ul)
+import Html.Styled exposing (Html, a, button, div, h1, header, li, nav, span, text, ul)
 import Html.Styled.Attributes exposing (attribute, css, href)
 import Html.Styled.Events exposing (onClick)
 import Messages exposing (Msg(..))
-import Path exposing (Path)
 import Route exposing (Route)
-import Theme.Global as Theme exposing (darkBlue, pink, screenReaderOnly, white, withMediaTabletPortraitUp)
+import Theme.Global exposing (darkBlue, pink, screenReaderOnly, white, withMediaTabletPortraitUp)
 import Theme.Logo
+import UrlPath exposing (UrlPath)
 
 
 headerNavigationItems : List TransRoutes.Route
@@ -21,7 +21,7 @@ headerNavigationItems =
 
 
 viewPageHeader :
-    { path : Path, route : Maybe Route }
+    { path : UrlPath, route : Maybe Route }
     -> { showMobileMenu : Bool }
     -> Html Msg
 viewPageHeader currentPath viewOptions =
@@ -46,7 +46,7 @@ viewPageHeaderTitle =
         ]
 
 
-viewPageHeaderNavigation : Bool -> List TransRoutes.Route -> Path -> Html Msg
+viewPageHeaderNavigation : Bool -> List TransRoutes.Route -> UrlPath -> Html Msg
 viewPageHeaderNavigation showMobileMenu listItems currentPath =
     nav []
         [ ul
@@ -65,10 +65,10 @@ viewPageHeaderNavigation showMobileMenu listItems currentPath =
                     if TransRoutes.toAbsoluteUrl item == "/" then
                         viewHeaderNavigationItem item
 
-                    else if TransRoutes.toAbsoluteUrl item == Path.toAbsolute currentPath then
+                    else if TransRoutes.toAbsoluteUrl item == UrlPath.toAbsolute currentPath then
                         viewHeaderNavigationItemCurrent item
 
-                    else if String.contains (TransRoutes.toAbsoluteUrl item) (Path.toAbsolute currentPath) then
+                    else if String.contains (TransRoutes.toAbsoluteUrl item) (UrlPath.toAbsolute currentPath) then
                         viewHeaderNavigationItemCurrentCategory item
 
                     else if TransRoutes.toAbsoluteUrl item == "/donate" then

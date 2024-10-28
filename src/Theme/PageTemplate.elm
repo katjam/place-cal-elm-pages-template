@@ -2,18 +2,15 @@ module Theme.PageTemplate exposing (..)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Css exposing (Style, absolute, after, auto, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, batch, before, block, borderBox, bottom, boxSizing, calc, center, color, display, fontSize, fontStyle, fontWeight, height, inlineBlock, int, italic, left, margin, margin2, margin4, marginBlockEnd, marginBlockStart, marginBottom, maxWidth, minus, noRepeat, none, outline, paddingBottom, paddingTop, pct, position, property, px, relative, rem, textAlign, top, url, vw, width, zIndex)
+import Css exposing (Style, absolute, after, auto, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, batch, before, block, borderBox, bottom, boxSizing, calc, center, color, display, fontSize, fontStyle, fontWeight, height, important, inlineBlock, int, italic, left, margin, margin2, margin4, marginBlockEnd, marginBlockStart, marginBottom, marginLeft, marginRight, marginTop, maxWidth, minus, noRepeat, none, outline, paddingBottom, paddingTop, pct, position, property, px, relative, rem, textAlign, top, url, vw, width, zIndex)
 import Head
 import Head.Seo as Seo
 import Html.Styled as Html exposing (Html, div, h1, h2, h3, img, p, section, text)
 import Html.Styled.Attributes exposing (alt, css, src)
 import List exposing (append)
+import Markdown.Block
 import Pages.Url
 import Theme.Global exposing (contentContainerStyle, contentWrapperStyle, introTextLargeStyle, introTextSmallStyle, textBoxInvisibleStyle, textBoxPinkStyle, white, withMediaMediumDesktopUp, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
-
-
-type alias Msg =
-    Never
 
 
 type alias PageUsingTemplate msg =
@@ -23,6 +20,21 @@ type alias PageUsingTemplate msg =
     , smallText : Maybe (List String)
     , innerContent : Maybe (Html.Html msg)
     , outerContent : Maybe (Html.Html msg)
+    }
+
+
+type alias SectionWithTextHeader =
+    { title : String
+    , subtitle : String
+    , body : List Markdown.Block.Block
+    }
+
+
+type alias SectionWithImageHeader =
+    { title : String
+    , subtitleimgalt : String
+    , subtitleimg : String
+    , body : List Markdown.Block.Block
     }
 
 
@@ -133,6 +145,23 @@ viewHeader pageInfo =
                 ]
             ]
             [ text pageInfo.title ]
+        ]
+
+
+columnsStyle : Style
+columnsStyle =
+    batch
+        [ withMediaSmallDesktopUp
+            [ property "column-gap" "2rem"
+            , maxWidth (px 848)
+            , important (marginLeft auto)
+            , important (marginRight auto)
+            ]
+        , withMediaTabletPortraitUp
+            [ property "columns" "2"
+            , important (marginTop (rem 3))
+            , important (marginBottom (rem 3))
+            ]
         ]
 
 

@@ -1,13 +1,17 @@
-module Data.PlaceCal.Articles exposing (Article, articlesData, emptyArticle)
+module Data.PlaceCal.Articles exposing (Article, articleFromSlug, articlesData, replacePartnerIdWithName)
 
-import Api
-import DataSource
-import DataSource.Http
-import Helpers.TransDate as TransDate
+import Array
+import BackendTask
+import BackendTask.Custom
+import Copy.Text exposing (isValidUrl)
+import Data.PlaceCal.Api
+import Data.PlaceCal.Partners
+import FatalError
+import Helpers.TransDate
+import Helpers.TransRoutes
+import Json.Decode
+import Json.Decode.Pipeline
 import Json.Encode
-import OptimizedDecoder
-import OptimizedDecoder.Pipeline
-import Pages.Secrets
 import Time
 
 
@@ -16,7 +20,7 @@ type alias Article =
     , body : String
     , publishedDatetime : Time.Posix
     , partnerIds : List String
-    , maybeImage : Maybe String
+    , imageSrc : String
     }
 
 
@@ -26,19 +30,20 @@ emptyArticle =
     , body = ""
     , publishedDatetime = Time.millisToPosix 0
     , partnerIds = []
-    , maybeImage = Nothing
+    , imageSrc = "/images/news/article_1.jpg"
     }
 
 
 
 ----------------------------
--- DataSource query & decode
+-- BackendTask query & decode
 ----------------------------
 
 
-articlesData : DataSource.DataSource AllArticlesResponse
+articlesData : BackendTask.BackendTask { fatal : FatalError.FatalError, recoverable : BackendTask.Custom.Error } AllArticlesResponse
 articlesData =
-    DataSource.Http.request (Pages.Secrets.succeed allArticlesPlaceCalRequest)
+    Data.PlaceCal.Api.fetchAndCachePlaceCalData "articles"
+        allArticlesQuery
         articlesDecoder
 
 
@@ -60,42 +65,35 @@ allArticlesQuery =
         ]
 
 
-allArticlesPlaceCalRequest : DataSource.Http.RequestDetails
-allArticlesPlaceCalRequest =
-    { url = Api.placeCalApiUrl
-    , method = "POST"
-    , headers = []
-    , body = DataSource.Http.jsonBody allArticlesQuery
-    }
-
-
-articlesDecoder : OptimizedDecoder.Decoder AllArticlesResponse
+articlesDecoder : Json.Decode.Decoder AllArticlesResponse
 articlesDecoder =
-    OptimizedDecoder.succeed AllArticlesResponse
-        |> OptimizedDecoder.Pipeline.requiredAt [ "data", "articleConnection", "edges" ] (OptimizedDecoder.list decode)
+    Json.Decode.succeed AllArticlesResponse
+        |> Json.Decode.Pipeline.requiredAt [ "data", "articleConnection", "edges" ] (Json.Decode.list decode)
 
 
-decode : OptimizedDecoder.Decoder Article
+decode : Json.Decode.Decoder Article
 decode =
-    OptimizedDecoder.succeed Article
-        |> OptimizedDecoder.Pipeline.requiredAt [ "node", "headline" ]
-            OptimizedDecoder.string
-        |> OptimizedDecoder.Pipeline.requiredAt [ "node", "articleBody" ]
-            OptimizedDecoder.string
-        |> OptimizedDecoder.Pipeline.requiredAt [ "node", "datePublished" ]
-            TransDate.isoDateStringDecoder
-        |> OptimizedDecoder.Pipeline.requiredAt [ "node", "providers" ]
-            (OptimizedDecoder.list partnerIdDecoder)
-        |> OptimizedDecoder.Pipeline.optionalAt [ "node", "image" ]
-            (OptimizedDecoder.nullable OptimizedDecoder.string)
-            Nothing
+    (Json.Decode.succeed Article
+        |> Json.Decode.Pipeline.requiredAt [ "node", "headline" ]
+            Json.Decode.string
+        |> Json.Decode.Pipeline.requiredAt [ "node", "articleBody" ]
+            Json.Decode.string
+        |> Json.Decode.Pipeline.requiredAt [ "node", "datePublished" ]
+            Helpers.TransDate.isoDateStringDecoder
+        |> Json.Decode.Pipeline.requiredAt [ "node", "providers" ]
+            (Json.Decode.list partnerIdDecoder)
+        |> Json.Decode.Pipeline.optionalAt [ "node", "image" ]
+            Json.Decode.string
+            ""
+    )
+        |> Json.Decode.andThen (\article -> addStockImage article)
 
 
-partnerIdDecoder : OptimizedDecoder.Decoder String
+partnerIdDecoder : Json.Decode.Decoder String
 partnerIdDecoder =
-    OptimizedDecoder.succeed ProviderId
-        |> OptimizedDecoder.Pipeline.required "id" OptimizedDecoder.string
-        |> OptimizedDecoder.map (\providerItem -> providerItem.id)
+    Json.Decode.succeed ProviderId
+        |> Json.Decode.Pipeline.required "id" Json.Decode.string
+        |> Json.Decode.map (\providerItem -> providerItem.id)
 
 
 type alias ProviderId =
@@ -104,3 +102,53 @@ type alias ProviderId =
 
 type alias AllArticlesResponse =
     { allArticles : List Article }
+
+
+replacePartnerIdWithName : List Article -> List Data.PlaceCal.Partners.Partner -> List Article
+replacePartnerIdWithName articleData partnerData =
+    List.map
+        (\article ->
+            { article | partnerIds = Data.PlaceCal.Partners.partnerNamesFromIds partnerData article.partnerIds }
+        )
+        articleData
+
+
+addStockImage article =
+    Json.Decode.succeed
+        { article
+            | imageSrc =
+                if isValidUrl article.imageSrc then
+                    article.imageSrc
+
+                else
+                    pickImageFromArticleLength (String.length article.body)
+        }
+
+
+pickImageFromArticleLength : Int -> String
+pickImageFromArticleLength articleLength =
+    Array.get
+        (modBy
+            (List.length stockImages)
+            articleLength
+        )
+        (Array.fromList stockImages)
+        |> Maybe.withDefault "/images/news/article_1.jpg"
+
+
+stockImages : List String
+stockImages =
+    List.map
+        (\id ->
+            "/images/news/article_" ++ String.fromInt id ++ ".jpg"
+        )
+        [ 1, 2, 3, 4, 5, 6 ]
+
+
+articleFromSlug : String -> List Article -> List Data.PlaceCal.Partners.Partner -> Article
+articleFromSlug slug allArticles allPartners =
+    List.filter
+        (\article -> Helpers.TransRoutes.stringToSlug article.title == slug)
+        (replacePartnerIdWithName allArticles allPartners)
+        |> List.head
+        |> Maybe.withDefault emptyArticle

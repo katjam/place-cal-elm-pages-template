@@ -93,7 +93,7 @@ t key =
             "Registered as a Company Limited by Guarantee in England and Wales No. 06617608."
 
         FooterInfoOffice ->
-            "Registered office at VAI, 200 Pentonville Road, London N1 9JP."
+            "Registered office at VAI, 200a Pentonville Road, London N1 9JP."
 
         FooterCreditTitle ->
             "Credits"
@@ -114,7 +114,7 @@ t key =
             "Squid"
 
         FooterCredit2Link ->
-            "https://studiosquid.co.uk/studio/"
+            "https://studiosquid.co.uk/"
 
         FooterCredit3Text ->
             "website by"
@@ -125,8 +125,8 @@ t key =
         FooterCredit3Link ->
             t GeeksForSocialChangeHomeUrl
 
-        FooterCopyright ->
-            "© 2022 Gendered Intelligence. All rights reserved."
+        FooterCopyright year ->
+            "© " ++ year ++ " Gendered Intelligence. All rights reserved."
 
         FooterPlaceCal ->
             "Powered by PlaceCal"
