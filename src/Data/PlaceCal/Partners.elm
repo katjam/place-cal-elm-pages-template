@@ -11,6 +11,7 @@ import Json.Encode
 
 type alias Partner =
     { id : String
+    , partnershipTagList : List String
     , name : String
     , summary : String
     , description : String
@@ -54,6 +55,7 @@ type alias ServiceArea =
 emptyPartner : Partner
 emptyPartner =
     { id = ""
+    , partnershipTagList = []
     , name = ""
     , summary = ""
     , description = ""
@@ -76,19 +78,33 @@ type alias AllPartnersResponse =
     { allPartners : List Partner }
 
 
+partnerTagId =
+    "3"
+
+
 partnersData : BackendTask.BackendTask { fatal : FatalError.FatalError, recoverable : BackendTask.Custom.Error } AllPartnersResponse
 partnersData =
-    Data.PlaceCal.Api.fetchAndCachePlaceCalData "partners"
-        allPartnersQuery
-        partnersDecoder
+    BackendTask.combine
+        [ Data.PlaceCal.Api.fetchAndCachePlaceCalData
+            ("partners-" ++ partnerTagId)
+            allPartnersQuery
+            partnersDecoder
+        , Data.PlaceCal.Api.fetchAndCachePlaceCalData
+            ("partners-" ++ partnerTagId)
+            allPartnersQuery
+            partnersDecoder
+        ]
 
 
 allPartnersQuery : Json.Encode.Value
 allPartnersQuery =
     Json.Encode.object
         [ ( "query"
-          , Json.Encode.string """
-                query { partnersByTag(tagId: 3) {
+          , Json.Encode.string
+                ("query { partnersByTag(tagId: "
+                    ++ partnerTagId
+                    ++ """
+                ) {
                   id
                   name
                   description
@@ -100,6 +116,7 @@ allPartnersQuery =
                   logo
                 } }
           """
+                )
           )
         ]
 
@@ -114,6 +131,7 @@ decodePartner : Json.Decode.Decoder Partner
 decodePartner =
     Json.Decode.succeed Partner
         |> Json.Decode.Pipeline.required "id" Json.Decode.string
+        |> Json.Decode.Pipeline.optional "partnershipTagList" (Json.Decode.succeed [ "3" ]) [ "3" ]
         |> Json.Decode.Pipeline.required "name" Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary" Json.Decode.string ""
         |> Json.Decode.Pipeline.optional "description" Json.Decode.string ""

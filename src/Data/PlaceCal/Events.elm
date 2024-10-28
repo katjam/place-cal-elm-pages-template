@@ -2,6 +2,7 @@ module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, allEventsQ
 
 import BackendTask
 import BackendTask.Custom
+import Constants
 import Data.PlaceCal.Api
 import Data.PlaceCal.Partners
 import FatalError
@@ -14,6 +15,7 @@ import Time
 
 type alias Event =
     { id : String
+    , partnershipTagList : List String
     , name : String
     , summary : String
     , description : String
@@ -58,6 +60,7 @@ type alias Geo =
 emptyEvent : Event
 emptyEvent =
     { id = ""
+    , partnershipTagList = []
     , name = ""
     , summary = ""
     , description = ""
@@ -187,6 +190,7 @@ decode =
     Json.Decode.succeed Event
         |> Json.Decode.Pipeline.required "id"
             Json.Decode.string
+        |> Json.Decode.Pipeline.optional "partnershipTagList" (Json.Decode.succeed [ "3" ]) [ "3" ]
         |> Json.Decode.Pipeline.required "name"
             Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary"
