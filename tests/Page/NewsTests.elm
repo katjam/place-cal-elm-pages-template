@@ -4,54 +4,32 @@ import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
 import Expect
 import Html
-import Page.News exposing (view)
-import Path
 import Test exposing (Test, describe, test)
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
-import TestFixtures exposing (sharedModelInit)
-import TestUtils exposing (queryFromStyledList)
+import TestFixtures exposing (sharedDataFixture, sharedModelInit)
+import TestUtils exposing (queryFromStyled)
+import Theme.Page.News
 
 
-viewParamsWithNews =
-    { data = TestFixtures.news
-    , path = Path.fromString "news"
-    , routeParams = {}
-    , sharedData = ()
-    }
-
-
-viewParamsWithoutNews =
-    { data = []
-    , path = Path.fromString "news"
-    , routeParams = {}
-    , sharedData = ()
-    }
-
-
-viewBodyHtml viewParams =
-    queryFromStyledList
-        (view Nothing sharedModelInit viewParams).body
+viewNewsListHtml newsList =
+    queryFromStyled
+        (Theme.Page.News.viewNewsList newsList)
 
 
 suite : Test
 suite =
-    describe "News page body"
-        [ test "Has expected h2 heading" <|
+    describe "News page"
+        [ test "Contains a list of news" <|
             \_ ->
-                viewBodyHtml viewParamsWithNews
-                    |> Query.find [ Selector.tag "h2" ]
-                    |> Query.contains [ Html.text (t NewsTitle) ]
-        , test "Contains a list of news" <|
-            \_ ->
-                viewBodyHtml viewParamsWithNews
+                viewNewsListHtml TestFixtures.news
                     |> Query.findAll [ Selector.tag "ul" ]
                     |> Query.first
                     |> Query.children [ Selector.tag "li" ]
                     |> Query.count (Expect.equal 2)
         , test "Contains expected news content" <|
             \_ ->
-                viewBodyHtml viewParamsWithNews
+                viewNewsListHtml TestFixtures.news
                     |> Query.contains
                         [ Html.text "Some news"
                         , Html.text "21st February 2022"
@@ -61,9 +39,9 @@ suite =
                         , Html.text "Big news!"
                         , Html.text "22nd February 2022"
                         ]
-        , test "Does not contain list if there are no events" <|
+        , test "Does not contain list if there is no news" <|
             \_ ->
-                viewBodyHtml viewParamsWithoutNews
+                viewNewsListHtml []
                     |> Query.findAll [ Selector.tag "p" ]
                     |> Query.index 0
                     |> Query.contains [ Html.text (t NewsEmptyText) ]
