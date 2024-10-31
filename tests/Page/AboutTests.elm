@@ -1,53 +1,60 @@
 module Page.AboutTests exposing (..)
 
+import Expect
 import Html
-import Page.About exposing (view)
-import Path
 import Test exposing (Test, describe, test)
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
-import TestFixtures exposing (sharedModelInit)
-import TestUtils exposing (queryFromStyledList)
+import TestUtils exposing (queryFromStyled)
+import Theme.Page.About
+import Theme.TransMarkdown
 
 
-viewParamsWithAbout =
-    { data =
-        { main =
-            { title = "About Page Test Title"
-            , subtitle = "Test subtitle here."
-            , body = []
-            }
-        , accessibility =
-            { title = "Accessibility"
-            , subtitle = "Accessibility is good for everyone"
-            , body = []
-            }
-        , makers =
-            [ { name = "Makername", url = "google.com", logo = "logo.png", body = [] } ]
-        , placecal =
-            { title = "PlaceCal lives here"
-            , subtitleimg = "img.jpeg"
-            , subtitleimgalt = "PlaceCal logo"
-            , body = []
-            }
+introMarkdown =
+    "# About us"
+        |> Theme.TransMarkdown.markdownToBlocks
+        |> fromResult
+
+
+fromResult markdownResult =
+    case markdownResult of
+        Ok markdownBlocks ->
+            markdownBlocks
+
+        Err _ ->
+            []
+
+
+sectionData =
+    { accessibilityData =
+        { title = "Accessibility"
+        , subtitle = "Accessibility is good for everyone"
+        , body = []
         }
-    , path = Path.fromString "about"
-    , routeParams = {}
-    , sharedData = ()
+    , makersData =
+        [ { name = "Makername", url = "google.com", logo = "logo.png", body = [] } ]
+    , aboutPlaceCalData =
+        { title = "PlaceCal lives here"
+        , subtitleimg = "img.jpeg"
+        , subtitleimgalt = "PlaceCal logo"
+        , body = []
+        }
     }
-
-
-viewBodyHtml viewParams =
-    queryFromStyledList
-        (view Nothing sharedModelInit viewParams).body
 
 
 suite : Test
 suite =
-    describe "About page body"
-        [ test "Has expected h2 heading" <|
+    describe "About page"
+        [ test "Has an intro" <|
             \_ ->
-                viewBodyHtml viewParamsWithAbout
-                    |> Query.find [ Selector.tag "h2" ]
-                    |> Query.contains [ Html.text "About Page Test Title" ]
+                Theme.Page.About.viewIntro introMarkdown
+                    |> queryFromStyled
+                    |> Query.find [ Selector.tag "h1" ]
+                    |> Query.contains [ Html.text "About us" ]
+        , test "Has sections" <|
+            \_ ->
+                Theme.Page.About.viewSections sectionData
+                    |> queryFromStyled
+                    |> Query.findAll [ Selector.tag "h3" ]
+                    |> Query.count (Expect.equal 3)
         ]
