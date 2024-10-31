@@ -21,7 +21,7 @@ fromResult markdownResult =
         Ok markdownBlocks ->
             markdownBlocks
 
-        Err error ->
+        Err _ ->
             []
 
 

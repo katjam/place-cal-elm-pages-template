@@ -7,7 +7,6 @@ import Html
 import Test exposing (Test, describe, test)
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
-import TestFixtures exposing (sharedDataFixture, sharedModelInit)
 import TestUtils exposing (queryFromStyled)
 import Theme.Page.News
 
