@@ -28,7 +28,8 @@ viewPageFooter time =
             ]
         , div [ css [ footerBottomSectionStyle ] ]
             [ viewPageFooterInfo (t FooterInfoTitle) [ t FooterInfoCharity, t FooterInfoCompany, t FooterInfoOffice ]
-            , viewPageFooterCredit time (t FooterCreditTitle)
+            , viewPageFooterCredit time
+                (t FooterCreditTitle)
                 [ { name = t FooterCredit1Name
                   , link = t FooterCredit1Link
                   , text = t FooterCredit1Text
