@@ -15,7 +15,7 @@ import Time
 
 type alias Event =
     { id : String
-    , partnershipTagList : List String
+    , partnershipTagId : Int
     , name : String
     , summary : String
     , description : String
@@ -60,7 +60,7 @@ type alias Geo =
 emptyEvent : Event
 emptyEvent =
     { id = ""
-    , partnershipTagList = []
+    , partnershipTagId = 0
     , name = ""
     , summary = ""
     , description = ""
@@ -190,7 +190,7 @@ decode =
     Json.Decode.succeed Event
         |> Json.Decode.Pipeline.required "id"
             Json.Decode.string
-        |> Json.Decode.Pipeline.optional "partnershipTagList" (Json.Decode.succeed [ "3" ]) [ "3" ]
+        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed 3) 3
         |> Json.Decode.Pipeline.required "name"
             Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary"

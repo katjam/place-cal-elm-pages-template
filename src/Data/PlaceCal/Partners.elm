@@ -12,7 +12,7 @@ import Json.Encode
 
 type alias Partner =
     { id : String
-    , partnershipTag : String
+    , partnershipTagId : Int
     , name : String
     , summary : String
     , description : String
@@ -56,7 +56,7 @@ type alias ServiceArea =
 emptyPartner : Partner
 emptyPartner =
     { id = ""
-    , partnershipTag = ""
+    , partnershipTagId = 0
     , name = ""
     , summary = ""
     , description = ""
@@ -121,13 +121,13 @@ partnersData : BackendTask.BackendTask { fatal : FatalError.FatalError, recovera
 partnersData =
     BackendTask.combine
         (List.map
-            (\partnershipTag ->
+            (\partnershipTagInt ->
                 Data.PlaceCal.Api.fetchAndCachePlaceCalData
-                    ("partners-" ++ partnershipTag)
-                    (allPartnersQuery partnershipTag)
-                    (partnersDecoder partnershipTag)
+                    ("partners-" ++ String.fromInt partnershipTagInt)
+                    (allPartnersQuery (String.fromInt partnershipTagInt))
+                    (partnersDecoder partnershipTagInt)
             )
-            (List.map (\id -> String.fromInt id) partnershipTagIdList)
+            partnershipTagIdList
         )
         |> BackendTask.map (List.map .allPartners)
         |> BackendTask.map List.concat
@@ -159,17 +159,17 @@ allPartnersQuery partnershipTag =
         ]
 
 
-partnersDecoder : String -> Json.Decode.Decoder AllPartnersResponse
-partnersDecoder partnershipTag =
+partnersDecoder : Int -> Json.Decode.Decoder AllPartnersResponse
+partnersDecoder partnershipTagInt =
     Json.Decode.succeed AllPartnersResponse
-        |> Json.Decode.Pipeline.requiredAt [ "data", "partnersByTag" ] (Json.Decode.list (decodePartner partnershipTag))
+        |> Json.Decode.Pipeline.requiredAt [ "data", "partnersByTag" ] (Json.Decode.list (decodePartner partnershipTagInt))
 
 
-decodePartner : String -> Json.Decode.Decoder Partner
-decodePartner partnershipTag =
+decodePartner : Int -> Json.Decode.Decoder Partner
+decodePartner partnershipTagInt =
     Json.Decode.succeed Partner
         |> Json.Decode.Pipeline.required "id" Json.Decode.string
-        |> Json.Decode.Pipeline.optional "partnershipTag" (Json.Decode.succeed partnershipTag) ""
+        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed partnershipTagInt) 0
         |> Json.Decode.Pipeline.required "name" Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary" Json.Decode.string ""
         |> Json.Decode.Pipeline.optional "description" Json.Decode.string ""
