@@ -10,7 +10,6 @@ import BackendTask
 import Browser.Dom
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Data.PlaceCal.Api
 import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
 import Effect
@@ -240,11 +239,7 @@ pages =
             partnerData.allPartners
                 |> List.map (\partner -> { partner = partner.id })
         )
-        (Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            "partners"
-            Data.PlaceCal.Partners.allPartnersQuery
-            Data.PlaceCal.Partners.partnersDecoder
-        )
+        Data.PlaceCal.Partners.partnersData
         |> BackendTask.allowFatal
 
 

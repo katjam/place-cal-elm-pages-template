@@ -9,7 +9,6 @@ module Route.Events.Event_ exposing (Model, Msg, RouteParams, route, Data, Actio
 import BackendTask
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Data.PlaceCal.Api
 import Data.PlaceCal.Events
 import FatalError
 import Head
@@ -61,11 +60,7 @@ pages =
             eventData.allEvents
                 |> List.map (\event -> { event = event.id })
         )
-        (Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            "events"
-            Data.PlaceCal.Events.allEventsQuery
-            Data.PlaceCal.Events.eventsDecoder
-        )
+        Data.PlaceCal.Events.eventsData
         |> BackendTask.allowFatal
 
 
