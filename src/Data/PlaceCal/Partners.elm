@@ -1,4 +1,4 @@
-module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, allPartnersQuery, partnerFromSlug, partnerNamesFromIds, partnersData, partnersDecoder, partnershipTagIdList)
+module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, partnerFromSlug, partnerNamesFromIds, partnersData, partnershipTagIdList)
 
 import BackendTask
 import BackendTask.Custom

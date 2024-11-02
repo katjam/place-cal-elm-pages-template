@@ -10,7 +10,6 @@ import BackendTask
 import Browser.Dom
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Data.PlaceCal.Api
 import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
 import Effect

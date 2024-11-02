@@ -9,7 +9,6 @@ module Route.Events.Event_ exposing (Model, Msg, RouteParams, route, Data, Actio
 import BackendTask
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Data.PlaceCal.Api
 import Data.PlaceCal.Events
 import FatalError
 import Head

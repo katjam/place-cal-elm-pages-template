@@ -1,8 +1,7 @@
-module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, allEventsQuery, eventFromSlug, eventPartnerFromId, eventsData, eventsDecoder, eventsFromDate, eventsWithPartners, next4Events, onOrBeforeDate)
+module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromDate, eventsWithPartners, next4Events, onOrBeforeDate)
 
 import BackendTask
 import BackendTask.Custom
-import Constants
 import Data.PlaceCal.Api
 import Data.PlaceCal.Partners
 import FatalError
