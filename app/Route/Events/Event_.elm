@@ -61,11 +61,7 @@ pages =
             eventData.allEvents
                 |> List.map (\event -> { event = event.id })
         )
-        (Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            "events"
-            Data.PlaceCal.Events.allEventsQuery
-            Data.PlaceCal.Events.eventsDecoder
-        )
+        Data.PlaceCal.Events.eventsData
         |> BackendTask.allowFatal
 
 
