@@ -240,11 +240,7 @@ pages =
             partnerData.allPartners
                 |> List.map (\partner -> { partner = partner.id })
         )
-        (Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            "partners"
-            Data.PlaceCal.Partners.allPartnersQuery
-            Data.PlaceCal.Partners.partnersDecoder
-        )
+        Data.PlaceCal.Partners.partnersData
         |> BackendTask.allowFatal
 
 

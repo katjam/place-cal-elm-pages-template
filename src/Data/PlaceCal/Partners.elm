@@ -2,6 +2,7 @@ module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, 
 
 import BackendTask
 import BackendTask.Custom
+import Constants
 import Data.PlaceCal.Api
 import FatalError
 import Json.Decode
@@ -11,7 +12,7 @@ import Json.Encode
 
 type alias Partner =
     { id : String
-    , partnershipTagList : List String
+    , partnershipTag : String
     , name : String
     , summary : String
     , description : String
@@ -55,7 +56,7 @@ type alias ServiceArea =
 emptyPartner : Partner
 emptyPartner =
     { id = ""
-    , partnershipTagList = []
+    , partnershipTag = ""
     , name = ""
     , summary = ""
     , description = ""
@@ -78,31 +79,68 @@ type alias AllPartnersResponse =
     { allPartners : List Partner }
 
 
-partnerTagId =
-    "3"
+type alias PartnershipTag =
+    { id : Int
+    , name : String
+    }
+
+
+partnershipTagList : List PartnershipTag
+partnershipTagList =
+    String.split "," Constants.partnershipTagList
+        |> List.map
+            (\tagInfo ->
+                { id = partnershipTagId tagInfo
+                , name = partnershipTagName tagInfo
+                }
+            )
+
+
+partnershipTagIdList : List Int
+partnershipTagIdList =
+    partnershipTagList
+        |> List.map .id
+
+
+partnershipTagId : String -> Int
+partnershipTagId tagInfo =
+    List.head (String.split "|" tagInfo)
+        |> Maybe.withDefault ""
+        |> String.toInt
+        |> Maybe.withDefault 0
+
+
+partnershipTagName : String -> String
+partnershipTagName tagInfo =
+    List.head
+        (List.reverse (String.split "|" tagInfo))
+        |> Maybe.withDefault ""
 
 
 partnersData : BackendTask.BackendTask { fatal : FatalError.FatalError, recoverable : BackendTask.Custom.Error } AllPartnersResponse
 partnersData =
     BackendTask.combine
-        [ Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            ("partners-" ++ partnerTagId)
-            allPartnersQuery
-            partnersDecoder
-        , Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            ("partners-" ++ partnerTagId)
-            allPartnersQuery
-            partnersDecoder
-        ]
+        (List.map
+            (\partnershipTag ->
+                Data.PlaceCal.Api.fetchAndCachePlaceCalData
+                    ("partners-" ++ partnershipTag)
+                    (allPartnersQuery partnershipTag)
+                    (partnersDecoder partnershipTag)
+            )
+            (List.map (\id -> String.fromInt id) partnershipTagIdList)
+        )
+        |> BackendTask.map (List.map .allPartners)
+        |> BackendTask.map List.concat
+        |> BackendTask.map (\partnerList -> { allPartners = partnerList })
 
 
-allPartnersQuery : Json.Encode.Value
-allPartnersQuery =
+allPartnersQuery : String -> Json.Encode.Value
+allPartnersQuery partnershipTag =
     Json.Encode.object
         [ ( "query"
           , Json.Encode.string
                 ("query { partnersByTag(tagId: "
-                    ++ partnerTagId
+                    ++ partnershipTag
                     ++ """
                 ) {
                   id
@@ -121,17 +159,17 @@ allPartnersQuery =
         ]
 
 
-partnersDecoder : Json.Decode.Decoder AllPartnersResponse
-partnersDecoder =
+partnersDecoder : String -> Json.Decode.Decoder AllPartnersResponse
+partnersDecoder partnershipTag =
     Json.Decode.succeed AllPartnersResponse
-        |> Json.Decode.Pipeline.requiredAt [ "data", "partnersByTag" ] (Json.Decode.list decodePartner)
+        |> Json.Decode.Pipeline.requiredAt [ "data", "partnersByTag" ] (Json.Decode.list (decodePartner partnershipTag))
 
 
-decodePartner : Json.Decode.Decoder Partner
-decodePartner =
+decodePartner : String -> Json.Decode.Decoder Partner
+decodePartner partnershipTag =
     Json.Decode.succeed Partner
         |> Json.Decode.Pipeline.required "id" Json.Decode.string
-        |> Json.Decode.Pipeline.optional "partnershipTagList" (Json.Decode.succeed [ "3" ]) [ "3" ]
+        |> Json.Decode.Pipeline.optional "partnershipTag" (Json.Decode.succeed partnershipTag) ""
         |> Json.Decode.Pipeline.required "name" Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary" Json.Decode.string ""
         |> Json.Decode.Pipeline.optional "description" Json.Decode.string ""
