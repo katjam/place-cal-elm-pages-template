@@ -173,7 +173,15 @@ eventsData =
         )
         |> BackendTask.map (List.map .allEvents)
         |> BackendTask.map List.concat
+        |> BackendTask.map sortEventsByDate
         |> BackendTask.map (\eventList -> { allEvents = eventList })
+
+
+sortEventsByDate : List Event -> List Event
+sortEventsByDate events =
+    List.sortBy
+        (\event -> Time.posixToMillis event.startDatetime)
+        events
 
 
 allEventsQuery : String -> Json.Encode.Value
