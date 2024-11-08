@@ -131,6 +131,10 @@ t key =
         FooterPlaceCal ->
             "Powered by PlaceCal"
 
+        --- Region Selector
+        AllRegionSelectorLabel ->
+            "Everywhere"
+
         --- Index Page
         IndexTitle ->
             "Home"

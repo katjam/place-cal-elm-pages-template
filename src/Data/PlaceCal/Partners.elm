@@ -1,4 +1,4 @@
-module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, partnerFromSlug, partnerNamesFromIds, partnersData, partnershipTagIdList)
+module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, partnerFromSlug, partnerNamesFromIds, partnersData, partnershipTagIdList, partnershipTagList)
 
 import BackendTask
 import BackendTask.Custom
@@ -169,7 +169,7 @@ decodePartner : Int -> Json.Decode.Decoder Partner
 decodePartner partnershipTagInt =
     Json.Decode.succeed Partner
         |> Json.Decode.Pipeline.required "id" Json.Decode.string
-        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed partnershipTagInt) 0
+        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed partnershipTagInt) partnershipTagInt
         |> Json.Decode.Pipeline.required "name" Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary" Json.Decode.string ""
         |> Json.Decode.Pipeline.optional "description" Json.Decode.string ""

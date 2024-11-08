@@ -12,14 +12,15 @@ import Shared
 import Theme.Global
 import Theme.Page.Events
 import Theme.Page.News
+import Theme.RegionSelector
 import Time
 
 
-view : Shared.Data -> Html msg
-view sharedData =
+view : Shared.Data -> Int -> Html Theme.RegionSelector.Msg
+view sharedData filterByRegionId =
     div [ css [ pageWrapperStyle ] ]
         [ viewIntro (t IndexIntroTitle) (t IndexIntroMessage) (t IndexIntroButtonText)
-        , viewFeatured sharedData.time (Data.PlaceCal.Events.eventsWithPartners sharedData.events sharedData.partners)
+        , viewFeatured sharedData.time (Data.PlaceCal.Events.eventsWithPartners sharedData.events sharedData.partners) filterByRegionId
         , viewLatestNews (List.head sharedData.articles) (t IndexNewsHeader) (t IndexNewsButtonText)
         ]
 
@@ -47,11 +48,12 @@ viewIntro introTitle introMsg eventButtonText =
         ]
 
 
-viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Html msg
-viewFeatured fromTime eventList =
+viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Int -> Html Theme.RegionSelector.Msg
+viewFeatured fromTime eventList regionId =
     section [ css [ sectionStyle, Theme.Global.darkBlueBackgroundStyle, eventsSectionStyle ] ]
         [ h2 [ css [ Theme.Global.smallFloatingTitleStyle ] ] [ text (t IndexFeaturedHeader) ]
-        , Theme.Page.Events.viewEventsList (Data.PlaceCal.Events.next4Events eventList fromTime)
+        , Theme.RegionSelector.viewRegionSelector { filterBy = regionId }
+        , Theme.Page.Events.viewEventsList (Data.PlaceCal.Events.nextNEvents 8 (Data.PlaceCal.Events.eventsFromRegionId eventList regionId) fromTime)
         , p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
             [ a
                 [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
