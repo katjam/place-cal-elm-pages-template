@@ -17,7 +17,8 @@ import Time
 
 viewEvents :
     { localModel
-        | filterBy : Theme.Paginator.Filter
+        | filterByDate : Theme.Paginator.Filter
+        , filterByRegion : Int
         , nowTime : Time.Posix
         , visibleEvents : List Data.PlaceCal.Events.Event
     }
@@ -25,7 +26,7 @@ viewEvents :
 viewEvents model =
     section [ css [ eventsContainerStyle ] ]
         [ Theme.Paginator.viewPagination model
-        , viewFilteredEventsList model.filterBy model.visibleEvents
+        , viewFilteredEventsList model.filterByDate model.visibleEvents
         ]
 
 

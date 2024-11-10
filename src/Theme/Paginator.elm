@@ -1,4 +1,4 @@
-module Theme.Paginator exposing (Filter(..), Msg(..), ScrollDirection(..), scrollPagination, viewPagination)
+module Theme.Paginator exposing (Filter(..), Msg(..), ScrollDirection(..), fromMsg, scrollPagination, viewPagination)
 
 import Browser.Dom exposing (Error, Viewport, getViewportOf, setViewportOf)
 import Copy.Keys exposing (Key(..))
@@ -41,7 +41,7 @@ type ScrollDirection
 
 viewPagination :
     { localModel
-        | filterBy : Filter
+        | filterByDate : Filter
         , nowTime : Time.Posix
     }
     -> Html Msg
@@ -56,7 +56,7 @@ viewPagination localModel =
                             li [ css [ paginationButtonListItemStyle ] ]
                                 [ button
                                     [ css
-                                        [ case localModel.filterBy of
+                                        [ case localModel.filterByDate of
                                             Day day ->
                                                 if TransDate.isSameDay buttonTime day then
                                                     paginationButtonListItemButtonActiveStyle
@@ -82,7 +82,7 @@ viewPagination localModel =
                 [ li [ css [ allEventsButtonListItemStyle ] ]
                     [ button
                         [ css
-                            (if localModel.filterBy == Past then
+                            (if localModel.filterByDate == Past then
                                 [ important (width (px 200)), paginationButtonListItemButtonActiveStyle ]
 
                              else
@@ -95,7 +95,7 @@ viewPagination localModel =
                 , li [ css [ allEventsButtonListItemStyle ] ]
                     [ button
                         [ css
-                            (if localModel.filterBy == Future then
+                            (if localModel.filterByDate == Future then
                                 [ important (width (px 200)), paginationButtonListItemButtonActiveStyle ]
 
                              else
