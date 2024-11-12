@@ -1,4 +1,4 @@
-module Theme.Page.Events exposing (viewEvents, viewEventsList)
+module Theme.Page.Events exposing (Msg(..), fromPaginatorMsg, fromRegionSelectorMsg, viewEvents, viewEventsList)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
@@ -12,7 +12,23 @@ import Html.Styled exposing (Html, a, article, div, h4, li, p, section, span, te
 import Html.Styled.Attributes exposing (css, href)
 import Theme.Global exposing (borderTransition, colorTransition, introTextLargeStyle, pink, white, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.Paginator
+import Theme.RegionSelector
 import Time
+
+
+type Msg
+    = PaginatorMsg Theme.Paginator.Msg
+    | RegionSelectorMsg Theme.RegionSelector.Msg
+
+
+fromPaginatorMsg : Theme.Paginator.Msg -> Msg
+fromPaginatorMsg msg =
+    PaginatorMsg msg
+
+
+fromRegionSelectorMsg : Theme.RegionSelector.Msg -> Msg
+fromRegionSelectorMsg msg =
+    RegionSelectorMsg msg
 
 
 viewEvents :
@@ -22,11 +38,12 @@ viewEvents :
         , nowTime : Time.Posix
         , visibleEvents : List Data.PlaceCal.Events.Event
     }
-    -> Html Theme.Paginator.Msg
+    -> Html Msg
 viewEvents model =
     section [ css [ eventsContainerStyle ] ]
-        [ Theme.Paginator.viewPagination model
-        , viewFilteredEventsList model.filterByDate model.visibleEvents
+        [ Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
+        , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
+        , viewFilteredEventsList model.filterByDate model.visibleEvents |> Html.Styled.map fromPaginatorMsg
         ]
 
 

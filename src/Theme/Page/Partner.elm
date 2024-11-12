@@ -9,9 +9,23 @@ import Html.Styled exposing (Html, a, address, div, h3, hr, p, section, span, te
 import Html.Styled.Attributes exposing (css, href, id, target)
 import Theme.Global exposing (hrStyle, introTextLargeStyle, linkStyle, normalFirstParagraphStyle, pink, smallInlineTitleStyle, white, withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.Page.Events
+import Theme.Paginator
 import Theme.TransMarkdown
+import Time
 
 
+viewInfo :
+    { a
+        | filterByDate : Theme.Paginator.Filter
+        , filterByRegion : Int
+        , nowTime : Time.Posix
+        , visibleEvents : List Data.PlaceCal.Events.Event
+    }
+    ->
+        { partner : Data.PlaceCal.Partners.Partner
+        , events : List Data.PlaceCal.Events.Event
+        }
+    -> Html Theme.Page.Events.Msg
 viewInfo localModel { partner, events } =
     section [ css [ margin2 (rem 0) (rem 0.35) ] ]
         [ text ""

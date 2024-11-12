@@ -37,9 +37,8 @@ type alias Model =
     }
 
 
-type Msg
-    = PaginatorMsg Theme.Paginator.Msg
-    | RegionSelectorMsg Theme.RegionSelector.Msg
+type alias Msg =
+    Theme.Page.Events.Msg
 
 
 type alias RouteParams =
@@ -58,20 +57,10 @@ init app _ =
       , viewportWidth = 320
       }
     , Effect.batch
-        [ Task.perform Theme.Paginator.GetTime Time.now |> Cmd.map fromPaginatorMsg |> Effect.fromCmd
-        , Task.perform Theme.Paginator.GotViewport Browser.Dom.getViewport |> Cmd.map fromPaginatorMsg |> Effect.fromCmd
+        [ Task.perform Theme.Paginator.GetTime Time.now |> Cmd.map Theme.Page.Events.fromPaginatorMsg |> Effect.fromCmd
+        , Task.perform Theme.Paginator.GotViewport Browser.Dom.getViewport |> Cmd.map Theme.Page.Events.fromPaginatorMsg |> Effect.fromCmd
         ]
     )
-
-
-fromPaginatorMsg : Theme.Paginator.Msg -> Msg
-fromPaginatorMsg msg =
-    PaginatorMsg msg
-
-
-fromRegionSelectorMsg : Theme.RegionSelector.Msg -> Msg
-fromRegionSelectorMsg msg =
-    RegionSelectorMsg msg
 
 
 update :
@@ -82,7 +71,7 @@ update :
     -> ( Model, Effect.Effect Msg )
 update app _ msg model =
     case msg of
-        PaginatorMsg submsg ->
+        Theme.Page.Events.PaginatorMsg submsg ->
             case submsg of
                 Theme.Paginator.ClickedDay posix ->
                     ( { model
@@ -123,7 +112,7 @@ update app _ msg model =
                     ( model
                     , Task.attempt (\_ -> Theme.Paginator.NoOp)
                         (Theme.Paginator.scrollPagination Theme.Paginator.Right model.viewportWidth)
-                        |> Cmd.map fromPaginatorMsg
+                        |> Cmd.map Theme.Page.Events.fromPaginatorMsg
                         |> Effect.fromCmd
                     )
 
@@ -131,7 +120,7 @@ update app _ msg model =
                     ( model
                     , Task.attempt (\_ -> Theme.Paginator.NoOp)
                         (Theme.Paginator.scrollPagination Theme.Paginator.Left model.viewportWidth)
-                        |> Cmd.map fromPaginatorMsg
+                        |> Cmd.map Theme.Page.Events.fromPaginatorMsg
                         |> Effect.fromCmd
                     )
 
@@ -141,10 +130,15 @@ update app _ msg model =
                 Theme.Paginator.NoOp ->
                     ( model, Effect.none )
 
-        RegionSelectorMsg submsg ->
+        Theme.Page.Events.RegionSelectorMsg submsg ->
             case submsg of
                 Theme.RegionSelector.ClickedSelector regionId ->
-                    ( model, Effect.none )
+                    ( { model
+                        | filterByRegion = regionId
+                        , visibleEvents = Data.PlaceCal.Events.eventsFromRegionId model.visibleEvents regionId
+                      }
+                    , Effect.none
+                    )
 
 
 subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
@@ -202,7 +196,6 @@ view _ _ model =
             , innerContent = Just (Theme.Page.Events.viewEvents model)
             , outerContent = Nothing
             }
-            |> Html.Styled.map fromPaginatorMsg
             |> Html.Styled.map PagesMsg.fromMsg
         ]
     }

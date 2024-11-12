@@ -25,7 +25,7 @@ import View
 
 
 type alias Model =
-    { filterBy : Int
+    { filterByRegion : Int
     }
 
 
@@ -42,7 +42,7 @@ init :
     -> Shared.Model
     -> ( Model, Effect.Effect Msg )
 init app _ =
-    ( { filterBy = 0
+    ( { filterByRegion = 0
       }
     , Effect.none
     )
@@ -58,7 +58,7 @@ update app _ msg model =
     case msg of
         ClickedSelector tagId ->
             ( { model
-                | filterBy = tagId
+                | filterByRegion = tagId
               }
             , Effect.none
             )
@@ -111,7 +111,7 @@ view :
 view app _ model =
     { title = t SiteTitle
     , body =
-        [ Theme.Page.Index.view app.sharedData model.filterBy
+        [ Theme.Page.Index.view app.sharedData model.filterByRegion
             |> Html.Styled.map PagesMsg.fromMsg
         ]
     }

@@ -1,4 +1,4 @@
-module Theme.Paginator exposing (Filter(..), Msg(..), ScrollDirection(..), fromMsg, scrollPagination, viewPagination)
+module Theme.Paginator exposing (Filter(..), Msg(..), ScrollDirection(..), scrollPagination, viewPagination)
 
 import Browser.Dom exposing (Error, Viewport, getViewportOf, setViewportOf)
 import Copy.Keys exposing (Key(..))
