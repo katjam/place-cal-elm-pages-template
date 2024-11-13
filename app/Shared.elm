@@ -135,7 +135,6 @@ view sharedData page model toMsg pageView =
         [ Html.Styled.toUnstyled
             (Theme.Global.containerPage pageView.title
                 [ View.fontPreload
-                , View.plausibleTracker
                 , Theme.Global.globalStyles
                 , viewPageHeader page
                     { showMobileMenu = model.showMobileMenu }
