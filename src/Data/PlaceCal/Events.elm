@@ -128,7 +128,7 @@ afterDate eventList fromDate =
 
 nextNEvents : Int -> List Event -> Time.Posix -> List Event
 nextNEvents showCount eventList fromTime =
-    List.take showCount (eventsFromDate eventList fromTime)
+    List.take showCount (afterDate eventList fromTime)
 
 
 eventPartnerFromId : List Data.PlaceCal.Partners.Partner -> String -> EventPartner

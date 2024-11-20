@@ -20,12 +20,14 @@ import Task
 import Theme.Page.Index
 import Theme.PageTemplate
 import Theme.RegionSelector exposing (Msg(..))
+import Time
 import UrlPath
 import View
 
 
 type alias Model =
     { filterByRegion : Int
+    , nowTime : Time.Posix
     }
 
 
@@ -43,6 +45,7 @@ init :
     -> ( Model, Effect.Effect Msg )
 init app _ =
     ( { filterByRegion = 0
+      , nowTime = app.sharedData.time
       }
     , Effect.none
     )
@@ -111,7 +114,7 @@ view :
 view app _ model =
     { title = t SiteTitle
     , body =
-        [ Theme.Page.Index.view app.sharedData model.filterByRegion
+        [ Theme.Page.Index.view app.sharedData model
             |> Html.Styled.map PagesMsg.fromMsg
         ]
     }

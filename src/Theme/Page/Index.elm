@@ -17,11 +17,18 @@ import Theme.RegionSelector
 import Time
 
 
-view : Shared.Data -> Int -> Html Theme.RegionSelector.Msg
-view sharedData filterByRegionId =
+view :
+    Shared.Data
+    ->
+        { localModel
+            | filterByRegion : Int
+            , nowTime : Time.Posix
+        }
+    -> Html Theme.RegionSelector.Msg
+view sharedData localModel =
     div [ css [ pageWrapperStyle ] ]
         [ viewIntro (t IndexIntroTitle) (t IndexIntroMessage) (t IndexIntroButtonText)
-        , viewFeatured sharedData.time (Data.PlaceCal.Events.eventsWithPartners sharedData.events sharedData.partners) filterByRegionId
+        , viewFeatured localModel.nowTime (Data.PlaceCal.Events.eventsWithPartners sharedData.events sharedData.partners) localModel.filterByRegion
         , viewLatestNews (List.head sharedData.articles) (t IndexNewsHeader) (t IndexNewsButtonText)
         ]
 
@@ -54,7 +61,7 @@ viewFeatured fromTime eventList regionId =
     section [ css [ sectionStyle, Theme.Global.darkBlueBackgroundStyle, eventsSectionStyle ] ]
         [ h2 [ css [ Theme.Global.smallFloatingTitleStyle ] ] [ text (t IndexFeaturedHeader) ]
         , Theme.RegionSelector.viewRegionSelector { filterBy = regionId }
-        , Theme.Page.Events.viewEventsList { filterByDate = Theme.Paginator.None, filterByRegion = regionId, nowTime = fromTime } eventList (Just 8)
+        , Theme.Page.Events.viewEventsList { filterByDate = Theme.Paginator.Future, filterByRegion = regionId, nowTime = fromTime } eventList (Just 8)
         , p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
             [ a
                 [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
