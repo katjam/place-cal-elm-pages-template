@@ -31,7 +31,6 @@ import View exposing (View)
 type alias Model =
     { filterByDate : Theme.Paginator.Filter
     , filterByRegion : Int
-    , visibleEvents : List Data.PlaceCal.Events.Event
     , nowTime : Time.Posix
     , viewportWidth : Float
     }
@@ -52,7 +51,6 @@ init :
 init app _ =
     ( { filterByDate = Theme.Paginator.None
       , filterByRegion = 0
-      , visibleEvents = Data.PlaceCal.Events.eventsWithPartners app.sharedData.events app.sharedData.partners
       , nowTime = Time.millisToPosix 0
       , viewportWidth = 320
       }
@@ -75,9 +73,8 @@ update app _ msg model =
             case submsg of
                 Theme.Paginator.ClickedDay posix ->
                     ( { model
-                        | filterByDate = Theme.Paginator.Day posix
-                        , visibleEvents =
-                            Data.PlaceCal.Events.eventsWithPartners (Data.PlaceCal.Events.eventsFromDate app.sharedData.events posix) app.sharedData.partners
+                        | filterByDate =
+                            Theme.Paginator.Day posix
                       }
                     , Effect.none
                     )
@@ -85,7 +82,6 @@ update app _ msg model =
                 Theme.Paginator.ClickedAllPastEvents ->
                     ( { model
                         | filterByDate = Theme.Paginator.Past
-                        , visibleEvents = Data.PlaceCal.Events.eventsWithPartners (List.reverse (Data.PlaceCal.Events.onOrBeforeDate app.sharedData.events model.nowTime)) app.sharedData.partners
                       }
                     , Effect.none
                     )
@@ -93,7 +89,6 @@ update app _ msg model =
                 Theme.Paginator.ClickedAllFutureEvents ->
                     ( { model
                         | filterByDate = Theme.Paginator.Future
-                        , visibleEvents = Data.PlaceCal.Events.eventsWithPartners (Data.PlaceCal.Events.afterDate app.sharedData.events model.nowTime) app.sharedData.partners
                       }
                     , Effect.none
                     )
@@ -102,8 +97,6 @@ update app _ msg model =
                     ( { model
                         | filterByDate = Theme.Paginator.Day newTime
                         , nowTime = newTime
-                        , visibleEvents =
-                            Data.PlaceCal.Events.eventsWithPartners (Data.PlaceCal.Events.eventsFromDate app.sharedData.events newTime) app.sharedData.partners
                       }
                     , Effect.none
                     )
@@ -135,7 +128,6 @@ update app _ msg model =
                 Theme.RegionSelector.ClickedSelector regionId ->
                     ( { model
                         | filterByRegion = regionId
-                        , visibleEvents = Data.PlaceCal.Events.eventsFromRegionId model.visibleEvents regionId
                       }
                     , Effect.none
                     )
@@ -185,7 +177,7 @@ view :
     -> Shared.Model
     -> Model
     -> View (PagesMsg.PagesMsg Msg)
-view _ _ model =
+view app _ model =
     { title = t (PageMetaTitle (t EventsTitle))
     , body =
         [ Theme.PageTemplate.view
@@ -193,7 +185,7 @@ view _ _ model =
             , title = t EventsTitle
             , bigText = { text = t EventsSummary, node = "h3" }
             , smallText = Nothing
-            , innerContent = Just (Theme.Page.Events.viewEvents model)
+            , innerContent = Just (Theme.Page.Events.viewEvents (Data.PlaceCal.Events.eventsWithPartners app.sharedData.events app.sharedData.partners) model)
             , outerContent = Nothing
             }
             |> Html.Styled.map PagesMsg.fromMsg

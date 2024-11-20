@@ -12,6 +12,7 @@ import Shared
 import Theme.Global
 import Theme.Page.Events
 import Theme.Page.News
+import Theme.Paginator
 import Theme.RegionSelector
 import Time
 
@@ -53,7 +54,7 @@ viewFeatured fromTime eventList regionId =
     section [ css [ sectionStyle, Theme.Global.darkBlueBackgroundStyle, eventsSectionStyle ] ]
         [ h2 [ css [ Theme.Global.smallFloatingTitleStyle ] ] [ text (t IndexFeaturedHeader) ]
         , Theme.RegionSelector.viewRegionSelector { filterBy = regionId }
-        , Theme.Page.Events.viewEventsList (Data.PlaceCal.Events.nextNEvents 8 (Data.PlaceCal.Events.eventsFromRegionId eventList regionId) fromTime)
+        , Theme.Page.Events.viewEventsList { filterByDate = Theme.Paginator.None, filterByRegion = regionId, nowTime = fromTime } eventList (Just 8)
         , p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
             [ a
                 [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)

@@ -19,7 +19,6 @@ viewInfo :
         | filterByDate : Theme.Paginator.Filter
         , filterByRegion : Int
         , nowTime : Time.Posix
-        , visibleEvents : List Data.PlaceCal.Events.Event
     }
     ->
         { partner : Data.PlaceCal.Partners.Partner
@@ -42,7 +41,7 @@ viewInfo localModel { partner, events } =
                 ]
             ]
         , hr [ css [ hrStyle ] ] []
-        , viewPartnerEvents localModel { partner = partner, events = events }
+        , viewPartnerEvents events localModel partner
         , case partner.maybeGeo of
             Just geo ->
                 div [ css [ mapContainerStyle ] ]
@@ -58,7 +57,17 @@ viewInfo localModel { partner, events } =
         ]
 
 
-viewPartnerEvents localModel { partner, events } =
+viewPartnerEvents :
+    List Data.PlaceCal.Events.Event
+    ->
+        { a
+            | filterByDate : Theme.Paginator.Filter
+            , filterByRegion : Int
+            , nowTime : Time.Posix
+        }
+    -> Data.PlaceCal.Partners.Partner
+    -> Html Theme.Page.Events.Msg
+viewPartnerEvents events localModel partner =
     let
         eventAreaTitle =
             h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerUpcomingEventsText partner.name)) ]
@@ -67,7 +76,8 @@ viewPartnerEvents localModel { partner, events } =
         (if List.length events > 0 then
             if List.length events > 20 then
                 [ eventAreaTitle
-                , Theme.Page.Events.viewEvents localModel
+                , Theme.Paginator.viewPagination localModel |> Html.Styled.map Theme.Page.Events.fromPaginatorMsg
+                , Theme.Page.Events.viewEventsList localModel events Nothing
                 ]
 
             else
@@ -81,7 +91,7 @@ viewPartnerEvents localModel { partner, events } =
                 [ if List.length futureEvents > 0 then
                     div []
                         [ eventAreaTitle
-                        , Theme.Page.Events.viewEventsList futureEvents
+                        , Theme.Page.Events.viewEventsList localModel futureEvents Nothing
                         ]
 
                   else
@@ -89,7 +99,7 @@ viewPartnerEvents localModel { partner, events } =
                 , if List.length pastEvents > 0 then
                     div []
                         [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
-                        , Theme.Page.Events.viewEventsList pastEvents
+                        , Theme.Page.Events.viewEventsList localModel pastEvents Nothing
                         ]
 
                   else

@@ -32,37 +32,59 @@ fromRegionSelectorMsg msg =
 
 
 viewEvents :
+    List Data.PlaceCal.Events.Event
+    ->
+        { localModel
+            | filterByDate : Theme.Paginator.Filter
+            , filterByRegion : Int
+            , nowTime : Time.Posix
+        }
+    -> Html Msg
+viewEvents eventsList model =
+    section [ css [ eventsContainerStyle ] ]
+        [ Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
+        , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
+        , viewEventsList model eventsList Nothing |> Html.Styled.map fromPaginatorMsg
+        ]
+
+
+viewEventsList :
     { localModel
         | filterByDate : Theme.Paginator.Filter
         , filterByRegion : Int
         , nowTime : Time.Posix
-        , visibleEvents : List Data.PlaceCal.Events.Event
     }
-    -> Html Msg
-viewEvents model =
-    section [ css [ eventsContainerStyle ] ]
-        [ Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
-        , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
-        , viewFilteredEventsList model.filterByDate model.visibleEvents |> Html.Styled.map fromPaginatorMsg
-        ]
+    -> List Data.PlaceCal.Events.Event
+    -> Maybe Int
+    -> Html msg
+viewEventsList localModel eventsList maybeListLength =
+    let
+        allEventsInRegion : List Data.PlaceCal.Events.Event
+        allEventsInRegion =
+            Data.PlaceCal.Events.eventsFromRegionId eventsList localModel.filterByRegion
 
+        paginatedEventsInRegion : List Data.PlaceCal.Events.Event
+        paginatedEventsInRegion =
+            Theme.Paginator.filterEvents localModel.nowTime localModel.filterByDate allEventsInRegion
 
-viewEventsList : List Data.PlaceCal.Events.Event -> Html msg
-viewEventsList events =
-    viewFilteredEventsList Theme.Paginator.Unknown events
+        filteredEvents : List Data.PlaceCal.Events.Event
+        filteredEvents =
+            case maybeListLength of
+                Nothing ->
+                    paginatedEventsInRegion
 
-
-viewFilteredEventsList : Theme.Paginator.Filter -> List Data.PlaceCal.Events.Event -> Html msg
-viewFilteredEventsList filter filteredEvents =
+                Just numberOfEvents ->
+                    Data.PlaceCal.Events.nextNEvents numberOfEvents paginatedEventsInRegion localModel.nowTime
+    in
     div []
         [ if List.length filteredEvents > 0 then
-            ul [ css [ eventListStyle ] ]
+            ul [ css [ eventsListStyle ] ]
                 (List.map (\event -> viewEvent event) filteredEvents)
 
           else
             p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ]
                 [ text
-                    (case filter of
+                    (case localModel.filterByDate of
                         Theme.Paginator.Day _ ->
                             t EventsEmptyText
 
@@ -78,7 +100,7 @@ viewFilteredEventsList filter filteredEvents =
 
 viewEvent : Data.PlaceCal.Events.Event -> Html msg
 viewEvent event =
-    li [ css [ eventListItemStyle ] ]
+    li [ css [ eventsListItemStyle ] ]
         [ a [ css [ eventLinkStyle ], href (TransRoutes.toAbsoluteUrl (Event event.id)) ]
             [ article [ css [ eventStyle ] ]
                 [ div [ css [ eventDescriptionStyle ] ]
@@ -128,8 +150,8 @@ eventsContainerStyle =
         ]
 
 
-eventListStyle : Style
-eventListStyle =
+eventsListStyle : Style
+eventsListStyle =
     batch
         [ displayFlex
         , flexDirection column
@@ -138,8 +160,8 @@ eventListStyle =
         ]
 
 
-eventListItemStyle : Style
-eventListItemStyle =
+eventsListItemStyle : Style
+eventsListItemStyle =
     batch
         [ hover
             [ descendants
