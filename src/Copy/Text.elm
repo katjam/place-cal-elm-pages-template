@@ -55,7 +55,7 @@ t key =
             "Donate"
 
         HeaderAskLink ->
-            -- Gendered Intelligence just giving page
+            -- PHT Donorbox
             "https://donorbox.org/the-trans-dimension"
 
         --- Footer
