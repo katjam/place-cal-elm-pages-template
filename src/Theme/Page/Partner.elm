@@ -18,6 +18,7 @@ viewInfo localModel { partner, events } =
         , div [ css [ descriptionStyle ] ]
             (Theme.TransMarkdown.markdownToHtml
                 (t (PartnerDescriptionText partner.summary partner.name)
+                    ++ "\n\n"
                     ++ t (PartnerDescriptionText partner.description partner.name)
                 )
             )
