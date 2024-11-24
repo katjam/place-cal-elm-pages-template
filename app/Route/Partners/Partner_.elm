@@ -22,6 +22,7 @@ import RouteBuilder
 import Shared
 import Task
 import Theme.Global
+import Theme.Page.Events
 import Theme.Page.Partner
 import Theme.PageTemplate
 import Theme.Paginator exposing (Msg(..))
@@ -31,7 +32,8 @@ import View
 
 
 type alias Model =
-    { filterBy : Theme.Paginator.Filter
+    { filterByDate : Theme.Paginator.Filter
+    , filterByRegion : Int
     , visibleEvents : List Data.PlaceCal.Events.Event
     , nowTime : Time.Posix
     , viewportWidth : Float
@@ -40,7 +42,7 @@ type alias Model =
 
 
 type alias Msg =
-    Theme.Paginator.Msg
+    Theme.Page.Events.Msg
 
 
 type alias RouteParams =
@@ -75,12 +77,15 @@ init app _ =
         tasks : List (Effect.Effect Msg)
         tasks =
             [ Task.perform GetTime Time.now
+                |> Cmd.map Theme.Page.Events.fromPaginatorMsg
                 |> Effect.fromCmd
             , Task.perform GotViewport Browser.Dom.getViewport
+                |> Cmd.map Theme.Page.Events.fromPaginatorMsg
                 |> Effect.fromCmd
             ]
     in
-    ( { filterBy = Theme.Paginator.None
+    ( { filterByDate = Theme.Paginator.None
+      , filterByRegion = 0
       , visibleEvents = app.sharedData.events
       , nowTime = Time.millisToPosix 0
       , viewportWidth = 320
@@ -93,6 +98,7 @@ init app _ =
                     ++ [ Browser.Dom.getElement fragment
                             |> Task.andThen (\element -> Browser.Dom.setViewport 0 element.element.y)
                             |> Task.attempt (\_ -> NoOp)
+                            |> Cmd.map Theme.Page.Events.fromPaginatorMsg
                             |> Effect.fromCmd
                        ]
 
@@ -114,59 +120,68 @@ update app _ msg model =
             Data.PlaceCal.Partners.partnerFromSlug app.sharedData.partners app.routeParams.partner
     in
     case msg of
-        ClickedDay posix ->
-            ( { model
-                | filterBy = Theme.Paginator.Day posix
-                , visibleEvents =
-                    eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.eventsFromDate app.sharedData.events posix)
-              }
-            , Effect.none
-            )
+        Theme.Page.Events.PaginatorMsg submsg ->
+            case submsg of
+                Theme.Paginator.ClickedDay posix ->
+                    ( { model
+                        | filterByDate = Theme.Paginator.Day posix
+                        , visibleEvents =
+                            eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.eventsFromDate app.sharedData.events posix)
+                      }
+                    , Effect.none
+                    )
 
-        ClickedAllPastEvents ->
-            ( { model
-                | filterBy = Theme.Paginator.Past
-                , visibleEvents = eventsFromPartnerId aPartner.id (List.reverse (Data.PlaceCal.Events.onOrBeforeDate app.sharedData.events model.nowTime))
-              }
-            , Effect.none
-            )
+                Theme.Paginator.ClickedAllPastEvents ->
+                    ( { model
+                        | filterByDate = Theme.Paginator.Past
+                        , visibleEvents = eventsFromPartnerId aPartner.id (List.reverse (Data.PlaceCal.Events.onOrBeforeDate app.sharedData.events model.nowTime))
+                      }
+                    , Effect.none
+                    )
 
-        ClickedAllFutureEvents ->
-            ( { model
-                | filterBy = Theme.Paginator.Future
-                , visibleEvents = eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.afterDate app.sharedData.events model.nowTime)
-              }
-            , Effect.none
-            )
+                Theme.Paginator.ClickedAllFutureEvents ->
+                    ( { model
+                        | filterByDate = Theme.Paginator.Future
+                        , visibleEvents = eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.afterDate app.sharedData.events model.nowTime)
+                      }
+                    , Effect.none
+                    )
 
-        GetTime newTime ->
-            ( { model
-                | filterBy = Theme.Paginator.Day newTime
-                , nowTime = newTime
-                , visibleEvents =
-                    eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.eventsFromDate app.sharedData.events newTime)
-              }
-            , Effect.none
-            )
+                Theme.Paginator.GetTime newTime ->
+                    ( { model
+                        | filterByDate = Theme.Paginator.Day newTime
+                        , nowTime = newTime
+                        , visibleEvents =
+                            eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.eventsFromDate app.sharedData.events newTime)
+                      }
+                    , Effect.none
+                    )
 
-        ScrollRight ->
-            ( model
-            , Task.attempt (\_ -> NoOp)
-                (Theme.Paginator.scrollPagination Theme.Paginator.Right model.viewportWidth)
-                |> Effect.fromCmd
-            )
+                Theme.Paginator.ScrollRight ->
+                    ( model
+                    , Task.attempt (\_ -> NoOp)
+                        (Theme.Paginator.scrollPagination Theme.Paginator.Right model.viewportWidth)
+                        |> Cmd.map Theme.Page.Events.fromPaginatorMsg
+                        |> Effect.fromCmd
+                    )
 
-        ScrollLeft ->
-            ( model
-            , Task.attempt (\_ -> NoOp)
-                (Theme.Paginator.scrollPagination Theme.Paginator.Left model.viewportWidth)
-                |> Effect.fromCmd
-            )
+                Theme.Paginator.ScrollLeft ->
+                    ( model
+                    , Task.attempt (\_ -> NoOp)
+                        (Theme.Paginator.scrollPagination Theme.Paginator.Left model.viewportWidth)
+                        |> Cmd.map Theme.Page.Events.fromPaginatorMsg
+                        |> Effect.fromCmd
+                    )
 
-        GotViewport viewport ->
-            ( { model | viewportWidth = Maybe.withDefault model.viewportWidth (Just viewport.scene.width) }, Effect.none )
+                Theme.Paginator.GotViewport viewport ->
+                    ( { model | viewportWidth = Maybe.withDefault model.viewportWidth (Just viewport.scene.width) }, Effect.none )
 
-        NoOp ->
+                Theme.Paginator.NoOp ->
+                    ( model, Effect.none )
+
+        Theme.Page.Events.RegionSelectorMsg _ ->
+            -- We do not include Region Selector on individual Partner pages
+            -- But may  in future if some partners have events in multiple regions
             ( model, Effect.none )
 
 

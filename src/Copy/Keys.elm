@@ -42,6 +42,8 @@ type Key
     | FooterCredit3Link
     | FooterCopyright String
     | FooterPlaceCal
+      --- Region Selector
+    | AllRegionSelectorLabel
       --- Index Page
     | IndexTitle
     | IndexMetaDescription

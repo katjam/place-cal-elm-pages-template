@@ -21,22 +21,23 @@ import Shared
 import Task
 import Theme.Page.Events
 import Theme.PageTemplate
-import Theme.Paginator exposing (Msg(..))
+import Theme.Paginator
+import Theme.RegionSelector
 import Time
 import UrlPath
 import View exposing (View)
 
 
 type alias Model =
-    { filterBy : Theme.Paginator.Filter
-    , visibleEvents : List Data.PlaceCal.Events.Event
+    { filterByDate : Theme.Paginator.Filter
+    , filterByRegion : Int
     , nowTime : Time.Posix
     , viewportWidth : Float
     }
 
 
 type alias Msg =
-    Theme.Paginator.Msg
+    Theme.Page.Events.Msg
 
 
 type alias RouteParams =
@@ -48,14 +49,14 @@ init :
     -> Shared.Model
     -> ( Model, Effect.Effect Msg )
 init app _ =
-    ( { filterBy = Theme.Paginator.None
-      , visibleEvents = Data.PlaceCal.Events.eventsWithPartners app.sharedData.events app.sharedData.partners
+    ( { filterByDate = Theme.Paginator.None
+      , filterByRegion = 0
       , nowTime = Time.millisToPosix 0
       , viewportWidth = 320
       }
     , Effect.batch
-        [ Task.perform GetTime Time.now |> Effect.fromCmd
-        , Task.perform GotViewport Browser.Dom.getViewport |> Effect.fromCmd
+        [ Task.perform Theme.Paginator.GetTime Time.now |> Cmd.map Theme.Page.Events.fromPaginatorMsg |> Effect.fromCmd
+        , Task.perform Theme.Paginator.GotViewport Browser.Dom.getViewport |> Cmd.map Theme.Page.Events.fromPaginatorMsg |> Effect.fromCmd
         ]
     )
 
@@ -68,60 +69,68 @@ update :
     -> ( Model, Effect.Effect Msg )
 update app _ msg model =
     case msg of
-        ClickedDay posix ->
-            ( { model
-                | filterBy = Theme.Paginator.Day posix
-                , visibleEvents =
-                    Data.PlaceCal.Events.eventsWithPartners (Data.PlaceCal.Events.eventsFromDate app.sharedData.events posix) app.sharedData.partners
-              }
-            , Effect.none
-            )
+        Theme.Page.Events.PaginatorMsg submsg ->
+            case submsg of
+                Theme.Paginator.ClickedDay posix ->
+                    ( { model
+                        | filterByDate =
+                            Theme.Paginator.Day posix
+                      }
+                    , Effect.none
+                    )
 
-        ClickedAllPastEvents ->
-            ( { model
-                | filterBy = Theme.Paginator.Past
-                , visibleEvents = Data.PlaceCal.Events.eventsWithPartners (List.reverse (Data.PlaceCal.Events.onOrBeforeDate app.sharedData.events model.nowTime)) app.sharedData.partners
-              }
-            , Effect.none
-            )
+                Theme.Paginator.ClickedAllPastEvents ->
+                    ( { model
+                        | filterByDate = Theme.Paginator.Past
+                      }
+                    , Effect.none
+                    )
 
-        ClickedAllFutureEvents ->
-            ( { model
-                | filterBy = Theme.Paginator.Future
-                , visibleEvents = Data.PlaceCal.Events.eventsWithPartners (Data.PlaceCal.Events.afterDate app.sharedData.events model.nowTime) app.sharedData.partners
-              }
-            , Effect.none
-            )
+                Theme.Paginator.ClickedAllFutureEvents ->
+                    ( { model
+                        | filterByDate = Theme.Paginator.Future
+                      }
+                    , Effect.none
+                    )
 
-        GetTime newTime ->
-            ( { model
-                | filterBy = Theme.Paginator.Day newTime
-                , nowTime = newTime
-                , visibleEvents =
-                    Data.PlaceCal.Events.eventsWithPartners (Data.PlaceCal.Events.eventsFromDate app.sharedData.events newTime) app.sharedData.partners
-              }
-            , Effect.none
-            )
+                Theme.Paginator.GetTime newTime ->
+                    ( { model
+                        | filterByDate = Theme.Paginator.Day newTime
+                        , nowTime = newTime
+                      }
+                    , Effect.none
+                    )
 
-        ScrollRight ->
-            ( model
-            , Task.attempt (\_ -> NoOp)
-                (Theme.Paginator.scrollPagination Theme.Paginator.Right model.viewportWidth)
-                |> Effect.fromCmd
-            )
+                Theme.Paginator.ScrollRight ->
+                    ( model
+                    , Task.attempt (\_ -> Theme.Paginator.NoOp)
+                        (Theme.Paginator.scrollPagination Theme.Paginator.Right model.viewportWidth)
+                        |> Cmd.map Theme.Page.Events.fromPaginatorMsg
+                        |> Effect.fromCmd
+                    )
 
-        ScrollLeft ->
-            ( model
-            , Task.attempt (\_ -> NoOp)
-                (Theme.Paginator.scrollPagination Theme.Paginator.Left model.viewportWidth)
-                |> Effect.fromCmd
-            )
+                Theme.Paginator.ScrollLeft ->
+                    ( model
+                    , Task.attempt (\_ -> Theme.Paginator.NoOp)
+                        (Theme.Paginator.scrollPagination Theme.Paginator.Left model.viewportWidth)
+                        |> Cmd.map Theme.Page.Events.fromPaginatorMsg
+                        |> Effect.fromCmd
+                    )
 
-        GotViewport viewport ->
-            ( { model | viewportWidth = Maybe.withDefault model.viewportWidth (Just viewport.scene.width) }, Effect.none )
+                Theme.Paginator.GotViewport viewport ->
+                    ( { model | viewportWidth = Maybe.withDefault model.viewportWidth (Just viewport.scene.width) }, Effect.none )
 
-        NoOp ->
-            ( model, Effect.none )
+                Theme.Paginator.NoOp ->
+                    ( model, Effect.none )
+
+        Theme.Page.Events.RegionSelectorMsg submsg ->
+            case submsg of
+                Theme.RegionSelector.ClickedSelector regionId ->
+                    ( { model
+                        | filterByRegion = regionId
+                      }
+                    , Effect.none
+                    )
 
 
 subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
@@ -168,7 +177,7 @@ view :
     -> Shared.Model
     -> Model
     -> View (PagesMsg.PagesMsg Msg)
-view _ _ model =
+view app _ model =
     { title = t (PageMetaTitle (t EventsTitle))
     , body =
         [ Theme.PageTemplate.view
@@ -176,7 +185,7 @@ view _ _ model =
             , title = t EventsTitle
             , bigText = { text = t EventsSummary, node = "h3" }
             , smallText = Nothing
-            , innerContent = Just (Theme.Page.Events.viewEvents model)
+            , innerContent = Just (Theme.Page.Events.viewEvents (Data.PlaceCal.Events.eventsWithPartners app.sharedData.events app.sharedData.partners) model)
             , outerContent = Nothing
             }
             |> Html.Styled.map PagesMsg.fromMsg
