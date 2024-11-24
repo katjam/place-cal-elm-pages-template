@@ -17,7 +17,7 @@ import Markdown.Block
 import PagesMsg
 import RouteBuilder
 import Shared
-import Theme.AboutPage
+import Theme.Page.About
 import Theme.PageTemplate
 import Theme.TransMarkdown
 import View
@@ -178,7 +178,7 @@ data =
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
-head app =
+head _ =
     Theme.PageTemplate.pageMetaTags
         { title = AboutTitle
         , description = AboutMetaDescription
@@ -190,7 +190,7 @@ view :
     RouteBuilder.App Data ActionData RouteParams
     -> Shared.Model
     -> View.View (PagesMsg.PagesMsg Msg)
-view app shared =
+view app _ =
     { title = t (PageMetaTitle (t AboutTitle))
     , body =
         [ Theme.PageTemplate.view
@@ -198,10 +198,10 @@ view app shared =
             , title = app.data.main.title
             , bigText = { text = app.data.main.subtitle, node = "p" }
             , smallText = Nothing
-            , innerContent = Just (Theme.AboutPage.viewIntro app.data.main.body)
+            , innerContent = Just (Theme.Page.About.viewIntro app.data.main.body)
             , outerContent =
                 Just
-                    (Theme.AboutPage.viewSections
+                    (Theme.Page.About.viewSections
                         { accessibilityData = app.data.accessibility
                         , makersData = app.data.makers
                         , aboutPlaceCalData = app.data.placecal

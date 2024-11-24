@@ -7,11 +7,9 @@ module Route.Partners.Partner_ exposing (Model, Msg, RouteParams, route, Data, A
 -}
 
 import BackendTask
-import BackendTask.Custom
 import Browser.Dom
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Data.PlaceCal.Api
 import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
 import Effect
@@ -24,9 +22,9 @@ import RouteBuilder
 import Shared
 import Task
 import Theme.Global
+import Theme.Page.Partner
 import Theme.PageTemplate
 import Theme.Paginator exposing (Msg(..))
-import Theme.PartnerPage
 import Time
 import UrlPath
 import View
@@ -68,7 +66,7 @@ init :
     RouteBuilder.App Data ActionData RouteParams
     -> Shared.Model
     -> ( Model, Effect.Effect Msg )
-init app shared =
+init app _ =
     let
         urlFragment : Maybe String
         urlFragment =
@@ -110,7 +108,7 @@ update :
     -> Msg
     -> Model
     -> ( Model, Effect.Effect Msg )
-update app shared msg model =
+update app _ msg model =
     let
         aPartner =
             Data.PlaceCal.Partners.partnerFromSlug app.sharedData.partners app.routeParams.partner
@@ -208,7 +206,7 @@ view :
     -> Shared.Model
     -> Model
     -> View.View (PagesMsg.PagesMsg Msg)
-view app shared model =
+view app _ model =
     let
         aPartner =
             Data.PlaceCal.Partners.partnerFromSlug app.sharedData.partners app.routeParams.partner
@@ -222,7 +220,7 @@ view app shared model =
             , smallText = Nothing
             , innerContent =
                 Just
-                    (Theme.PartnerPage.viewInfo model
+                    (Theme.Page.Partner.viewInfo model
                         { partner = aPartner
                         , events = eventsFromPartnerId aPartner.id app.sharedData.events
                         }
@@ -241,11 +239,7 @@ pages =
             partnerData.allPartners
                 |> List.map (\partner -> { partner = partner.id })
         )
-        (Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            "partners"
-            Data.PlaceCal.Partners.allPartnersQuery
-            Data.PlaceCal.Partners.partnersDecoder
-        )
+        Data.PlaceCal.Partners.partnersData
         |> BackendTask.allowFatal
 
 

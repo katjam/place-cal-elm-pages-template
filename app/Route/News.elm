@@ -15,7 +15,7 @@ import Head
 import PagesMsg
 import RouteBuilder
 import Shared
-import Theme.NewsPage
+import Theme.Page.News
 import Theme.PageTemplate
 import View
 
@@ -54,7 +54,7 @@ data =
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
-head app =
+head _ =
     Theme.PageTemplate.pageMetaTags
         { title = NewsTitle
         , description = NewsDescription
@@ -66,7 +66,7 @@ view :
     RouteBuilder.App Data ActionData RouteParams
     -> Shared.Model
     -> View.View (PagesMsg.PagesMsg Msg)
-view app shared =
+view app _ =
     { title = t (PageMetaTitle (t NewsTitle))
     , body =
         [ Theme.PageTemplate.view
@@ -77,7 +77,7 @@ view app shared =
             , innerContent = Nothing
             , outerContent =
                 Just
-                    (Theme.NewsPage.viewNewsList
+                    (Theme.Page.News.viewNewsList
                         (Data.PlaceCal.Articles.replacePartnerIdWithName app.sharedData.articles app.sharedData.partners)
                     )
             }

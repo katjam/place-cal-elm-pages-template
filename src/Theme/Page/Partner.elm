@@ -1,22 +1,20 @@
-module Theme.PartnerPage exposing (viewInfo)
+module Theme.Page.Partner exposing (viewInfo)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Css exposing (Style, auto, batch, calc, center, color, display, displayFlex, fontStyle, important, inlineBlock, margin2, margin4, marginBlockEnd, marginBlockStart, marginTop, maxWidth, minus, normal, paddingTop, pct, px, rem, textAlign, width)
+import Css exposing (Style, auto, batch, calc, center, color, displayFlex, fontStyle, important, margin2, margin4, marginBlockEnd, marginBlockStart, marginTop, maxWidth, minus, normal, pct, px, rem, textAlign, width)
 import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
-import Html.Styled exposing (Html, a, address, div, h3, hr, img, p, section, span, text)
-import Html.Styled.Attributes exposing (alt, css, href, id, src, target)
-import Theme.EventsPage
-import Theme.Global exposing (hrStyle, introTextLargeStyle, linkStyle, normalFirstParagraphStyle, pink, smallInlineTitleStyle, viewBackButton, white, withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Html.Styled exposing (Html, a, address, div, h3, hr, p, section, span, text)
+import Html.Styled.Attributes exposing (css, href, id, target)
+import Theme.Global exposing (hrStyle, introTextLargeStyle, linkStyle, normalFirstParagraphStyle, pink, smallInlineTitleStyle, white, withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Theme.Page.Events
 import Theme.TransMarkdown
 
 
 viewInfo localModel { partner, events } =
     section [ css [ margin2 (rem 0) (rem 0.35) ] ]
         [ text ""
-
-        --[ partnerLogo partner.maybeLogo partner.name
         , div [ css [ descriptionStyle ] ] (Theme.TransMarkdown.markdownToHtml (t (PartnerDescriptionText partner.description partner.name)))
         , hr [ css [ hrStyle ] ] []
         , section [ css [ contactWrapperStyle ] ]
@@ -55,7 +53,7 @@ viewPartnerEvents localModel { partner, events } =
         (if List.length events > 0 then
             if List.length events > 20 then
                 [ eventAreaTitle
-                , Theme.EventsPage.viewEvents localModel
+                , Theme.Page.Events.viewEvents localModel
                 ]
 
             else
@@ -69,7 +67,7 @@ viewPartnerEvents localModel { partner, events } =
                 [ if List.length futureEvents > 0 then
                     div []
                         [ eventAreaTitle
-                        , Theme.EventsPage.viewEventsList futureEvents
+                        , Theme.Page.Events.viewEventsList futureEvents
                         ]
 
                   else
@@ -77,7 +75,7 @@ viewPartnerEvents localModel { partner, events } =
                 , if List.length pastEvents > 0 then
                     div []
                         [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
-                        , Theme.EventsPage.viewEventsList pastEvents
+                        , Theme.Page.Events.viewEventsList pastEvents
                         ]
 
                   else
@@ -149,23 +147,6 @@ viewAddress maybeAddress =
             p [ css [ contactItemStyle ] ] [ text (t PartnerAddressEmptyText) ]
 
 
-partnerLogo : Maybe String -> String -> Html msg
-partnerLogo maybeLogoUrl partnerName =
-    case maybeLogoUrl of
-        Just logoUrl ->
-            if Copy.Text.isValidUrl logoUrl then
-                div [ css [ partnerLogoContainer ] ]
-                    [ img [ src logoUrl, css [ partnerLogoStyle ], alt (partnerName ++ " logo") ] []
-                    , hr [ css [ hrStyle ] ] []
-                    ]
-
-            else
-                text ""
-
-        Nothing ->
-            text ""
-
-
 
 ---------
 -- Styles
@@ -224,19 +205,4 @@ mapContainerStyle =
             [ margin4 (rem 3) (calc (rem -1.85) minus (px 1)) (calc (rem -1.85) minus (px 1)) (calc (rem -1.85) minus (px 1)) ]
         , withMediaTabletPortraitUp
             [ margin4 (rem 3) (calc (rem -2.35) minus (px 1)) (px -1) (calc (rem -2.35) minus (px 1)) ]
-        ]
-
-
-partnerLogoContainer : Style
-partnerLogoContainer =
-    batch
-        [ textAlign center
-        , paddingTop (rem 2)
-        ]
-
-
-partnerLogoStyle : Style
-partnerLogoStyle =
-    batch
-        [ display inlineBlock
         ]

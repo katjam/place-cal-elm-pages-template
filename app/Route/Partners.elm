@@ -14,8 +14,8 @@ import Head
 import PagesMsg
 import RouteBuilder
 import Shared
+import Theme.Page.Partners
 import Theme.PageTemplate
-import Theme.PartnersPage
 import View
 
 
@@ -53,7 +53,7 @@ data =
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
-head app =
+head _ =
     Theme.PageTemplate.pageMetaTags
         { title = PartnersTitle
         , description = PartnersMetaDescription
@@ -65,7 +65,7 @@ view :
     RouteBuilder.App Data ActionData RouteParams
     -> Shared.Model
     -> View.View (PagesMsg.PagesMsg Msg)
-view app shared =
+view app _ =
     { title = t (PageMetaTitle (t PartnersTitle))
     , body =
         [ Theme.PageTemplate.view
@@ -73,7 +73,7 @@ view app shared =
             , title = t PartnersTitle
             , bigText = { text = t PartnersIntroSummary, node = "p" }
             , smallText = Just [ t PartnersIntroDescription ]
-            , innerContent = Just (Theme.PartnersPage.viewPartners app.sharedData.partners)
+            , innerContent = Just (Theme.Page.Partners.viewPartners app.sharedData.partners)
             , outerContent = Nothing
             }
         ]

@@ -7,23 +7,16 @@ module Route.Events.Event_ exposing (Model, Msg, RouteParams, route, Data, Actio
 -}
 
 import BackendTask
-import BackendTask.Custom
-import Browser.Dom
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Data.PlaceCal.Api
 import Data.PlaceCal.Events
-import Effect
 import FatalError
 import Head
-import Json.Encode
 import PagesMsg
 import RouteBuilder
 import Shared
-import Task
-import Theme.EventPage
+import Theme.Page.Event
 import Theme.PageTemplate
-import Theme.TransMarkdown
 import View
 
 
@@ -67,11 +60,7 @@ pages =
             eventData.allEvents
                 |> List.map (\event -> { event = event.id })
         )
-        (Data.PlaceCal.Api.fetchAndCachePlaceCalData
-            "events"
-            Data.PlaceCal.Events.allEventsQuery
-            Data.PlaceCal.Events.eventsDecoder
-        )
+        Data.PlaceCal.Events.eventsData
         |> BackendTask.allowFatal
 
 
@@ -109,8 +98,8 @@ view app _ =
             , title = t EventsTitle
             , bigText = { text = event.name, node = "h3" }
             , smallText = Nothing
-            , innerContent = Just (Theme.EventPage.viewEventInfo eventWithPartner)
-            , outerContent = Just (Theme.EventPage.viewButtons event)
+            , innerContent = Just (Theme.Page.Event.viewEventInfo eventWithPartner)
+            , outerContent = Just (Theme.Page.Event.viewButtons event)
             }
         ]
     }

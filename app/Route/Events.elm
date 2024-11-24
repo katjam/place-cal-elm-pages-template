@@ -8,7 +8,6 @@ module Route.Events exposing (Model, Msg, RouteParams, route, Data, ActionData)
 
 import BackendTask
 import Browser.Dom
-import Browser.Navigation
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
 import Data.PlaceCal.Events
@@ -20,7 +19,7 @@ import PagesMsg
 import RouteBuilder
 import Shared
 import Task
-import Theme.EventsPage
+import Theme.Page.Events
 import Theme.PageTemplate
 import Theme.Paginator exposing (Msg(..))
 import Time
@@ -177,7 +176,7 @@ view _ _ model =
             , title = t EventsTitle
             , bigText = { text = t EventsSummary, node = "h3" }
             , smallText = Nothing
-            , innerContent = Just (Theme.EventsPage.viewEvents model)
+            , innerContent = Just (Theme.Page.Events.viewEvents model)
             , outerContent = Nothing
             }
             |> Html.Styled.map PagesMsg.fromMsg
