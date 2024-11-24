@@ -233,6 +233,9 @@ t key =
         PartnersIntroDescription ->
             "All of our partners are explicitly trans-friendly organisations. Some are led by trans people, and some led by friends and allies. They put on events, provide services and offer support for members of our community."
 
+        PartnersListHeading ->
+            "All partners"
+
         PartnersListEmpty ->
             "There are currently no Trans Dimension partners"
 
