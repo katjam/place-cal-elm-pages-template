@@ -80,6 +80,7 @@ type Key
     | PartnersMetaDescription
     | PartnersIntroSummary
     | PartnersIntroDescription
+    | PartnersListHeading
     | PartnersListEmpty
     | PartnersMapAltText
       --- Partner Page

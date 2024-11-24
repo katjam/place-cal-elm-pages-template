@@ -1,4 +1,4 @@
-module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, partnerFromSlug, partnerNamesFromIds, partnersData, partnershipTagIdList, partnershipTagList)
+module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, partnerFromSlug, partnerNamesFromIds, partnersData, partnersFromRegionId, partnershipTagIdList, partnershipTagList)
 
 import BackendTask
 import BackendTask.Custom
@@ -228,3 +228,13 @@ partnerNamesFromIds partnerList idList =
     -- If the partner isn't in our sites partners, it won't be in the list
     List.filter (\partner -> List.member partner.id idList) partnerList
         |> List.map (\partner -> partner.name)
+
+
+partnersFromRegionId : List Partner -> Int -> List Partner
+partnersFromRegionId partnerList regionId =
+    -- Region 0 is everywhere
+    if regionId == 0 then
+        List.sortBy .name partnerList
+
+    else
+        List.filter (\partner -> partner.partnershipTagId == regionId) partnerList
