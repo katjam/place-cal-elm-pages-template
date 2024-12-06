@@ -92,7 +92,6 @@ filterFromPath maybePagePath =
         Just aPath ->
             case aPath.path.query of
                 Just aQuery ->
-                    --Data.PlaceCal.Partners.filterFromQueryString (String.replace "filter=" "" aQuery)
                     Data.PlaceCal.Partners.filterFromQueryString (filterFromQueryParams aQuery)
 
                 Nothing ->
