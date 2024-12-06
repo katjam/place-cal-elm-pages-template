@@ -48,9 +48,9 @@ init :
     RouteBuilder.App Data ActionData RouteParams
     -> Shared.Model
     -> ( Model, Effect.Effect Msg )
-init app _ =
+init app shared =
     ( { filterByDate = Theme.Paginator.None
-      , filterByRegion = 0
+      , filterByRegion = Maybe.withDefault 0 shared.filterParam
       , nowTime = Time.millisToPosix 0
       , viewportWidth = 320
       }

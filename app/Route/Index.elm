@@ -43,8 +43,8 @@ init :
     RouteBuilder.App Data ActionData RouteParams
     -> Shared.Model
     -> ( Model, Effect.Effect Msg )
-init app _ =
-    ( { filterByRegion = 0
+init app shared =
+    ( { filterByRegion = Maybe.withDefault 0 shared.filterParam
       , nowTime = app.sharedData.time
       }
     , Effect.none

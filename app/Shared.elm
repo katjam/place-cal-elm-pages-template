@@ -6,6 +6,7 @@ import Browser.Navigation
 import Data.PlaceCal.Articles
 import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
+import Dict
 import Effect exposing (Effect)
 import FatalError exposing (FatalError)
 import Html
@@ -60,6 +61,7 @@ type alias Msg =
 
 type alias Model =
     { showMobileMenu : Bool
+    , filterParam : Maybe Int
     }
 
 
@@ -78,9 +80,35 @@ init :
     -> ( Model, Effect Msg )
 init flags maybePagePath =
     ( { showMobileMenu = False
+      , filterParam = filterFromPath maybePagePath
       }
     , Effect.none
     )
+
+
+filterFromPath : Maybe { a | path : { q | query : Maybe String } } -> Maybe Int
+filterFromPath maybePagePath =
+    case maybePagePath of
+        Just aPath ->
+            case aPath.path.query of
+                Just aQuery ->
+                    --Data.PlaceCal.Partners.filterFromQueryString (String.replace "filter=" "" aQuery)
+                    Data.PlaceCal.Partners.filterFromQueryString (filterFromQueryParams aQuery)
+
+                Nothing ->
+                    Nothing
+
+        Nothing ->
+            Nothing
+
+
+filterFromQueryParams : String -> String
+filterFromQueryParams queryParams =
+    Pages.PageUrl.parseQueryParams queryParams
+        |> Dict.get "filter"
+        |> Maybe.withDefault []
+        |> List.head
+        |> Maybe.withDefault ""
 
 
 update : Msg -> Model -> ( Model, Effect Msg )
