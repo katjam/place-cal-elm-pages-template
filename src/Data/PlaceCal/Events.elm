@@ -1,4 +1,4 @@
-module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromDate, eventsWithPartners, next4Events, onOrBeforeDate)
+module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromDate, eventsFromRegionId, eventsWithPartners, nextNEvents, onOrBeforeDate)
 
 import BackendTask
 import BackendTask.Custom
@@ -83,42 +83,52 @@ emptyEvent =
 
 
 eventFromSlug : String -> List Event -> Event
-eventFromSlug eventId eventsList =
-    List.filter (\event -> event.id == eventId) eventsList
+eventFromSlug eventId eventList =
+    List.filter (\event -> event.id == eventId) eventList
         |> List.head
         |> Maybe.withDefault emptyEvent
 
 
+eventsFromRegionId : List Event -> Int -> List Event
+eventsFromRegionId eventList regionId =
+    -- Region 0 is everywhere
+    if regionId == 0 then
+        eventList
+
+    else
+        List.filter (\event -> event.partnershipTagId == regionId) eventList
+
+
 eventsFromDate : List Event -> Time.Posix -> List Event
-eventsFromDate eventsList fromDate =
+eventsFromDate eventList fromDate =
     List.filter
         (\event ->
             TransDate.isSameDay event.startDatetime fromDate
         )
-        eventsList
+        eventList
 
 
 onOrBeforeDate : List Event -> Time.Posix -> List Event
-onOrBeforeDate eventsList fromDate =
+onOrBeforeDate eventList fromDate =
     List.filter
         (\event ->
             TransDate.isOnOrBeforeDate event.startDatetime fromDate
         )
-        eventsList
+        eventList
 
 
 afterDate : List Event -> Time.Posix -> List Event
-afterDate eventsList fromDate =
+afterDate eventList fromDate =
     List.filter
         (\event ->
             TransDate.isAfterDate event.startDatetime fromDate
         )
-        eventsList
+        eventList
 
 
-next4Events : List Event -> Time.Posix -> List Event
-next4Events allEvents fromTime =
-    List.take 4 (eventsFromDate allEvents fromTime)
+nextNEvents : Int -> List Event -> Time.Posix -> List Event
+nextNEvents showCount eventList fromTime =
+    List.take showCount (afterDate eventList fromTime)
 
 
 eventPartnerFromId : List Data.PlaceCal.Partners.Partner -> String -> EventPartner
@@ -163,7 +173,15 @@ eventsData =
         )
         |> BackendTask.map (List.map .allEvents)
         |> BackendTask.map List.concat
+        |> BackendTask.map sortEventsByDate
         |> BackendTask.map (\eventList -> { allEvents = eventList })
+
+
+sortEventsByDate : List Event -> List Event
+sortEventsByDate events =
+    List.sortBy
+        (\event -> Time.posixToMillis event.startDatetime)
+        events
 
 
 allEventsQuery : String -> Json.Encode.Value
@@ -203,7 +221,7 @@ decodeEvent partnershipTagInt =
     Json.Decode.succeed Event
         |> Json.Decode.Pipeline.required "id"
             Json.Decode.string
-        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed partnershipTagInt) 0
+        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed partnershipTagInt) partnershipTagInt
         |> Json.Decode.Pipeline.required "name"
             Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary"

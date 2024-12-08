@@ -1,4 +1,4 @@
-module Theme.Page.Events exposing (viewEvents, viewEventsList)
+module Theme.Page.Events exposing (Msg(..), fromPaginatorMsg, fromRegionSelectorMsg, viewEvents, viewEventsList)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
@@ -12,39 +12,79 @@ import Html.Styled exposing (Html, a, article, div, h4, li, p, section, span, te
 import Html.Styled.Attributes exposing (css, href)
 import Theme.Global exposing (borderTransition, colorTransition, introTextLargeStyle, pink, white, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.Paginator
+import Theme.RegionSelector
 import Time
 
 
+type Msg
+    = PaginatorMsg Theme.Paginator.Msg
+    | RegionSelectorMsg Theme.RegionSelector.Msg
+
+
+fromPaginatorMsg : Theme.Paginator.Msg -> Msg
+fromPaginatorMsg msg =
+    PaginatorMsg msg
+
+
+fromRegionSelectorMsg : Theme.RegionSelector.Msg -> Msg
+fromRegionSelectorMsg msg =
+    RegionSelectorMsg msg
+
+
 viewEvents :
-    { localModel
-        | filterBy : Theme.Paginator.Filter
-        , nowTime : Time.Posix
-        , visibleEvents : List Data.PlaceCal.Events.Event
-    }
-    -> Html Theme.Paginator.Msg
-viewEvents model =
+    List Data.PlaceCal.Events.Event
+    ->
+        { localModel
+            | filterByDate : Theme.Paginator.Filter
+            , filterByRegion : Int
+            , nowTime : Time.Posix
+        }
+    -> Html Msg
+viewEvents eventsList model =
     section [ css [ eventsContainerStyle ] ]
-        [ Theme.Paginator.viewPagination model
-        , viewFilteredEventsList model.filterBy model.visibleEvents
+        [ Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
+        , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
+        , viewEventsList model eventsList Nothing |> Html.Styled.map fromPaginatorMsg
         ]
 
 
-viewEventsList : List Data.PlaceCal.Events.Event -> Html msg
-viewEventsList events =
-    viewFilteredEventsList Theme.Paginator.Unknown events
+viewEventsList :
+    { localModel
+        | filterByDate : Theme.Paginator.Filter
+        , filterByRegion : Int
+        , nowTime : Time.Posix
+    }
+    -> List Data.PlaceCal.Events.Event
+    -> Maybe Int
+    -> Html msg
+viewEventsList localModel eventsList maybeListLength =
+    let
+        allEventsInRegion : List Data.PlaceCal.Events.Event
+        allEventsInRegion =
+            Data.PlaceCal.Events.eventsFromRegionId eventsList localModel.filterByRegion
 
+        paginatedEventsInRegion : List Data.PlaceCal.Events.Event
+        paginatedEventsInRegion =
+            Theme.Paginator.filterEvents localModel.nowTime localModel.filterByDate allEventsInRegion
 
-viewFilteredEventsList : Theme.Paginator.Filter -> List Data.PlaceCal.Events.Event -> Html msg
-viewFilteredEventsList filter filteredEvents =
+        filteredEvents : List Data.PlaceCal.Events.Event
+        filteredEvents =
+            case maybeListLength of
+                Nothing ->
+                    paginatedEventsInRegion
+
+                Just numberOfEvents ->
+                    Data.PlaceCal.Events.nextNEvents numberOfEvents paginatedEventsInRegion localModel.nowTime
+    in
     div []
         [ if List.length filteredEvents > 0 then
-            ul [ css [ eventListStyle ] ]
+            ul [ css [ eventsListStyle ] ]
                 (List.map (\event -> viewEvent event) filteredEvents)
 
           else
             p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ]
                 [ text
-                    (case filter of
+                    (case localModel.filterByDate of
                         Theme.Paginator.Day _ ->
                             t EventsEmptyText
 
@@ -60,7 +100,7 @@ viewFilteredEventsList filter filteredEvents =
 
 viewEvent : Data.PlaceCal.Events.Event -> Html msg
 viewEvent event =
-    li [ css [ eventListItemStyle ] ]
+    li [ css [ eventsListItemStyle ] ]
         [ a [ css [ eventLinkStyle ], href (TransRoutes.toAbsoluteUrl (Event event.id)) ]
             [ article [ css [ eventStyle ] ]
                 [ div [ css [ eventDescriptionStyle ] ]
@@ -110,8 +150,8 @@ eventsContainerStyle =
         ]
 
 
-eventListStyle : Style
-eventListStyle =
+eventsListStyle : Style
+eventsListStyle =
     batch
         [ displayFlex
         , flexDirection column
@@ -120,8 +160,8 @@ eventListStyle =
         ]
 
 
-eventListItemStyle : Style
-eventListItemStyle =
+eventsListItemStyle : Style
+eventsListItemStyle =
     batch
         [ hover
             [ descendants
