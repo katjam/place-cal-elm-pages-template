@@ -9,4 +9,4 @@ At its core, The Trans Dimension is a digital partnership built on real-life tru
 
 The Trans Dimension is run by Geeks for Social Change in partnership with Gendered Intelligence with support from the Comic Relief Tech for Good programme.
 
-At this stage, the Trans Dimension is operating in London and Manchester. If you think you can help us roll it out in your area, please [get in touch](info@transdimension.uk).
+At this stage, the Trans Dimension is operating in London and Manchester. If you think you can help us roll it out in your area, please [get in touch](mailto:info@transdimension.uk).
