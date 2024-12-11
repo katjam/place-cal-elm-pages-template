@@ -1,4 +1,4 @@
-module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, partnerFromSlug, partnerNamesFromIds, partnersData, partnershipTagIdList)
+module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, filterFromQueryString, partnerFromSlug, partnerNamesFromIds, partnersData, partnersFromRegionId, partnershipTagIdList, partnershipTagList)
 
 import BackendTask
 import BackendTask.Custom
@@ -117,6 +117,25 @@ partnershipTagName tagInfo =
         |> Maybe.withDefault ""
 
 
+filterFromQueryString : String -> Maybe Int
+filterFromQueryString queryString =
+    partnershipTagList
+        |> List.map (\tagInfo -> { tagInfo | name = String.toLower tagInfo.name })
+        |> List.filter (\tagInfo -> tagInfo.name == String.toLower queryString)
+        |> Maybe.withDefault List.head Nothing
+        |> maybeMatchTagId
+
+
+maybeMatchTagId : Maybe PartnershipTag -> Maybe Int
+maybeMatchTagId maybeTagInfo =
+    case maybeTagInfo of
+        Just tagInfo ->
+            Just tagInfo.id
+
+        Nothing ->
+            Nothing
+
+
 partnersData : BackendTask.BackendTask { fatal : FatalError.FatalError, recoverable : BackendTask.Custom.Error } AllPartnersResponse
 partnersData =
     BackendTask.combine
@@ -169,7 +188,7 @@ decodePartner : Int -> Json.Decode.Decoder Partner
 decodePartner partnershipTagInt =
     Json.Decode.succeed Partner
         |> Json.Decode.Pipeline.required "id" Json.Decode.string
-        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed partnershipTagInt) 0
+        |> Json.Decode.Pipeline.optional "partnershipTagId" (Json.Decode.succeed partnershipTagInt) partnershipTagInt
         |> Json.Decode.Pipeline.required "name" Json.Decode.string
         |> Json.Decode.Pipeline.optional "summary" Json.Decode.string ""
         |> Json.Decode.Pipeline.optional "description" Json.Decode.string ""
@@ -228,3 +247,13 @@ partnerNamesFromIds partnerList idList =
     -- If the partner isn't in our sites partners, it won't be in the list
     List.filter (\partner -> List.member partner.id idList) partnerList
         |> List.map (\partner -> partner.name)
+
+
+partnersFromRegionId : List Partner -> Int -> List Partner
+partnersFromRegionId partnerList regionId =
+    -- Region 0 is everywhere
+    if regionId == 0 then
+        List.sortBy .name partnerList
+
+    else
+        List.filter (\partner -> partner.partnershipTagId == regionId) partnerList

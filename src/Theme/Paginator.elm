@@ -1,4 +1,4 @@
-module Theme.Paginator exposing (Filter(..), Msg(..), ScrollDirection(..), scrollPagination, viewPagination)
+module Theme.Paginator exposing (Filter(..), Msg(..), ScrollDirection(..), filterEvents, scrollPagination, viewPagination)
 
 import Browser.Dom exposing (Error, Viewport, getViewportOf, setViewportOf)
 import Copy.Keys exposing (Key(..))
@@ -6,6 +6,7 @@ import Copy.Text exposing (t)
 import Css exposing (Style, active, auto, backgroundColor, batch, borderBox, borderColor, borderRadius, borderStyle, borderWidth, boxSizing, center, color, cursor, deg, display, displayFlex, fitContent, flexWrap, focus, fontSize, fontWeight, height, hover, important, int, justifyContent, listStyleType, margin, margin2, margin4, maxWidth, noWrap, none, overflowX, padding2, padding4, paddingLeft, paddingRight, pct, pointer, position, property, pseudoElement, px, relative, rem, rotate, scroll, solid, textAlign, transform, width, wrap)
 import Css.Global exposing (descendants, typeSelector)
 import Css.Transitions exposing (transition)
+import Data.PlaceCal.Events
 import Helpers.TransDate as TransDate
 import Html.Styled exposing (Html, button, div, img, li, text, ul)
 import Html.Styled.Attributes exposing (css, id, src)
@@ -41,7 +42,7 @@ type ScrollDirection
 
 viewPagination :
     { localModel
-        | filterBy : Filter
+        | filterByDate : Filter
         , nowTime : Time.Posix
     }
     -> Html Msg
@@ -56,7 +57,7 @@ viewPagination localModel =
                             li [ css [ paginationButtonListItemStyle ] ]
                                 [ button
                                     [ css
-                                        [ case localModel.filterBy of
+                                        [ case localModel.filterByDate of
                                             Day day ->
                                                 if TransDate.isSameDay buttonTime day then
                                                     paginationButtonListItemButtonActiveStyle
@@ -82,7 +83,7 @@ viewPagination localModel =
                 [ li [ css [ allEventsButtonListItemStyle ] ]
                     [ button
                         [ css
-                            (if localModel.filterBy == Past then
+                            (if localModel.filterByDate == Past then
                                 [ important (width (px 200)), paginationButtonListItemButtonActiveStyle ]
 
                              else
@@ -95,7 +96,7 @@ viewPagination localModel =
                 , li [ css [ allEventsButtonListItemStyle ] ]
                     [ button
                         [ css
-                            (if localModel.filterBy == Future then
+                            (if localModel.filterByDate == Future then
                                 [ important (width (px 200)), paginationButtonListItemButtonActiveStyle ]
 
                              else
@@ -108,6 +109,25 @@ viewPagination localModel =
                 ]
             ]
         ]
+
+
+filterEvents : Time.Posix -> Filter -> List Data.PlaceCal.Events.Event -> List Data.PlaceCal.Events.Event
+filterEvents now filter eventList =
+    case filter of
+        Day time ->
+            Data.PlaceCal.Events.eventsFromDate eventList time
+
+        Past ->
+            List.reverse (Data.PlaceCal.Events.onOrBeforeDate eventList now)
+
+        Future ->
+            Data.PlaceCal.Events.afterDate eventList now
+
+        None ->
+            eventList
+
+        Unknown ->
+            eventList
 
 
 todayTomorrowNext5DaysPosix : Time.Posix -> List ( String, Time.Posix )

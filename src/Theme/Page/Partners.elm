@@ -10,18 +10,27 @@ import Helpers.TransRoutes as TransRoutes exposing (Route(..))
 import Html.Styled exposing (Html, a, div, h3, h4, li, p, section, span, styled, text, ul)
 import Html.Styled.Attributes exposing (css, href)
 import Theme.Global as Theme exposing (darkPurple, pink, purple, white, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Theme.RegionSelector
 
 
-viewPartners : List Data.PlaceCal.Partners.Partner -> Html msg
-viewPartners partnerList =
+viewPartners :
+    List Data.PlaceCal.Partners.Partner
+    -> { localModel | filterByRegion : Int }
+    -> Html Theme.RegionSelector.Msg
+viewPartners partnerList model =
+    let
+        filteredPartnerList =
+            Data.PlaceCal.Partners.partnersFromRegionId partnerList model.filterByRegion
+    in
     section []
-        [ h3 [ css [ partnersListTitleStyle ] ] [ text "All partners" ]
-        , if List.length partnerList > 0 then
-            ul [ css [ listStyle ] ] (List.map (\partner -> viewPartner partner) partnerList)
+        [ h3 [ css [ partnersListTitleStyle ] ] [ text (t PartnersListHeading) ]
+        , Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion }
+        , if List.length filteredPartnerList > 0 then
+            ul [ css [ listStyle ] ] (List.map (\partner -> viewPartner partner) filteredPartnerList)
 
           else
             p [] [ text (t PartnersListEmpty) ]
-        , viewMap partnerList
+        , viewMap filteredPartnerList
         ]
 
 

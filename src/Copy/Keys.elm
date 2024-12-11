@@ -42,6 +42,8 @@ type Key
     | FooterCredit3Link
     | FooterCopyright String
     | FooterPlaceCal
+      --- Region Selector
+    | AllRegionSelectorLabel
       --- Index Page
     | IndexTitle
     | IndexMetaDescription
@@ -78,6 +80,7 @@ type Key
     | PartnersMetaDescription
     | PartnersIntroSummary
     | PartnersIntroDescription
+    | PartnersListHeading
     | PartnersListEmpty
     | PartnersMapAltText
       --- Partner Page
