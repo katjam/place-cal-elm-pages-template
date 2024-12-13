@@ -71,42 +71,39 @@ viewPartnerEvents events localModel partner =
     let
         eventAreaTitle =
             h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerUpcomingEventsText partner.name)) ]
+
+        futureEvents =
+            Data.PlaceCal.Events.afterDate events localModel.nowTime
+
+        pastEvents =
+            Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
     in
     section [ id "events" ]
-        (if List.length events > 0 then
-            if List.length events > 20 then
+        (if List.length futureEvents > 0 then
+            -- If we have more than 20 future events paginate
+            if List.length futureEvents > 20 then
                 [ eventAreaTitle
                 , Theme.Paginator.viewPagination localModel |> Html.Styled.map Theme.Page.Events.fromPaginatorMsg
                 , Theme.Page.Events.viewEventsList localModel events Nothing
                 ]
 
             else
-                let
-                    futureEvents =
-                        Data.PlaceCal.Events.afterDate events localModel.nowTime
-
-                    pastEvents =
-                        Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
-                in
-                [ if List.length futureEvents > 0 then
-                    div []
-                        [ eventAreaTitle
-                        , Theme.Page.Events.viewEventsList localModel futureEvents Nothing
-                        ]
-
-                  else
-                    div [] []
-                , if List.length pastEvents > 0 then
-                    div []
-                        [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
-                        , Theme.Page.Events.viewEventsList localModel pastEvents Nothing
-                        ]
-
-                  else
-                    div [] []
+                -- Otherwise show them all
+                [ div []
+                    [ Theme.Page.Events.viewEventsList localModel futureEvents Nothing
+                    ]
                 ]
 
+         else if List.length pastEvents > 0 then
+            -- If there are no future events but there were in the past, show them
+            [ div []
+                [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
+                , Theme.Page.Events.viewEventsList { localModel | filterByDate = Theme.Paginator.None } pastEvents Nothing
+                ]
+            ]
+
          else
+            -- This partner has never had events
             [ eventAreaTitle
             , p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ] [ text (t (PartnerEventsEmptyText partner.name)) ]
             ]
