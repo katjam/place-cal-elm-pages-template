@@ -33,7 +33,7 @@ viewInfo localModel { partner, events } =
         , section [ css [ contactWrapperStyle ] ]
             [ div [ css [ contactSectionStyle ] ]
                 [ h3 [ css [ contactHeadingStyle, Theme.Global.smallInlineTitleStyle ] ] [ text (t PartnerContactsHeading) ]
-                , viewContactDetails partner.maybeUrl partner.maybeContactDetails
+                , viewContactDetails partner.maybeUrl partner.maybeContactDetails partner.maybeInstagramUrl
                 ]
             , div [ css [ contactSectionStyle ] ]
                 [ h3 [ css [ contactHeadingStyle, Theme.Global.smallInlineTitleStyle ] ] [ text (t PartnerAddressHeading) ]
@@ -110,9 +110,9 @@ viewPartnerEvents events localModel partner =
         )
 
 
-viewContactDetails : Maybe String -> Maybe Data.PlaceCal.Partners.Contact -> Html msg
-viewContactDetails maybeUrl maybeContactDetails =
-    if maybeUrl == Nothing && maybeContactDetails == Nothing then
+viewContactDetails : Maybe String -> Maybe Data.PlaceCal.Partners.Contact -> Maybe String -> Html msg
+viewContactDetails maybeUrl maybeContactDetails maybeInstagramUrl =
+    if maybeUrl == Nothing && maybeContactDetails == Nothing && maybeInstagramUrl == Nothing then
         p [ css [ contactItemStyle ] ] [ text (t PartnerContactsEmptyText) ]
 
     else
@@ -146,6 +146,12 @@ viewContactDetails maybeUrl maybeContactDetails =
                 Just url ->
                     p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (Copy.Text.urlToDisplay url) ] ]
 
+                Nothing ->
+                    text ""
+            , case maybeInstagramUrl of
+                Just url ->
+                    p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (Copy.Text.urlToDisplay url) ] ]
+                
                 Nothing ->
                     text ""
             ]
