@@ -261,12 +261,8 @@ t key =
         PartnerAddressEmptyText ->
             "No address provided"
 
-        PartnerDescriptionText partnerDescription partnerName ->
-            if String.isEmpty partnerDescription then
-                "Please ask " ++ partnerName ++ " for more information"
-
-            else
-                partnerDescription
+        PartnerDescriptionEmptyText partnerName ->
+            "Please ask " ++ partnerName ++ " for more information"
 
         PartnerUpcomingEventsText partnerName ->
             "Upcoming events by " ++ partnerName

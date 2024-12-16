@@ -90,7 +90,7 @@ type Key
     | PartnerContactsEmptyText
     | PartnerAddressHeading
     | PartnerAddressEmptyText
-    | PartnerDescriptionText String String
+    | PartnerDescriptionEmptyText String
     | PartnerUpcomingEventsText String
     | PartnerPreviousEventsText String
     | PartnerEventsEmptyText String

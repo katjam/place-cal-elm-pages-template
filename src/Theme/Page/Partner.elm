@@ -28,7 +28,8 @@ viewInfo :
 viewInfo localModel { partner, events } =
     section [ css [ margin2 (rem 0) (rem 0.35) ] ]
         [ text ""
-        , div [ css [ descriptionStyle ] ] (Theme.TransMarkdown.markdownToHtml (t (PartnerDescriptionText partner.description partner.name)))
+        , div [ css [ descriptionStyle ] ]
+            (viewPartnerDescription partner.name partner.description partner.summary)
         , hr [ css [ hrStyle ] ] []
         , section [ css [ contactWrapperStyle ] ]
             [ div [ css [ contactSectionStyle ] ]
@@ -173,7 +174,15 @@ viewAddress maybeAddress =
         Nothing ->
             p [ css [ contactItemStyle ] ] [ text (t PartnerAddressEmptyText) ]
 
-
+viewPartnerDescription : String -> String -> String -> List (Html msg)
+viewPartnerDescription partnerName partnerDescription partnerSummary =
+    case (partnerDescription, partnerSummary) of
+        ("", "") -> [ div [ ] (Theme.TransMarkdown.markdownToHtml (t (PartnerDescriptionEmptyText partnerName))) ]
+        ( "", s) -> [ div [ ] (Theme.TransMarkdown.markdownToHtml s) ]
+        (d, "")  -> [ div [ ] (Theme.TransMarkdown.markdownToHtml d) ]
+        (d, s)   -> [ div [ ] (Theme.TransMarkdown.markdownToHtml s)
+                    , div [ ] (Theme.TransMarkdown.markdownToHtml d)
+                    ]
 
 ---------
 -- Styles
