@@ -17,6 +17,7 @@ type alias Partner =
     , summary : String
     , description : String
     , maybeUrl : Maybe String
+    , maybeInstagramUrl : Maybe String
     , maybeContactDetails : Maybe Contact
     , maybeAddress : Maybe Address
     , areasServed : List ServiceArea
@@ -61,6 +62,7 @@ emptyPartner =
     , summary = ""
     , description = ""
     , maybeUrl = Nothing
+    , maybeInstagramUrl = Nothing
     , maybeContactDetails = Nothing
     , maybeAddress = Nothing
     , areasServed = []
@@ -168,6 +170,7 @@ allPartnersQuery partnershipTag =
                   summary
                   contact { email, telephone }
                   url
+                  instagramUrl
                   address { streetAddress, postalCode, addressRegion, geo { latitude, longitude } }
                   areasServed { name abbreviatedName }
                   logo
@@ -193,6 +196,7 @@ decodePartner partnershipTagInt =
         |> Json.Decode.Pipeline.optional "summary" Json.Decode.string ""
         |> Json.Decode.Pipeline.optional "description" Json.Decode.string ""
         |> Json.Decode.Pipeline.optional "url" (Json.Decode.map Just Json.Decode.string) Nothing
+        |> Json.Decode.Pipeline.optional "instagramUrl" (Json.Decode.map Just Json.Decode.string) Nothing
         |> Json.Decode.Pipeline.optional "contact" (Json.Decode.map Just contactDecoder) Nothing
         |> Json.Decode.Pipeline.optional "address" (Json.Decode.map Just addressDecoder) Nothing
         |> Json.Decode.Pipeline.required "areasServed" (Json.Decode.list serviceAreaDecoder)
