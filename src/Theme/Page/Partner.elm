@@ -2,7 +2,7 @@ module Theme.Page.Partner exposing (viewInfo)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Css exposing (Style, auto, batch, calc, center, color, displayFlex, fontStyle, important, margin2, margin4, marginBlockEnd, marginBlockStart, marginTop, maxWidth, minus, normal, pct, px, rem, textAlign, text_, width)
+import Css exposing (Style, auto, batch, calc, center, color, displayFlex, fontStyle, important, margin2, margin4, marginBlockEnd, marginBlockStart, marginTop, maxWidth, minus, normal, pct, px, rem, textAlign, width)
 import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
 import Html.Styled exposing (Html, a, address, div, h3, hr, p, section, span, text)
@@ -29,12 +29,7 @@ viewInfo localModel { partner, events } =
     section [ css [ margin2 (rem 0) (rem 0.35) ] ]
         [ text ""
         , div [ css [ descriptionStyle ] ]
-            (Theme.TransMarkdown.markdownToHtml
-                (t (PartnerDescriptionText partner.summary partner.name)
-                    ++ "\n\n"
-                    ++ t (PartnerDescriptionText partner.description partner.name)
-                )
-            )
+            (viewPartnerDescription partner.name partner.description partner.summary)
         , hr [ css [ hrStyle ] ] []
         , section [ css [ contactWrapperStyle ] ]
             [ div [ css [ contactSectionStyle ] ]
@@ -179,7 +174,15 @@ viewAddress maybeAddress =
         Nothing ->
             p [ css [ contactItemStyle ] ] [ text (t PartnerAddressEmptyText) ]
 
-
+viewPartnerDescription : String -> String -> String -> List (Html msg)
+viewPartnerDescription partnerName partnerDescription partnerSummary =
+    case (partnerDescription, partnerSummary) of
+        ("", "") -> [ div [ ] (Theme.TransMarkdown.markdownToHtml (t (PartnerDescriptionEmptyText partnerName))) ]
+        ( "", s) -> [ div [ ] (Theme.TransMarkdown.markdownToHtml s) ]
+        (d, "")  -> [ div [ ] (Theme.TransMarkdown.markdownToHtml d) ]
+        (d, s)   -> [ div [ ] (Theme.TransMarkdown.markdownToHtml s)
+                    , div [ ] (Theme.TransMarkdown.markdownToHtml d)
+                    ]
 
 ---------
 -- Styles
