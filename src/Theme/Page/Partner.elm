@@ -39,7 +39,7 @@ viewInfo localModel { partner, events } =
         , section [ css [ contactWrapperStyle ] ]
             [ div [ css [ contactSectionStyle ] ]
                 [ h3 [ css [ contactHeadingStyle, Theme.Global.smallInlineTitleStyle ] ] [ text (t PartnerContactsHeading) ]
-                , viewContactDetails partner.maybeUrl partner.maybeContactDetails
+                , viewContactDetails partner.maybeUrl partner.maybeContactDetails partner.maybeInstagramUrl
                 ]
             , div [ css [ contactSectionStyle ] ]
                 [ h3 [ css [ contactHeadingStyle, Theme.Global.smallInlineTitleStyle ] ] [ text (t PartnerAddressHeading) ]
@@ -77,51 +77,48 @@ viewPartnerEvents events localModel partner =
     let
         eventAreaTitle =
             h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerUpcomingEventsText partner.name)) ]
+
+        futureEvents =
+            Data.PlaceCal.Events.afterDate events localModel.nowTime
+
+        pastEvents =
+            Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
     in
     section [ id "events" ]
-        (if List.length events > 0 then
-            if List.length events > 20 then
+        (if List.length futureEvents > 0 then
+            -- If we have more than 20 future events paginate
+            if List.length futureEvents > 20 then
                 [ eventAreaTitle
                 , Theme.Paginator.viewPagination localModel |> Html.Styled.map Theme.Page.Events.fromPaginatorMsg
                 , Theme.Page.Events.viewEventsList localModel events Nothing
                 ]
 
             else
-                let
-                    futureEvents =
-                        Data.PlaceCal.Events.afterDate events localModel.nowTime
-
-                    pastEvents =
-                        Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
-                in
-                [ if List.length futureEvents > 0 then
-                    div []
-                        [ eventAreaTitle
-                        , Theme.Page.Events.viewEventsList localModel futureEvents Nothing
-                        ]
-
-                  else
-                    div [] []
-                , if List.length pastEvents > 0 then
-                    div []
-                        [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
-                        , Theme.Page.Events.viewEventsList localModel pastEvents Nothing
-                        ]
-
-                  else
-                    div [] []
+                -- Otherwise show them all
+                [ div []
+                    [ Theme.Page.Events.viewEventsList localModel futureEvents Nothing
+                    ]
                 ]
 
+         else if List.length pastEvents > 0 then
+            -- If there are no future events but there were in the past, show them
+            [ div []
+                [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
+                , Theme.Page.Events.viewEventsList { localModel | filterByDate = Theme.Paginator.None } pastEvents Nothing
+                ]
+            ]
+
          else
+            -- This partner has never had events
             [ eventAreaTitle
             , p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ] [ text (t (PartnerEventsEmptyText partner.name)) ]
             ]
         )
 
 
-viewContactDetails : Maybe String -> Maybe Data.PlaceCal.Partners.Contact -> Html msg
-viewContactDetails maybeUrl maybeContactDetails =
-    if maybeUrl == Nothing && maybeContactDetails == Nothing then
+viewContactDetails : Maybe String -> Maybe Data.PlaceCal.Partners.Contact -> Maybe String -> Html msg
+viewContactDetails maybeUrl maybeContactDetails maybeInstagramUrl =
+    if maybeUrl == Nothing && maybeContactDetails == Nothing && maybeInstagramUrl == Nothing then
         p [ css [ contactItemStyle ] ] [ text (t PartnerContactsEmptyText) ]
 
     else
@@ -155,6 +152,12 @@ viewContactDetails maybeUrl maybeContactDetails =
                 Just url ->
                     p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (Copy.Text.urlToDisplay url) ] ]
 
+                Nothing ->
+                    text ""
+            , case maybeInstagramUrl of
+                Just url ->
+                    p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (Copy.Text.urlToDisplay url) ] ]
+                
                 Nothing ->
                     text ""
             ]

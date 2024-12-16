@@ -34,7 +34,6 @@ import View
 type alias Model =
     { filterByDate : Theme.Paginator.Filter
     , filterByRegion : Int
-    , visibleEvents : List Data.PlaceCal.Events.Event
     , nowTime : Time.Posix
     , viewportWidth : Float
     , urlFragment : Maybe String
@@ -86,7 +85,6 @@ init app _ =
     in
     ( { filterByDate = Theme.Paginator.None
       , filterByRegion = 0
-      , visibleEvents = app.sharedData.events
       , nowTime = Time.millisToPosix 0
       , viewportWidth = 320
       , urlFragment = urlFragment
@@ -125,8 +123,6 @@ update app _ msg model =
                 Theme.Paginator.ClickedDay posix ->
                     ( { model
                         | filterByDate = Theme.Paginator.Day posix
-                        , visibleEvents =
-                            eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.eventsFromDate app.sharedData.events posix)
                       }
                     , Effect.none
                     )
@@ -134,7 +130,6 @@ update app _ msg model =
                 Theme.Paginator.ClickedAllPastEvents ->
                     ( { model
                         | filterByDate = Theme.Paginator.Past
-                        , visibleEvents = eventsFromPartnerId aPartner.id (List.reverse (Data.PlaceCal.Events.onOrBeforeDate app.sharedData.events model.nowTime))
                       }
                     , Effect.none
                     )
@@ -142,7 +137,6 @@ update app _ msg model =
                 Theme.Paginator.ClickedAllFutureEvents ->
                     ( { model
                         | filterByDate = Theme.Paginator.Future
-                        , visibleEvents = eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.afterDate app.sharedData.events model.nowTime)
                       }
                     , Effect.none
                     )
@@ -151,8 +145,6 @@ update app _ msg model =
                     ( { model
                         | filterByDate = Theme.Paginator.Day newTime
                         , nowTime = newTime
-                        , visibleEvents =
-                            eventsFromPartnerId aPartner.id (Data.PlaceCal.Events.eventsFromDate app.sharedData.events newTime)
                       }
                     , Effect.none
                     )
