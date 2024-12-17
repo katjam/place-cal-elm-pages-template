@@ -1,4 +1,4 @@
-module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromDate, eventsFromRegionId, eventsWithPartners, nextNEvents, onOrBeforeDate)
+module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsOnDate, eventsFromRegionId, eventsWithPartners, nextNEvents, onOrBeforeDate)
 
 import BackendTask
 import BackendTask.Custom
@@ -99,11 +99,11 @@ eventsFromRegionId eventList regionId =
         List.filter (\event -> event.partnershipTagId == regionId) eventList
 
 
-eventsFromDate : List Event -> Time.Posix -> List Event
-eventsFromDate eventList fromDate =
+eventsOnDate : List Event -> Time.Posix -> List Event
+eventsOnDate eventList onDate =
     List.filter
         (\event ->
-            TransDate.isSameDay event.startDatetime fromDate
+            TransDate.isSameDay event.startDatetime onDate
         )
         eventList
 

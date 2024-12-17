@@ -115,7 +115,7 @@ filterEvents : Time.Posix -> Filter -> List Data.PlaceCal.Events.Event -> List D
 filterEvents now filter eventList =
     case filter of
         Day time ->
-            Data.PlaceCal.Events.eventsFromDate eventList time
+            Data.PlaceCal.Events.eventsOnDate eventList time
 
         Past ->
             List.reverse (Data.PlaceCal.Events.onOrBeforeDate eventList now)
