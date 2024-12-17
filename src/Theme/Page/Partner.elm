@@ -91,7 +91,7 @@ viewPartnerEvents events localModel partner =
             else
                 -- Otherwise show them all
                 [ div []
-                    [ Theme.Page.Events.viewEventsList localModel futureEvents Nothing
+                    [ Theme.Page.Events.viewEventsList { localModel | filterByDate = Theme.Paginator.Future } events Nothing
                     ]
                 ]
 
