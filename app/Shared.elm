@@ -123,6 +123,10 @@ update msg model =
         -- Shared
         SharedMsg _ ->
             ( model, Effect.none )
+        
+        -- Update region filter
+        SetRegion tagId ->
+            ( { model | filterParam = Just (tagId) }, Effect.none )
 
 
 subscriptions : UrlPath -> Model -> Sub Msg

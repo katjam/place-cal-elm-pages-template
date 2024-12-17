@@ -23,6 +23,7 @@ import Theme.RegionSelector exposing (Msg(..))
 import Time
 import UrlPath
 import View
+import Messages exposing (Msg(..))
 
 
 type alias Model =
@@ -56,7 +57,7 @@ update :
     -> Shared.Model
     -> Msg
     -> Model
-    -> ( Model, Effect.Effect Msg )
+    -> ( Model, Effect.Effect Msg, Maybe Shared.Msg )
 update app _ msg model =
     case msg of
         ClickedSelector tagId ->
@@ -64,6 +65,7 @@ update app _ msg model =
                 | filterByRegion = tagId
               }
             , Effect.none
+            , Just (SetRegion tagId)
             )
 
 
@@ -76,7 +78,7 @@ route : RouteBuilder.StatefulRoute RouteParams Data ActionData Model Msg
 route =
     RouteBuilder.single
         { data = data, head = head }
-        |> RouteBuilder.buildWithLocalState
+        |> RouteBuilder.buildWithSharedState
             { init = init
             , view = view
             , update = update
