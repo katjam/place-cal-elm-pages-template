@@ -81,8 +81,8 @@ viewPartnerEvents events localModel partner =
     in
     section [ id "events" ]
         (if List.length futureEvents > 0 then
-            -- If we have more than 20 future events paginate
-            if List.length futureEvents > 20 then
+            -- If we have more than 40 future events paginate
+            if List.length futureEvents > 40 then
                 [ eventAreaTitle
                 , Theme.Paginator.viewPagination localModel |> Html.Styled.map Theme.Page.Events.fromPaginatorMsg
                 , Theme.Page.Events.viewEventsList localModel events Nothing
