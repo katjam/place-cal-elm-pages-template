@@ -14,6 +14,7 @@ type Msg
     | ToggleMenu
       -- Shared
     | SharedMsg SharedMsg
+    | SetRegion Int
 
 
 type SharedMsg

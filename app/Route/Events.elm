@@ -26,6 +26,7 @@ import Theme.RegionSelector
 import Time
 import UrlPath
 import View exposing (View)
+import Messages exposing (Msg(..))
 
 
 type alias Model =
@@ -66,7 +67,7 @@ update :
     -> Shared.Model
     -> Msg
     -> Model
-    -> ( Model, Effect.Effect Msg )
+    -> ( Model, Effect.Effect Msg, Maybe Shared.Msg )
 update app _ msg model =
     case msg of
         Theme.Page.Events.PaginatorMsg submsg ->
@@ -77,6 +78,7 @@ update app _ msg model =
                             Theme.Paginator.Day posix
                       }
                     , Effect.none
+                    , Nothing
                     )
 
                 Theme.Paginator.ClickedAllPastEvents ->
@@ -84,6 +86,7 @@ update app _ msg model =
                         | filterByDate = Theme.Paginator.Past
                       }
                     , Effect.none
+                    , Nothing
                     )
 
                 Theme.Paginator.ClickedAllFutureEvents ->
@@ -91,6 +94,7 @@ update app _ msg model =
                         | filterByDate = Theme.Paginator.Future
                       }
                     , Effect.none
+                    , Nothing
                     )
 
                 Theme.Paginator.GetTime newTime ->
@@ -99,6 +103,7 @@ update app _ msg model =
                         , nowTime = newTime
                       }
                     , Effect.none
+                    , Nothing
                     )
 
                 Theme.Paginator.ScrollRight ->
@@ -107,6 +112,7 @@ update app _ msg model =
                         (Theme.Paginator.scrollPagination Theme.Paginator.Right model.viewportWidth)
                         |> Cmd.map Theme.Page.Events.fromPaginatorMsg
                         |> Effect.fromCmd
+                    , Nothing
                     )
 
                 Theme.Paginator.ScrollLeft ->
@@ -115,21 +121,23 @@ update app _ msg model =
                         (Theme.Paginator.scrollPagination Theme.Paginator.Left model.viewportWidth)
                         |> Cmd.map Theme.Page.Events.fromPaginatorMsg
                         |> Effect.fromCmd
+                    , Nothing
                     )
 
                 Theme.Paginator.GotViewport viewport ->
-                    ( { model | viewportWidth = Maybe.withDefault model.viewportWidth (Just viewport.scene.width) }, Effect.none )
+                    ( { model | viewportWidth = Maybe.withDefault model.viewportWidth (Just viewport.scene.width) }, Effect.none, Nothing )
 
                 Theme.Paginator.NoOp ->
-                    ( model, Effect.none )
+                    ( model, Effect.none, Nothing )
 
         Theme.Page.Events.RegionSelectorMsg submsg ->
             case submsg of
-                Theme.RegionSelector.ClickedSelector regionId ->
+                Theme.RegionSelector.ClickedSelector tagId ->
                     ( { model
-                        | filterByRegion = regionId
+                        | filterByRegion = tagId
                       }
                     , Effect.none
+                    , Just (SetRegion tagId)
                     )
 
 
@@ -142,7 +150,7 @@ route : RouteBuilder.StatefulRoute RouteParams Data ActionData Model Msg
 route =
     RouteBuilder.single
         { data = data, head = head }
-        |> RouteBuilder.buildWithLocalState
+        |> RouteBuilder.buildWithSharedState
             { init = init
             , view = view
             , update = update
