@@ -71,7 +71,9 @@ stringToHeaderType maybeTypeString =
 
 pageMetaTags : { title : Key, description : Key, imageSrc : Maybe String } -> List Head.Tag
 pageMetaTags { title, description, imageSrc } =
-    Seo.summary
+    Head.metaName "viewport" (Head.raw "width=device-width, initial-scale=1") ::
+    (
+        Seo.summary
         { canonicalUrlOverride = Nothing
         , siteName = t SiteTitle
         , image =
@@ -93,6 +95,7 @@ pageMetaTags { title, description, imageSrc } =
         , title = t (PageMetaTitle (t title))
         }
         |> Seo.website
+    )
 
 
 view : PageUsingTemplate msg -> Html.Html msg
