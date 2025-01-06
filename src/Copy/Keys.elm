@@ -1,4 +1,9 @@
-module Copy.Keys exposing (Key(..))
+module Copy.Keys exposing (Key(..), Prefix(..))
+
+
+type Prefix
+    = Prefixed
+    | NoPrefix
 
 
 type Key
@@ -70,7 +75,7 @@ type Key
     | EventsFilterLabelAllPast
     | EventsFilterLabelAllFuture
       --- Event Page
-    | EventTitle String
+    | EventTitle Prefix String
     | EventMetaDescription String String
     | BackToPartnerEventsLinkText (Maybe String)
     | BackToEventsLinkText
@@ -117,7 +122,7 @@ type Key
     | NewsEmptyText
     | NewsDescription
       --- News Single Article Page
-    | NewsItemTitle String
+    | NewsItemTitle Prefix String
     | NewsItemMetaDescription String String
     | NewsItemReturnButton
     | NewsItemReadMore

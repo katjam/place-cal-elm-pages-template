@@ -1,7 +1,7 @@
 module Copy.Text exposing (isValidUrl, t, urlToDisplay)
 
 import Constants exposing (canonicalUrl)
-import Copy.Keys exposing (Key(..))
+import Copy.Keys exposing (Key(..), Prefix(..))
 import Url
 
 
@@ -205,8 +205,13 @@ t key =
             "Future events"
 
         --- Event Page
-        EventTitle eventName ->
-            "Event - " ++ eventName
+        EventTitle prefix eventName ->
+            case prefix of
+                Prefixed ->
+                    "Event - " ++ eventName
+
+                NoPrefix ->
+                    eventName
 
         EventMetaDescription eventName eventSummary ->
             eventName ++ " - " ++ eventSummary
@@ -339,8 +344,13 @@ t key =
             "Updates & articles from our partners."
 
         --- News Single Article Page
-        NewsItemTitle title ->
-            "News -" ++ title
+        NewsItemTitle prefix title ->
+            case prefix of
+                Prefixed ->
+                    "News - " ++ title
+
+                NoPrefix ->
+                    title
 
         NewsItemMetaDescription title author ->
             title ++ " - by " ++ author ++ " for The Trans Dimension"
