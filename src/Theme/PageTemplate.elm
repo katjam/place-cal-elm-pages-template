@@ -71,31 +71,31 @@ stringToHeaderType maybeTypeString =
 
 pageMetaTags : { title : Key, description : Key, imageSrc : Maybe String } -> List Head.Tag
 pageMetaTags { title, description, imageSrc } =
-    Head.metaName "viewport" (Head.raw "width=device-width, initial-scale=1") ::
-    (
-        Seo.summary
-        { canonicalUrlOverride = Nothing
-        , siteName = t SiteTitle
-        , image =
-            { url =
-                Pages.Url.external
-                    (case imageSrc of
-                        Just anImageSrc ->
-                            anImageSrc
+    Head.metaName "viewport" (Head.raw "width=device-width, initial-scale=1")
+        :: (Seo.summary
+                { canonicalUrlOverride = Nothing
+                , siteName = t SiteTitle
+                , image =
+                    { url =
+                        Pages.Url.external
+                            (case imageSrc of
+                                Just anImageSrc ->
+                                    anImageSrc
 
-                        Nothing ->
-                            t SiteLogoSrc
-                    )
-            , alt = "" -- This will not be meaningful images are decorative
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = t description
-        , locale = Nothing
-        , title = t (PageMetaTitle (t title))
-        }
-        |> Seo.website
-    )
+                                Nothing ->
+                                    t SiteLogoSrc
+                            )
+                    , alt = "" -- This will not be meaningful images are decorative
+                    , dimensions =
+                        Just { width = 1200, height = 675 }
+                    , mimeType = Nothing
+                    }
+                , description = t description
+                , locale = Nothing
+                , title = t (PageMetaTitle (t title))
+                }
+                |> Seo.website
+           )
 
 
 view : PageUsingTemplate msg -> Html.Html msg
