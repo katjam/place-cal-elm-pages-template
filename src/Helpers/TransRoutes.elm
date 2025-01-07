@@ -1,6 +1,6 @@
 module Helpers.TransRoutes exposing (Route(..), stringToSlug, toAbsoluteUrl, toPageTitle)
 
-import Copy.Keys exposing (Key(..))
+import Copy.Keys exposing (Key(..), Prefix(..))
 import Copy.Text exposing (t)
 import Slug
 import UrlPath
@@ -34,13 +34,13 @@ toPageTitle route =
             t EventsTitle
 
         Event name ->
-            t (EventTitle name)
+            t (EventTitle Prefixed name)
 
         JoinUs ->
             t JoinUsTitle
 
         NewsItem title ->
-            t (NewsItemTitle title)
+            t (NewsItemTitle Prefixed title)
 
         News ->
             t NewsTitle

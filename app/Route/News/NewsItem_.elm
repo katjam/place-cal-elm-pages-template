@@ -7,7 +7,7 @@ module Route.News.NewsItem_ exposing (Model, Msg, RouteParams, route, Data, Acti
 -}
 
 import BackendTask
-import Copy.Keys exposing (Key(..))
+import Copy.Keys exposing (Key(..), Prefix(..))
 import Copy.Text exposing (t)
 import Data.PlaceCal.Articles
 import FatalError
@@ -61,10 +61,10 @@ head app =
             Data.PlaceCal.Articles.articleFromSlug app.routeParams.newsItem app.sharedData.articles app.sharedData.partners
     in
     Theme.PageTemplate.pageMetaTags
-        { title = NewsItemTitle article.title
+        { title = NewsItemTitle NoPrefix article.title
         , description =
-            NewsItemMetaDescription article.title (String.join " & " article.partnerIds)
-        , imageSrc = Nothing
+            NewsItemMetaDescription (Data.PlaceCal.Articles.summaryFromArticleBody article.body) (String.join " & " article.partnerIds)
+        , imageSrc = Just article.imageSrc
         }
 
 
@@ -77,7 +77,7 @@ view app _ =
         article =
             Data.PlaceCal.Articles.articleFromSlug app.routeParams.newsItem app.sharedData.articles app.sharedData.partners
     in
-    { title = t (NewsItemTitle article.title)
+    { title = t <| PageMetaTitle <| t (NewsItemTitle Prefixed article.title)
     , body =
         [ Theme.PageTemplate.view
             { headerType = Just "invisible"

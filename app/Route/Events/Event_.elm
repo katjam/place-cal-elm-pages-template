@@ -7,7 +7,7 @@ module Route.Events.Event_ exposing (Model, Msg, RouteParams, route, Data, Actio
 -}
 
 import BackendTask
-import Copy.Keys exposing (Key(..))
+import Copy.Keys exposing (Key(..), Prefix(..))
 import Copy.Text exposing (t)
 import Data.PlaceCal.Events
 import FatalError
@@ -71,7 +71,7 @@ head app =
             Data.PlaceCal.Events.eventFromSlug app.routeParams.event app.sharedData.events
     in
     Theme.PageTemplate.pageMetaTags
-        { title = EventTitle event.name
+        { title = EventTitle NoPrefix event.name
         , description = EventMetaDescription event.name event.summary
         , imageSrc = Nothing
         }
