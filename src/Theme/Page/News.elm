@@ -52,7 +52,7 @@ viewNewsArticle newsItem =
                     text ""
                 , time [] [ text (TransDate.humanDateFromPosix newsItem.publishedDatetime) ]
                 ]
-            , p [ css [ newsItemSummaryStyle ] ] [ text (summaryFromArticleBody newsItem.body), text "..." ]
+            , p [ css [ newsItemSummaryStyle ] ] [ text (Data.PlaceCal.Articles.summaryFromArticleBody newsItem.body) ]
             ]
         , div [ css [ buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
             [ a
@@ -65,13 +65,6 @@ viewNewsArticle newsItem =
                 [ text (t NewsItemReadMore) ]
             ]
         ]
-
-
-summaryFromArticleBody : String -> String
-summaryFromArticleBody articleBody =
-    String.words articleBody
-        |> List.take 20
-        |> String.join " "
 
 
 newsArticleImage : String -> Html msg

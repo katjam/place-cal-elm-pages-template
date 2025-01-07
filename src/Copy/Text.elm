@@ -353,7 +353,7 @@ t key =
                     title
 
         NewsItemMetaDescription title author ->
-            title ++ " - by " ++ author ++ " for The Trans Dimension"
+            title ++ " - by " ++ author
 
         NewsItemReturnButton ->
             "Go back to news"

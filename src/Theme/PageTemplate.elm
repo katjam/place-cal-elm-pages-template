@@ -92,7 +92,7 @@ pageMetaTags { title, description, imageSrc } =
                     }
                 , description = t description
                 , locale = Nothing
-                , title = t (PageMetaTitle (t title))
+                , title = t title
                 }
                 |> Seo.website
            )

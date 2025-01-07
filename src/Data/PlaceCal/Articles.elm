@@ -1,4 +1,4 @@
-module Data.PlaceCal.Articles exposing (Article, articleFromSlug, articlesData, replacePartnerIdWithName)
+module Data.PlaceCal.Articles exposing (Article, articleFromSlug, articlesData, replacePartnerIdWithName, summaryFromArticleBody)
 
 import Array
 import BackendTask
@@ -152,3 +152,12 @@ articleFromSlug slug allArticles allPartners =
         (replacePartnerIdWithName allArticles allPartners)
         |> List.head
         |> Maybe.withDefault emptyArticle
+
+
+
+summaryFromArticleBody : String -> String
+summaryFromArticleBody articleBody =
+    String.words articleBody
+        |> List.take 20
+        |> String.join " "
+        |> (\summary -> summary ++ "...")
