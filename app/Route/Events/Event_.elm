@@ -10,8 +10,10 @@ import BackendTask
 import Copy.Keys exposing (Key(..), Prefix(..))
 import Copy.Text exposing (t)
 import Data.PlaceCal.Events
+import Data.PlaceCal.Partners
 import FatalError
 import Head
+import Helpers.TransDate as TransDate
 import PagesMsg
 import RouteBuilder
 import Shared
@@ -69,12 +71,28 @@ head app =
     let
         event =
             Data.PlaceCal.Events.eventFromSlug app.routeParams.event app.sharedData.events
+                |> eventWithPartner app.sharedData.partners
     in
     Theme.PageTemplate.pageMetaTags
-        { title = EventTitle NoPrefix event.name
-        , description = EventMetaDescription event.name event.summary
+        { title = EventTitle NoPrefix (eventMetaTagTitle event)
+        , description = EventMetaDescription event.description
         , imageSrc = Nothing
         }
+
+
+eventMetaTagTitle : Data.PlaceCal.Events.Event -> String
+eventMetaTagTitle event =
+    let
+        eventDay =
+            TransDate.humanDayDateMonthFromPosix event.startDatetime
+
+        ( eventHourStart, eventHourEnd ) =
+            ( TransDate.humanTimeFromPosix event.startDatetime, TransDate.humanTimeFromPosix event.endDatetime )
+
+        partnerName =
+            event.partner.name |> Maybe.withDefault ""
+    in
+    event.name ++ ", " ++ eventDay ++ ", " ++ eventHourStart ++ "-" ++ eventHourEnd ++ " @ " ++ partnerName
 
 
 view :
@@ -86,10 +104,7 @@ view app _ =
         event : Data.PlaceCal.Events.Event
         event =
             Data.PlaceCal.Events.eventFromSlug app.routeParams.event app.sharedData.events
-
-        eventWithPartner : Data.PlaceCal.Events.Event
-        eventWithPartner =
-            { event | partner = Data.PlaceCal.Events.eventPartnerFromId app.sharedData.partners event.partner.id }
+                |> eventWithPartner app.sharedData.partners
     in
     { title = t (PageMetaTitle event.name)
     , body =
@@ -98,8 +113,13 @@ view app _ =
             , title = t EventsTitle
             , bigText = { text = event.name, node = "h3" }
             , smallText = Nothing
-            , innerContent = Just (Theme.Page.Event.viewEventInfo eventWithPartner)
+            , innerContent = Just (Theme.Page.Event.viewEventInfo event)
             , outerContent = Just (Theme.Page.Event.viewButtons event)
             }
         ]
     }
+
+
+eventWithPartner : List Data.PlaceCal.Partners.Partner -> Data.PlaceCal.Events.Event -> Data.PlaceCal.Events.Event
+eventWithPartner partners event =
+    { event | partner = Data.PlaceCal.Events.eventPartnerFromId partners event.partner.id }

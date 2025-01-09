@@ -213,8 +213,8 @@ t key =
                 NoPrefix ->
                     eventName
 
-        EventMetaDescription eventName eventSummary ->
-            eventName ++ " - " ++ eventSummary
+        EventMetaDescription eventDescription ->
+            eventDescription
 
         BackToPartnerEventsLinkText partnerName ->
             "All events by " ++ Maybe.withDefault "this partner" partnerName

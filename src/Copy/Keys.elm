@@ -76,7 +76,7 @@ type Key
     | EventsFilterLabelAllFuture
       --- Event Page
     | EventTitle Prefix String
-    | EventMetaDescription String String
+    | EventMetaDescription String
     | BackToPartnerEventsLinkText (Maybe String)
     | BackToEventsLinkText
     | EventVisitPublisherUrlText (Maybe String)
