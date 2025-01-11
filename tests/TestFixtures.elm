@@ -20,6 +20,7 @@ headFixture _ =
 sharedModelInit : Shared.Model
 sharedModelInit =
     { showMobileMenu = False
+    , filterParam = Nothing
     }
 
 
@@ -35,10 +36,12 @@ sharedDataFixture =
 partners : List Partner
 partners =
     [ { id = "1"
+      , partnershipTagId = 0
       , name = "Partner one"
       , summary = "Partner one Info"
       , description = "Partner one intro"
       , maybeUrl = Nothing
+      , maybeInstagramUrl = Nothing
       , maybeAddress =
             Just
                 { streetAddress = "1 The Avenue"
@@ -52,10 +55,12 @@ partners =
       , maybeLogo = Nothing
       }
     , { id = "2"
+      , partnershipTagId = 1
       , name = "Partner two"
       , summary = "Partner two Info"
       , description = "Partner two intro"
       , maybeUrl = Just "https://partner2.example.com"
+      , maybeInstagramUrl = Just "https://instagram.com/partner2"
       , maybeAddress =
             Just
                 { streetAddress = "3 A Road, flat 1"
@@ -71,10 +76,12 @@ partners =
       , maybeLogo = Nothing
       }
     , { id = "3"
+      , partnershipTagId = 2
       , name = "Partner three"
       , summary = "Partner three Info"
       , description = "Partner three intro"
       , maybeUrl = Nothing
+      , maybeInstagramUrl = Nothing
       , maybeAddress = Nothing
       , maybeContactDetails =
             Just { email = "partner3@example.com", telephone = "020 7946 0300" }
@@ -86,10 +93,12 @@ partners =
       , maybeLogo = Nothing
       }
     , { id = "4"
+      , partnershipTagId = 3
       , name = "Partner four"
       , summary = "Partner four Info"
       , description = "Partner four intro"
       , maybeUrl = Just "https://partner4.example.org"
+      , maybeInstagramUrl = Just "https://instagram.com/partner4"
       , maybeAddress =
             Just
                 { streetAddress = "1 The Steet"
@@ -107,6 +116,7 @@ partners =
 events : List Event
 events =
     [ { id = "1"
+      , partnershipTagId = 0
       , name = "Event 1 name"
       , summary = "A summary of the first event"
       , description = "Fusce at sodales lacus. Morbi scelerisque lacus leo, ac mattis urna ultrices et. Proin ac eros faucibus, consequat ante vel, vulputate lectus. Nunc dictum pharetra ex, eget vestibulum lacus. Maecenas molestie felis in turpis eleifend, nec accumsan massa sodales. Nulla facilisi. Vivamus id rhoncus nulla. Nunc ultricies lectus et dui tempor sodales. Curabitur interdum lectus ultricies est ultricies, at faucibus nisi semper. Praesent iaculis ornare orci. Sed vel metus pharetra, efficitur leo a, porttitor magna. Curabitur sit amet mollis ex."
@@ -120,6 +130,7 @@ events =
       , partner = { id = "1", name = Just "Partner one", maybeUrl = Nothing, maybeContactDetails = Nothing }
       }
     , { id = "2"
+      , partnershipTagId = 1
       , name = "Event 2 name"
       , summary = "A summary of the second event"
       , description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut risus placerat, suscipit lacus quis, pretium nisl. Fusce enim erat, fringilla ac auctor scelerisque, scelerisque non ipsum. Vivamus non elit id orci aliquam lobortis at sit amet ligula. Aenean vel massa pellentesque, viverra turpis et, commodo ipsum. Vivamus nunc elit, elementum et ipsum id, rutrum commodo sapien. Integer eget mi eget lacus sagittis molestie feugiat at lacus. Cras ultrices molestie blandit. Suspendisse gravida tortor non risus vestibulum laoreet. Nam nec quam id nisi suscipit consectetur. Aliquam venenatis tortor elit, id suscipit augue feugiat ac."
