@@ -1,4 +1,4 @@
-module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsOnDate, eventsFromRegionId, eventsWithPartners, nextNEvents, onOrBeforeDate)
+module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromRegionId, eventsOnDate, eventsWithPartners, nextNEvents, onOrBeforeDate)
 
 import BackendTask
 import BackendTask.Custom
@@ -193,7 +193,7 @@ allEventsQuery partnershipTag =
                 ("query { eventsByFilter(tagId: "
                     ++ partnershipTag
                     ++ """
-            , fromDate: "2024-01-01 00:00", toDate: "2025-06-15 00:00") {
+            , fromDate: "2024-06-01 00:00", toDate: "2025-10-15 00:00") {
               id
               name
               summary
