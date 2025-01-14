@@ -103,7 +103,7 @@ filterFromPath maybePagePath =
 filterFromQueryParams : String -> String
 filterFromQueryParams queryParams =
     Pages.PageUrl.parseQueryParams queryParams
-        |> Dict.get "filter"
+        |> Dict.get "region"
         |> Maybe.withDefault []
         |> List.head
         |> Maybe.withDefault ""
@@ -205,7 +205,7 @@ regionFilterQuery model =
     in
     case selectedRegionName of
         Just regionName ->
-            "?filter=" ++ String.toLower regionName
+            "?region=" ++ String.toLower regionName
 
         Nothing ->
             ""
