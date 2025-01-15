@@ -161,7 +161,6 @@ route =
 
 type alias Data =
     { events : List Data.PlaceCal.Events.Event
-    , partners : List Data.PlaceCal.Partners.Partner
     }
 
 
@@ -171,9 +170,8 @@ type alias ActionData =
 
 data : BackendTask.BackendTask FatalError.FatalError Data
 data =
-    BackendTask.map2 Data
+    BackendTask.map Data
         (BackendTask.map (\eventsData -> eventsData.allEvents) Data.PlaceCal.Events.eventsData)
-        (BackendTask.succeed [])
         |> BackendTask.allowFatal
 
 

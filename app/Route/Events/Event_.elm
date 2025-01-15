@@ -43,9 +43,6 @@ route =
 
 
 type alias Data =
-    -- { event : Data.PlaceCal.Events.Event
-    -- , partner : Data.PlaceCal.Partners.Partner
-    -- }
     Data.PlaceCal.Events.Event
 
 
