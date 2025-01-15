@@ -11,6 +11,7 @@ import Browser.Dom
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
 import Data.PlaceCal.Events
+import Data.PlaceCal.Partners
 import Effect
 import FatalError
 import Head
@@ -159,7 +160,9 @@ route =
 
 
 type alias Data =
-    ()
+    { events : List Data.PlaceCal.Events.Event
+    , partners : List Data.PlaceCal.Partners.Partner
+    }
 
 
 type alias ActionData =
@@ -168,7 +171,10 @@ type alias ActionData =
 
 data : BackendTask.BackendTask FatalError.FatalError Data
 data =
-    BackendTask.succeed ()
+    BackendTask.map2 Data
+        (BackendTask.map (\eventsData -> eventsData.allEvents) Data.PlaceCal.Events.eventsData)
+        (BackendTask.succeed [])
+        |> BackendTask.allowFatal
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
@@ -193,7 +199,7 @@ view app _ model =
             , title = t EventsTitle
             , bigText = { text = t EventsSummary, node = "h3" }
             , smallText = Nothing
-            , innerContent = Just (Theme.Page.Events.viewEvents (Data.PlaceCal.Events.eventsWithPartners app.sharedData.events app.sharedData.partners) model)
+            , innerContent = Just (Theme.Page.Events.viewEvents (Data.PlaceCal.Events.eventsWithPartners app.data.events app.sharedData.partners) model)
             , outerContent = Nothing
             }
             |> Html.Styled.map PagesMsg.fromMsg

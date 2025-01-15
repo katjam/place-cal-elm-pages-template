@@ -43,7 +43,10 @@ route =
 
 
 type alias Data =
-    ()
+    -- { event : Data.PlaceCal.Events.Event
+    -- , partner : Data.PlaceCal.Partners.Partner
+    -- }
+    Data.PlaceCal.Events.Event
 
 
 type alias ActionData =
@@ -51,8 +54,10 @@ type alias ActionData =
 
 
 data : RouteParams -> BackendTask.BackendTask FatalError.FatalError Data
-data _ =
-    BackendTask.succeed ()
+data { event } =
+    Data.PlaceCal.Events.singleEventData
+        event
+        |> BackendTask.allowFatal
 
 
 pages : BackendTask.BackendTask FatalError.FatalError (List RouteParams)
@@ -70,7 +75,7 @@ head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
 head app =
     let
         event =
-            Data.PlaceCal.Events.eventFromSlug app.routeParams.event app.sharedData.events
+            app.data
                 |> eventWithPartner app.sharedData.partners
     in
     Theme.PageTemplate.pageMetaTags
@@ -103,7 +108,7 @@ view app _ =
     let
         event : Data.PlaceCal.Events.Event
         event =
-            Data.PlaceCal.Events.eventFromSlug app.routeParams.event app.sharedData.events
+            app.data
                 |> eventWithPartner app.sharedData.partners
     in
     { title = t (PageMetaTitle event.name)

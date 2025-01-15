@@ -37,6 +37,36 @@ async function fetchAndCachePlaceCalData(config, context) {
   return placeCalData;
 }
 
+async function fetchSinglePlaceCalData(config, context) {
+  try {
+    const collectionJson = await query(config.url, config.query.query, config.query.variables)
+    return collectionJson;
+  } catch (_error) {
+    console.error(_error)
+  }
+}
+
+
+function query(endPoint, query, variables) {
+  return new Promise((resolve, reject) => {
+    fetch(endPoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        variables,
+        query
+      })
+    })
+      .then(r => r.json())
+      .then(data => resolve(data))
+      .catch(err => reject(err));
+  });
+}
+
 export {
-  fetchAndCachePlaceCalData
+  fetchAndCachePlaceCalData,
+  fetchSinglePlaceCalData
 };
