@@ -163,8 +163,7 @@ view sharedData page model toMsg pageView =
     { body =
         [ Html.Styled.toUnstyled
             (Theme.Global.containerPage pageView.title
-                [ View.fontPreload
-                , Theme.Global.globalStyles
+                [ Theme.Global.globalStyles
                 , viewPageHeader page
                     { showMobileMenu = model.showMobileMenu }
                     |> Html.Styled.map toMsg
