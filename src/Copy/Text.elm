@@ -206,7 +206,7 @@ t key =
 
         GoToNextEvent ->
             "Go to next event"
-        
+
         --- Event Page
         EventTitle prefix eventName ->
             case prefix of

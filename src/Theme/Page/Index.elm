@@ -10,13 +10,11 @@ import Html.Styled exposing (Html, a, div, h1, h2, img, p, section, text)
 import Html.Styled.Attributes exposing (alt, css, href, src)
 import Shared
 import Theme.Global
-import Theme.Page.Events
+import Theme.Page.Events exposing (Msg, fromRegionSelectorMsg)
 import Theme.Page.News
 import Theme.Paginator
 import Theme.RegionSelector
 import Time
-import Theme.Page.Events exposing (fromRegionSelectorMsg)
-import Theme.Page.Events exposing (Msg)
 
 
 view :
