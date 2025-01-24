@@ -1,4 +1,4 @@
-module View exposing (View, fontPreload, map)
+module View exposing (View, map)
 
 import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, rel, src)
@@ -16,11 +16,3 @@ map fn doc =
     , body = List.map (Html.Styled.map fn) doc.body
     }
 
-
-fontPreload : Html msg
-fontPreload =
-    node "link"
-        [ rel "stylesheet preload"
-        , href "https://use.typekit.net/qwi3qrw.css"
-        ]
-        []
