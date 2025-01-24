@@ -1,4 +1,7 @@
-module Route.About exposing (Model, Msg, RouteParams, route, Data, ActionData)
+module Route.About exposing
+    ( Model, Msg, RouteParams, route, Data, ActionData
+    , Maker
+    )
 
 {-|
 

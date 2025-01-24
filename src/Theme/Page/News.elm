@@ -14,7 +14,7 @@ import Theme.Global exposing (buttonFloatingWrapperStyle, darkBlueBackgroundStyl
 viewNewsList : List Data.PlaceCal.Articles.Article -> Html msg
 viewNewsList newsList =
     section []
-        [ if List.length newsList == 0 then
+        [ if List.isEmpty newsList then
             p [] [ text (t NewsEmptyText) ]
 
           else

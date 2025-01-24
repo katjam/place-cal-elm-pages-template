@@ -20,7 +20,6 @@ import Messages exposing (Msg(..))
 import PagesMsg
 import RouteBuilder
 import Shared
-import Task
 import Theme.Page.Index
 import Theme.PageTemplate
 import Theme.RegionSelector exposing (Msg(..))

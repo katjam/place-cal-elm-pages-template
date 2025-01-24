@@ -75,9 +75,6 @@ viewPartnerEvents events localModel partner =
 
         futureEvents =
             Data.PlaceCal.Events.afterDate events localModel.nowTime
-
-        pastEvents =
-            Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
     in
     section [ id "events" ]
         (if List.length futureEvents > 0 then
@@ -95,19 +92,24 @@ viewPartnerEvents events localModel partner =
                     ]
                 ]
 
-         else if List.length pastEvents > 0 then
-            -- If there are no future events but there were in the past, show them
-            [ div []
-                [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
-                , Theme.Page.Events.viewEventsList { localModel | filterByDate = Theme.Paginator.None } pastEvents Nothing
-                ]
-            ]
-
          else
-            -- This partner has never had events
-            [ eventAreaTitle
-            , p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ] [ text (t (PartnerEventsEmptyText partner.name)) ]
-            ]
+            let
+                pastEvents =
+                    Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
+            in
+            if List.length pastEvents > 0 then
+                -- If there are no future events but there were in the past, show them
+                [ div []
+                    [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
+                    , Theme.Page.Events.viewEventsList { localModel | filterByDate = Theme.Paginator.None } pastEvents Nothing
+                    ]
+                ]
+
+            else
+                -- This partner has never had events
+                [ eventAreaTitle
+                , p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ] [ text (t (PartnerEventsEmptyText partner.name)) ]
+                ]
         )
 
 

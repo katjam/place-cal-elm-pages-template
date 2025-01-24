@@ -1,4 +1,4 @@
-module Theme.Page.Events exposing (Msg(..), fromPaginatorMsg, fromRegionSelectorMsg, viewEvents, viewEventsList)
+module Theme.Page.Events exposing (Msg(..), fromPaginatorMsg, viewEvents, viewEventsList)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)

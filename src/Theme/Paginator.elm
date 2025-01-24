@@ -151,32 +151,38 @@ addDays days now =
 
 scrollPagination : ScrollDirection -> Float -> Task Error ()
 scrollPagination direction viewportWidth =
-    let
-        scrollXAmount =
-            if viewportWidth < Theme.Global.maxMobile then
-                buttonWidthMobile + (buttonMarginMobile * 2)
-
-            else if viewportWidth < Theme.Global.maxTabletPortrait then
-                buttonWidthTablet + (buttonMarginTablet * 2)
-
-            else
-                buttonWidthFullWidth + (buttonMarginFullWidth * 2)
-
-        scrollXValue =
-            case direction of
-                Right ->
-                    scrollXAmount
-
-                Left ->
-                    -scrollXAmount
-    in
     getViewportOf "scrollable"
-        |> Task.andThen (\info -> scrollX scrollXValue info.viewport.x)
+        |> Task.andThen
+            (\info ->
+                let
+                    scrollXAmount : Float
+                    scrollXAmount =
+                        if viewportWidth < Theme.Global.maxMobile then
+                            buttonWidthMobile + (buttonMarginMobile * 2)
+
+                        else if viewportWidth < Theme.Global.maxTabletPortrait then
+                            buttonWidthTablet + (buttonMarginTablet * 2)
+
+                        else
+                            buttonWidthFullWidth + (buttonMarginFullWidth * 2)
+
+                    scrollXValue : Float
+                    scrollXValue =
+                        case direction of
+                            Right ->
+                                scrollXAmount
+
+                            Left ->
+                                -scrollXAmount
+                in
+                scrollX scrollXValue info.viewport.x
+            )
 
 
 scrollX : Float -> Float -> Task Error ()
 scrollX scrollRemaining viewportXPosition =
     let
+        pixelsLeftToMove : Int
         pixelsLeftToMove =
             round (posOrNeg scrollRemaining * scrollRemaining)
     in
