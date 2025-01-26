@@ -54,7 +54,7 @@ viewInfo localModel { partner, events } =
                     ]
 
             Nothing ->
-                div [ css [ mapContainerStyle ] ] [ text "" ]
+                text ""
         ]
 
 
