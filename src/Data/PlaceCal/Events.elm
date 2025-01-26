@@ -1,4 +1,4 @@
-module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromRegionId, eventsOnDate, eventsWithPartners, nextNEvents, onOrBeforeDate, singleEventData)
+module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromRegionId, eventsOnDate, eventsWithPartners, nextEventStartTime, nextNEvents, onOrBeforeDate, singleEventData)
 
 import BackendTask
 import BackendTask.Custom
@@ -151,6 +151,15 @@ eventsWithPartners eventList partnerList =
     List.map
         (\event -> { event | partner = eventPartnerFromId partnerList event.partner.id })
         eventList
+
+
+nextEventStartTime : List Event -> Int -> Time.Posix -> Maybe Time.Posix
+nextEventStartTime eventList tagId nowTime =
+    eventsFromRegionId (afterDate eventList nowTime) tagId
+        |> List.map (\event -> Time.posixToMillis event.startDatetime)
+        |> List.sort
+        |> List.head
+        |> Maybe.map Time.millisToPosix
 
 
 

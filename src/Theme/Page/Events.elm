@@ -2,16 +2,17 @@ module Theme.Page.Events exposing (Msg(..), fromPaginatorMsg, fromRegionSelector
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Css exposing (Style, alignItems, batch, block, borderBottomColor, borderBottomStyle, borderBottomWidth, calc, center, color, column, display, displayFlex, em, firstChild, flexDirection, flexGrow, flexWrap, fontSize, fontStyle, fontWeight, hover, important, int, italic, justifyContent, lastChild, letterSpacing, lineHeight, margin, margin2, marginBlockEnd, marginBlockStart, marginBottom, marginRight, marginTop, maxWidth, minus, none, paddingBottom, pct, px, rem, row, rowReverse, solid, spaceBetween, textDecoration, textTransform, uppercase, width, wrap)
+import Css exposing (Style, alignItems, backgroundColor, batch, block, borderBottomColor, borderBottomStyle, borderBottomWidth, calc, center, color, column, display, displayFlex, em, firstChild, flexDirection, flexGrow, flexWrap, fontSize, fontStyle, fontWeight, hover, important, int, italic, justifyContent, lastChild, letterSpacing, lineHeight, margin, margin2, marginBlockEnd, marginBlockStart, marginBottom, marginRight, marginTop, maxWidth, minus, none, padding4, paddingBottom, pct, px, rem, row, rowReverse, solid, spaceBetween, textDecoration, textTransform, uppercase, width, wrap)
 import Css.Global exposing (descendants, typeSelector)
 import Css.Transitions exposing (transition)
 import Data.PlaceCal.Events
 import Helpers.TransDate as TransDate
 import Helpers.TransRoutes as TransRoutes exposing (Route(..))
-import Html.Styled exposing (Html, a, article, div, h4, li, p, section, span, text, time, ul)
+import Html.Styled exposing (Html, a, article, button, div, h4, li, p, section, span, text, time, ul)
 import Html.Styled.Attributes exposing (css, href)
-import Theme.Global exposing (borderTransition, colorTransition, introTextLargeStyle, pink, white, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
-import Theme.Paginator
+import Html.Styled.Events
+import Theme.Global exposing (borderTransition, colorTransition, darkBlue, introTextLargeStyle, pink, white, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Theme.Paginator exposing (buttonWidthFullWidth, buttonWidthMobile, buttonWidthTablet, paginationButtonStyle)
 import Theme.RegionSelector
 import Time
 
@@ -19,6 +20,7 @@ import Time
 type Msg
     = PaginatorMsg Theme.Paginator.Msg
     | RegionSelectorMsg Theme.RegionSelector.Msg
+    | ClickedGoToNextEvent Time.Posix
 
 
 fromPaginatorMsg : Theme.Paginator.Msg -> Msg
@@ -44,7 +46,7 @@ viewEvents eventsList model =
     section [ css [ eventsContainerStyle ] ]
         [ Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
         , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
-        , viewEventsList model eventsList Nothing |> Html.Styled.map fromPaginatorMsg
+        , viewEventsList model eventsList Nothing
         ]
 
 
@@ -56,7 +58,7 @@ viewEventsList :
     }
     -> List Data.PlaceCal.Events.Event
     -> Maybe Int
-    -> Html msg
+    -> Html Msg
 viewEventsList localModel eventsList maybeListLength =
     let
         allEventsInRegion : List Data.PlaceCal.Events.Event
@@ -75,26 +77,48 @@ viewEventsList localModel eventsList maybeListLength =
 
                 Just numberOfEvents ->
                     Data.PlaceCal.Events.nextNEvents numberOfEvents paginatedEventsInRegion localModel.nowTime
+
+        upcomingEventTime : Maybe Time.Posix
+        upcomingEventTime =
+            Data.PlaceCal.Events.nextEventStartTime eventsList localModel.filterByRegion localModel.nowTime
     in
     div []
         [ if List.length filteredEvents > 0 then
             ul [ css [ eventsListStyle ] ]
                 (List.map (\event -> viewEvent event) filteredEvents)
+                |> Html.Styled.map fromPaginatorMsg
 
           else
-            p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ]
-                [ text
-                    (case localModel.filterByDate of
-                        Theme.Paginator.Day _ ->
-                            t EventsEmptyText
+            case upcomingEventTime of
+                Just eventTime ->
+                    div [ css [ displayFlex, flexDirection column, alignItems center ] ]
+                        [ viewEmptyEventText localModel.filterByDate
+                        , div [ css [ goToNextEventButtonContainerStyle ] ]
+                            [ button
+                                [ css [ goToNextEventButtonStyle ], Html.Styled.Events.onClick (ClickedGoToNextEvent eventTime) ]
+                                [ text (t GoToNextEvent) ]
+                            ]
+                        ]
 
-                        Theme.Paginator.Past ->
-                            t PreviousEventsEmptyTextAll
+                Nothing ->
+                    viewEmptyEventText localModel.filterByDate
+        ]
 
-                        _ ->
-                            t EventsEmptyTextAll
-                    )
-                ]
+
+viewEmptyEventText : Theme.Paginator.Filter -> Html Msg
+viewEmptyEventText filterBy =
+    p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ]
+        [ text
+            (case filterBy of
+                Theme.Paginator.Day _ ->
+                    t EventsEmptyText
+
+                Theme.Paginator.Past ->
+                    t PreviousEventsEmptyTextAll
+
+                _ ->
+                    t EventsEmptyTextAll
+            )
         ]
 
 
@@ -263,4 +287,26 @@ eventParagraphStyle =
         , margin (rem 0)
         , fontSize (rem 0.8777)
         , withMediaTabletPortraitUp [ fontSize (rem 1.2), lineHeight (rem 1.75) ]
+        ]
+
+
+goToNextEventButtonContainerStyle : Style
+goToNextEventButtonContainerStyle =
+    batch
+        [ margin2 (rem 1.0) (rem 1.0)
+        ]
+
+
+goToNextEventButtonStyle : Style
+goToNextEventButtonStyle =
+    batch
+        [ important (width (px 200))
+        , paginationButtonStyle
+        , fontSize (rem 0.875)
+        , fontWeight (int 600)
+        , padding4 (rem 0.2) (rem 0.2) (rem 0.3) (rem 0.2)
+        , width (px buttonWidthMobile)
+        , backgroundColor darkBlue
+        , withMediaTabletLandscapeUp [ width (px buttonWidthFullWidth), fontSize (rem 1.2) ]
+        , withMediaTabletPortraitUp [ width (px buttonWidthTablet), fontSize (rem 1) ]
         ]
