@@ -20,7 +20,7 @@ fetchAndCachePlaceCalData collection query =
             , ( "query", query )
             ]
         )
-    >> BackendTask.quiet
+        >> BackendTask.quiet
 
 
 fetchSinglePlaceCalData :
@@ -35,4 +35,4 @@ fetchSinglePlaceCalData entityId query =
             , ( "query", query )
             ]
         )
-    >> BackendTask.quiet
+        >> BackendTask.quiet
