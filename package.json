@@ -11,7 +11,7 @@
   },
   "lint-staged": {
     "*.elm": [
-      "npm run format --yes"
+      "elm-format --yes"
     ]
   },
   "devDependencies": {
