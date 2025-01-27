@@ -20,6 +20,7 @@ import Messages exposing (Msg(..))
 import PagesMsg
 import RouteBuilder
 import Shared
+import Theme.Page.Events exposing (Msg(..))
 import Theme.Page.Index
 import Theme.PageTemplate
 import Theme.RegionSelector exposing (Msg(..))
@@ -35,7 +36,7 @@ type alias Model =
 
 
 type alias Msg =
-    Theme.RegionSelector.Msg
+    Theme.Page.Events.Msg
 
 
 type alias RouteParams =
@@ -62,13 +63,18 @@ update :
     -> ( Model, Effect.Effect Msg, Maybe Shared.Msg )
 update app _ msg model =
     case msg of
-        ClickedSelector tagId ->
-            ( { model
-                | filterByRegion = tagId
-              }
-            , Effect.none
-            , Just (SetRegion tagId)
-            )
+        RegionSelectorMsg submsg ->
+            case submsg of
+                ClickedSelector tagId ->
+                    ( { model
+                        | filterByRegion = tagId
+                      }
+                    , Effect.none
+                    , Just (SetRegion tagId)
+                    )
+
+        _ ->
+            ( model, Effect.none, Nothing )
 
 
 subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
