@@ -30,7 +30,7 @@ Copy `.env.example` over into `.env` and edit as appropriate! This must be done 
 
 ## Formatting
 
-- There is a pre-commit hook that runs `elm-format --yes` that will edit your files when you commit code. This might interfere with the state of files in your IDE. So, we recommend integrating `elm-format@0.8.3` on save into your code editor.
+- There is a pre-commit hook that runs `elm-format --yes`. This will format your files when you commit. This might interfere with the state of files in your IDE. So, we recommend integrating `elm-format@0.8.3` on save into your code editor.
 - You can also manually run `npm run format` to format `.elm` files in `src`.
 
 ## Testing
