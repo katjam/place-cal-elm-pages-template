@@ -7,9 +7,9 @@ import Html
 import Test exposing (Test, describe, test)
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
+import TestFixtures
 import TestUtils exposing (queryFromStyled)
 import Theme.Page.News
-import TestFixtures
 
 
 viewNewsListHtml newsList =

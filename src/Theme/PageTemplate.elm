@@ -1,4 +1,4 @@
-module Theme.PageTemplate exposing (..)
+module Theme.PageTemplate exposing (BigText, HeaderType(..), PageUsingTemplate, SectionWithImageHeader, SectionWithTextHeader, columnsStyle, pageMetaTags, view)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)

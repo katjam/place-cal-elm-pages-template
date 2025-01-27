@@ -31,18 +31,14 @@ defaultPosix =
 isoDateStringDecoder : Json.Decode.Decoder Time.Posix
 isoDateStringDecoder =
     Json.Decode.string
-        |> Json.Decode.andThen
+        |> Json.Decode.map
             (\isoString ->
-                Json.Decode.succeed <|
-                    -- It would be better if this returned the timezone as well
-                    -- and we tracked the timezone around the app instead of
-                    -- assuming UTC due to this.
-                    case Iso8601.toTime isoString of
-                        Err _ ->
-                            defaultPosix
+                case Iso8601.toTime isoString of
+                    Err _ ->
+                        defaultPosix
 
-                        Ok posix ->
-                            posix
+                    Ok posix ->
+                        posix
             )
 
 
