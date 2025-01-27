@@ -1,6 +1,5 @@
 module Messages exposing (Msg(..), SharedMsg(..))
 
-import Time
 import UrlPath exposing (UrlPath)
 
 

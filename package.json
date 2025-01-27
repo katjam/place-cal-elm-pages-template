@@ -6,6 +6,8 @@
     "start": "elm-constants && elm-pages dev --port 3030",
     "build": "elm-constants && elm-pages build",
     "format": "elm-format src tests",
+    "review": "elm-review src app",
+    "review-fix": "elm-review --fix src app",
     "test": "elm-constants && elm-test-rs"
   },
   "devDependencies": {
