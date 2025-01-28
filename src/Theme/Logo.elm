@@ -1,4 +1,4 @@
-module Theme.Logo exposing (..)
+module Theme.Logo exposing (logoParentStyle, view, viewFacebook, viewGFSC, viewInsta, viewTwitter)
 
 import Css exposing (Style, active, batch, focus, hover, property)
 import Css.Global exposing (descendants, typeSelector)

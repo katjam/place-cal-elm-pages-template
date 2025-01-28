@@ -140,6 +140,7 @@ transHtmlRenderer =
                             case item of
                                 Markdown.Block.ListItem task children ->
                                     let
+                                        checkbox : Html.Html msg
                                         checkbox =
                                             case task of
                                                 Markdown.Block.NoTask ->
@@ -206,6 +207,7 @@ transHtmlRenderer =
     , tableHeaderCell =
         \maybeAlignment ->
             let
+                attrs : List (Html.Attribute msg)
                 attrs =
                     maybeAlignment
                         |> Maybe.map
@@ -228,6 +230,7 @@ transHtmlRenderer =
     , tableCell =
         \maybeAlignment ->
             let
+                attrs : List (Html.Attribute msg)
                 attrs =
                     maybeAlignment
                         |> Maybe.map

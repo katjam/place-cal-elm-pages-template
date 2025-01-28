@@ -1,4 +1,4 @@
-module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromRegionId, eventsOnDate, eventsWithPartners, nextEventStartTime, nextNEvents, onOrBeforeDate, singleEventData)
+module Data.PlaceCal.Events exposing (Event, EventLocation, EventPartner, EventPartnerContact, Geo, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromRegionId, eventsOnDate, eventsWithPartners, nextEventStartTime, nextNEvents, onOrBeforeDate, singleEventData)
 
 import BackendTask
 import BackendTask.Custom
