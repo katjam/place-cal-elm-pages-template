@@ -2,7 +2,7 @@ module Theme.RegionSelector exposing (Msg(..), viewRegionSelector)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Css exposing (Style, active, auto, backgroundColor, batch, borderBox, borderColor, borderRadius, borderStyle, borderWidth, boxSizing, center, color, cursor, display, displayFlex, fitContent, flexWrap, focus, fontSize, fontWeight, hover, int, justifyContent, listStyleType, margin2, margin4, maxWidth, none, padding4, pointer, position, property, px, relative, rem, solid, textAlign, width, wrap)
+import Css exposing (Style, active, auto, backgroundColor, batch, borderBox, borderColor, borderRadius, borderStyle, borderWidth, boxSizing, center, color, cursor, displayFlex, fitContent, flexWrap, focus, fontSize, fontWeight, hover, int, justifyContent, listStyleType, margin2, margin4, maxWidth, none, padding4, pointer, position, property, px, relative, rem, solid, textAlign, width, wrap)
 import Css.Global exposing (descendants, typeSelector)
 import Css.Transitions exposing (transition)
 import Data.PlaceCal.Partners exposing (partnershipTagList)
