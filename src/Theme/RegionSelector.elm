@@ -2,10 +2,10 @@ module Theme.RegionSelector exposing (Msg(..), viewRegionSelector)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
-import Css exposing (Style, active, auto, backgroundColor, batch, borderBox, borderColor, borderRadius, borderStyle, borderWidth, boxSizing, center, color, cursor, displayFlex, fitContent, flexWrap, focus, fontSize, fontWeight, hover, int, justifyContent, listStyleType, margin2, margin4, maxWidth, none, padding4, pointer, position, property, px, relative, rem, solid, textAlign, width, wrap)
+import Css exposing (Style, active, auto, backgroundColor, batch, borderBox, borderColor, borderRadius, borderStyle, borderWidth, boxSizing, center, color, cursor, display, displayFlex, fitContent, flexWrap, focus, fontSize, fontWeight, hover, int, justifyContent, listStyleType, margin2, margin4, maxWidth, none, padding4, pointer, position, property, px, relative, rem, solid, textAlign, width, wrap)
 import Css.Global exposing (descendants, typeSelector)
 import Css.Transitions exposing (transition)
-import Data.PlaceCal.Partners
+import Data.PlaceCal.Partners exposing (partnershipTagList)
 import Html.Styled exposing (Html, button, div, li, text, ul)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events
@@ -95,11 +95,15 @@ buttonMarginFullWidth =
 
 regionSelectorWrapper : Style
 regionSelectorWrapper =
-    batch
-        [ margin2 (rem 0) (rem -0.5)
-        , withMediaSmallDesktopUp [ margin4 (rem 2) (rem -1) (rem 3) (rem -1) ]
-        , withMediaTabletLandscapeUp [ margin2 (rem 2) (rem -1) ]
-        ]
+    if List.length partnershipTagList > 1 then
+        batch
+            [ margin2 (rem 0) (rem -0.5)
+            , withMediaSmallDesktopUp [ margin4 (rem 2) (rem -1) (rem 3) (rem -1) ]
+            , withMediaTabletLandscapeUp [ margin2 (rem 2) (rem -1) ]
+            ]
+
+    else
+        display none
 
 
 regionSelectorContainer : Style
