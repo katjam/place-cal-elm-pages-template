@@ -44,17 +44,15 @@ viewEvents :
         }
     -> Html Msg
 viewEvents eventsList model =
-    section [ css [ eventsContainerStyle ] ] <|
-        if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
-            [ Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
-            , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
-            , viewEventsList model eventsList Nothing
-            ]
+    section [ css [ eventsContainerStyle ] ]
+        [ if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
+            Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
 
-        else
-            [ Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
-            , viewEventsList model eventsList Nothing
-            ]
+          else
+            text ""
+        , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
+        , viewEventsList model eventsList Nothing
+        ]
 
 
 viewEventsList :

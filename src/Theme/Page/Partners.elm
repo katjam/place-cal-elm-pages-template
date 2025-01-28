@@ -22,19 +22,16 @@ viewPartners partnerList model =
         filteredPartnerList =
             Data.PlaceCal.Partners.partnersFromRegionId partnerList model.filterByRegion
     in
-    section [] <|
-        if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
-            [ h3 [ css [ partnersListTitleStyle ] ] [ text (t PartnersListHeading) ]
-            , Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion }
-            , viewPartnerList filteredPartnerList
-            , viewMap filteredPartnerList
-            ]
+    section []
+        [ h3 [ css [ partnersListTitleStyle ] ] [ text (t PartnersListHeading) ]
+        , if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
+            Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion }
 
-        else
-            [ h3 [ css [ partnersListTitleStyle ] ] [ text (t PartnersListHeading) ]
-            , viewPartnerList filteredPartnerList
-            , viewMap filteredPartnerList
-            ]
+          else
+            text ""
+        , viewPartnerList filteredPartnerList
+        , viewMap filteredPartnerList
+        ]
 
 
 viewPartnerList : List Data.PlaceCal.Partners.Partner -> Html msg
