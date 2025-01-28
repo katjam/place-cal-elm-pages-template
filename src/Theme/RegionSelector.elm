@@ -95,15 +95,11 @@ buttonMarginFullWidth =
 
 regionSelectorWrapper : Style
 regionSelectorWrapper =
-    if List.length partnershipTagList > 1 then
-        batch
-            [ margin2 (rem 0) (rem -0.5)
-            , withMediaSmallDesktopUp [ margin4 (rem 2) (rem -1) (rem 3) (rem -1) ]
-            , withMediaTabletLandscapeUp [ margin2 (rem 2) (rem -1) ]
-            ]
-
-    else
-        display none
+    batch
+        [ margin2 (rem 0) (rem -0.5)
+        , withMediaSmallDesktopUp [ margin4 (rem 2) (rem -1) (rem 3) (rem -1) ]
+        , withMediaTabletLandscapeUp [ margin2 (rem 2) (rem -1) ]
+        ]
 
 
 regionSelectorContainer : Style
