@@ -6,6 +6,7 @@ import Css exposing (Style, alignItems, backgroundColor, batch, block, borderBot
 import Css.Global exposing (descendants, typeSelector)
 import Css.Transitions exposing (transition)
 import Data.PlaceCal.Events
+import Data.PlaceCal.Partners
 import Helpers.TransDate as TransDate
 import Helpers.TransRoutes as TransRoutes exposing (Route(..))
 import Html.Styled exposing (Html, a, article, button, div, h4, li, p, section, span, text, time, ul)
@@ -44,7 +45,11 @@ viewEvents :
     -> Html Msg
 viewEvents eventsList model =
     section [ css [ eventsContainerStyle ] ]
-        [ Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
+        [ if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
+            Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion } |> Html.Styled.map fromRegionSelectorMsg
+
+          else
+            text ""
         , Theme.Paginator.viewPagination model |> Html.Styled.map fromPaginatorMsg
         , viewEventsList model eventsList Nothing
         ]

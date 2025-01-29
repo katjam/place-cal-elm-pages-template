@@ -64,15 +64,24 @@ viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Int -> Html Msg
 viewFeatured fromTime eventList regionId =
     section [ css [ sectionStyle, Theme.Global.darkBlueBackgroundStyle, eventsSectionStyle ] ]
         [ h2 [ css [ Theme.Global.smallFloatingTitleStyle ] ] [ text (t IndexFeaturedHeader) ]
-        , Theme.RegionSelector.viewRegionSelector { filterBy = regionId } |> Html.Styled.map fromRegionSelectorMsg
+        , if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
+            Theme.RegionSelector.viewRegionSelector { filterBy = regionId } |> Html.Styled.map fromRegionSelectorMsg
+
+          else
+            text ""
         , Theme.Page.Events.viewEventsList { filterByDate = Theme.Paginator.Future, filterByRegion = regionId, nowTime = fromTime } eventList (Just 8)
-        , p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
-            [ a
-                [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
-                , css [ Theme.Global.pinkButtonOnDarkBackgroundStyle ]
-                ]
-                [ text (t IndexFeaturedButtonText) ]
+        , viewAllEventsButton
+        ]
+
+
+viewAllEventsButton : Html msg
+viewAllEventsButton =
+    p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
+        [ a
+            [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
+            , css [ Theme.Global.pinkButtonOnDarkBackgroundStyle ]
             ]
+            [ text (t IndexFeaturedButtonText) ]
         ]
 
 

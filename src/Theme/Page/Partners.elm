@@ -24,14 +24,23 @@ viewPartners partnerList model =
     in
     section []
         [ h3 [ css [ partnersListTitleStyle ] ] [ text (t PartnersListHeading) ]
-        , Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion }
-        , if List.length filteredPartnerList > 0 then
-            ul [ css [ listStyle ] ] (List.map (\partner -> viewPartner partner) filteredPartnerList)
+        , if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
+            Theme.RegionSelector.viewRegionSelector { filterBy = model.filterByRegion }
 
           else
-            p [] [ text (t PartnersListEmpty) ]
+            text ""
+        , viewPartnerList filteredPartnerList
         , viewMap filteredPartnerList
         ]
+
+
+viewPartnerList : List Data.PlaceCal.Partners.Partner -> Html msg
+viewPartnerList partners =
+    if List.length partners > 0 then
+        ul [ css [ listStyle ] ] (List.map (\partner -> viewPartner partner) partners)
+
+    else
+        p [] [ text (t PartnersListEmpty) ]
 
 
 viewPartner : Data.PlaceCal.Partners.Partner -> Html msg
