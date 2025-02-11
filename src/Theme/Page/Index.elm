@@ -5,12 +5,12 @@ import Copy.Text exposing (t)
 import Css exposing (Style, absolute, after, auto, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, batch, before, block, borderRadius, bottom, calc, center, color, display, em, fontSize, fontStyle, fontWeight, height, important, inlineBlock, int, italic, lineHeight, margin2, marginBottom, marginLeft, marginRight, marginTop, maxWidth, minus, noRepeat, none, padding2, padding4, paddingBottom, paddingLeft, paddingRight, paddingTop, pct, position, property, px, relative, rem, textAlign, top, url, vw, width, zIndex)
 import Data.PlaceCal.Articles
 import Data.PlaceCal.Events
+import Data.PlaceCal.Partners
 import Helpers.TransRoutes
 import Html.Styled exposing (Html, a, div, h1, h2, img, p, section, text)
 import Html.Styled.Attributes exposing (alt, css, href, src)
-import Shared
 import Theme.Global
-import Theme.Page.Events
+import Theme.Page.Events exposing (Msg, fromRegionSelectorMsg)
 import Theme.Page.News
 import Theme.Paginator
 import Theme.RegionSelector
@@ -18,13 +18,17 @@ import Time
 
 
 view :
-    Shared.Data
+    { events : List Data.PlaceCal.Events.Event
+    , partners : List Data.PlaceCal.Partners.Partner
+    , articles : List Data.PlaceCal.Articles.Article
+    , time : Time.Posix
+    }
     ->
         { localModel
             | filterByRegion : Int
             , nowTime : Time.Posix
         }
-    -> Html Theme.RegionSelector.Msg
+    -> Html Theme.Page.Events.Msg
 view sharedData localModel =
     div [ css [ pageWrapperStyle ] ]
         [ viewIntro (t IndexIntroTitle) (t IndexIntroMessage) (t IndexIntroButtonText)
@@ -56,19 +60,28 @@ viewIntro introTitle introMsg eventButtonText =
         ]
 
 
-viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Int -> Html Theme.RegionSelector.Msg
+viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Int -> Html Msg
 viewFeatured fromTime eventList regionId =
     section [ css [ sectionStyle, Theme.Global.darkBlueBackgroundStyle, eventsSectionStyle ] ]
         [ h2 [ css [ Theme.Global.smallFloatingTitleStyle ] ] [ text (t IndexFeaturedHeader) ]
-        , Theme.RegionSelector.viewRegionSelector { filterBy = regionId }
+        , if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
+            Theme.RegionSelector.viewRegionSelector { filterBy = regionId } |> Html.Styled.map fromRegionSelectorMsg
+
+          else
+            text ""
         , Theme.Page.Events.viewEventsList { filterByDate = Theme.Paginator.Future, filterByRegion = regionId, nowTime = fromTime } eventList (Just 8)
-        , p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
-            [ a
-                [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
-                , css [ Theme.Global.pinkButtonOnDarkBackgroundStyle ]
-                ]
-                [ text (t IndexFeaturedButtonText) ]
+        , viewAllEventsButton
+        ]
+
+
+viewAllEventsButton : Html msg
+viewAllEventsButton =
+    p [ css [ Theme.Global.buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
+        [ a
+            [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
+            , css [ Theme.Global.pinkButtonOnDarkBackgroundStyle ]
             ]
+            [ text (t IndexFeaturedButtonText) ]
         ]
 
 

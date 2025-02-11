@@ -43,7 +43,6 @@ template =
 type alias Data =
     { articles : List Data.PlaceCal.Articles.Article
     , partners : List Data.PlaceCal.Partners.Partner
-    , events : List Data.PlaceCal.Events.Event
     , time : Time.Posix
     }
 
@@ -218,10 +217,9 @@ subscriptions _ _ =
 
 data : BackendTask FatalError Data
 data =
-    BackendTask.map4 Data
+    BackendTask.map3 Data
         (BackendTask.map (\articlesData -> articlesData.allArticles) Data.PlaceCal.Articles.articlesData)
         (BackendTask.map (\partnersData -> partnersData.allPartners) Data.PlaceCal.Partners.partnersData)
-        (BackendTask.map (\eventsData -> eventsData.allEvents) Data.PlaceCal.Events.eventsData)
         -- Consider using Pages.builtAt or Server.Request.requestTime
         BackendTask.Time.now
         |> BackendTask.allowFatal
@@ -247,8 +245,7 @@ view sharedData page model toMsg pageView =
     { body =
         [ Html.Styled.toUnstyled
             (Theme.Global.containerPage pageView.title
-                [ View.fontPreload
-                , Theme.Global.globalStyles
+                [ Theme.Global.globalStyles
                 , viewPageHeader page
                     { showMobileMenu = model.showMobileMenu }
                     |> Html.Styled.map toMsg

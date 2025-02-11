@@ -54,7 +54,7 @@ viewInfo localModel { partner, events } =
                     ]
 
             Nothing ->
-                div [ css [ mapContainerStyle ] ] [ text "" ]
+                text ""
         ]
 
 
@@ -75,9 +75,6 @@ viewPartnerEvents events localModel partner =
 
         futureEvents =
             Data.PlaceCal.Events.afterDate events localModel.nowTime
-
-        pastEvents =
-            Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
     in
     section [ id "events" ]
         (if List.length futureEvents > 0 then
@@ -95,19 +92,24 @@ viewPartnerEvents events localModel partner =
                     ]
                 ]
 
-         else if List.length pastEvents > 0 then
-            -- If there are no future events but there were in the past, show them
-            [ div []
-                [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
-                , Theme.Page.Events.viewEventsList { localModel | filterByDate = Theme.Paginator.None } pastEvents Nothing
-                ]
-            ]
-
          else
-            -- This partner has never had events
-            [ eventAreaTitle
-            , p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ] [ text (t (PartnerEventsEmptyText partner.name)) ]
-            ]
+            let
+                pastEvents =
+                    Data.PlaceCal.Events.onOrBeforeDate events localModel.nowTime
+            in
+            if List.length pastEvents > 0 then
+                -- If there are no future events but there were in the past, show them
+                [ div []
+                    [ h3 [ css [ smallInlineTitleStyle, color white ] ] [ text (t (PartnerPreviousEventsText partner.name)) ]
+                    , Theme.Page.Events.viewEventsList { localModel | filterByDate = Theme.Paginator.None } pastEvents Nothing
+                    ]
+                ]
+
+            else
+                -- This partner has never had events
+                [ eventAreaTitle
+                , p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ] [ text (t (PartnerEventsEmptyText partner.name)) ]
+                ]
         )
 
 
@@ -152,7 +154,7 @@ viewContactDetails maybeUrl maybeContactDetails maybeInstagramUrl =
             , case maybeInstagramUrl of
                 Just url ->
                     p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (Copy.Text.urlToDisplay url) ] ]
-                
+
                 Nothing ->
                     text ""
             ]
@@ -174,15 +176,25 @@ viewAddress maybeAddress =
         Nothing ->
             p [ css [ contactItemStyle ] ] [ text (t PartnerAddressEmptyText) ]
 
+
 viewPartnerDescription : String -> String -> String -> List (Html msg)
 viewPartnerDescription partnerName partnerDescription partnerSummary =
-    case (partnerDescription, partnerSummary) of
-        ("", "") -> [ div [ ] (Theme.TransMarkdown.markdownToHtml (t (PartnerDescriptionEmptyText partnerName))) ]
-        ( "", s) -> [ div [ ] (Theme.TransMarkdown.markdownToHtml s) ]
-        (d, "")  -> [ div [ ] (Theme.TransMarkdown.markdownToHtml d) ]
-        (d, s)   -> [ div [ ] (Theme.TransMarkdown.markdownToHtml s)
-                    , div [ ] (Theme.TransMarkdown.markdownToHtml d)
-                    ]
+    case ( partnerDescription, partnerSummary ) of
+        ( "", "" ) ->
+            [ div [] (Theme.TransMarkdown.markdownToHtml (t (PartnerDescriptionEmptyText partnerName))) ]
+
+        ( "", s ) ->
+            [ div [] (Theme.TransMarkdown.markdownToHtml s) ]
+
+        ( d, "" ) ->
+            [ div [] (Theme.TransMarkdown.markdownToHtml d) ]
+
+        ( d, s ) ->
+            [ div [] (Theme.TransMarkdown.markdownToHtml s)
+            , div [] (Theme.TransMarkdown.markdownToHtml d)
+            ]
+
+
 
 ---------
 -- Styles

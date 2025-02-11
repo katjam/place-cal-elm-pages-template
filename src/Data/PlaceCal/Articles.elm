@@ -154,7 +154,6 @@ articleFromSlug slug allArticles allPartners =
         |> Maybe.withDefault emptyArticle
 
 
-
 summaryFromArticleBody : String -> String
 summaryFromArticleBody articleBody =
     String.words articleBody

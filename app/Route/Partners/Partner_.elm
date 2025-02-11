@@ -113,10 +113,6 @@ update :
     -> Model
     -> ( Model, Effect.Effect Msg )
 update app _ msg model =
-    let
-        aPartner =
-            Data.PlaceCal.Partners.partnerFromSlug app.sharedData.partners app.routeParams.partner
-    in
     case msg of
         Theme.Page.Events.PaginatorMsg submsg ->
             case submsg of
@@ -166,7 +162,7 @@ update app _ msg model =
                     )
 
                 Theme.Paginator.GotViewport viewport ->
-                    ( { model | viewportWidth = Maybe.withDefault model.viewportWidth (Just viewport.scene.width) }, Effect.none )
+                    ( { model | viewportWidth = viewport.scene.width }, Effect.none )
 
                 Theme.Paginator.NoOp ->
                     ( model, Effect.none )
@@ -176,6 +172,9 @@ update app _ msg model =
             -- But may  in future if some partners have events in multiple regions
             ( model, Effect.none )
 
+        Theme.Page.Events.ClickedGoToNextEvent nextEventTime ->
+            ( { model | filterByDate = Theme.Paginator.Day nextEventTime }, Effect.none )
+
 
 subscriptions : RouteParams -> UrlPath.UrlPath -> Shared.Model -> Model -> Sub Msg
 subscriptions _ _ _ _ =
@@ -183,7 +182,8 @@ subscriptions _ _ _ _ =
 
 
 type alias Data =
-    ()
+    { events : List Data.PlaceCal.Events.Event
+    }
 
 
 type alias ActionData =
@@ -192,7 +192,9 @@ type alias ActionData =
 
 data : RouteParams -> BackendTask.BackendTask FatalError.FatalError Data
 data _ =
-    BackendTask.succeed ()
+    BackendTask.map Data
+        (BackendTask.map (\eventsData -> eventsData.allEvents) Data.PlaceCal.Events.eventsData)
+        |> BackendTask.allowFatal
 
 
 head : RouteBuilder.App Data ActionData RouteParams -> List Head.Tag
@@ -229,7 +231,7 @@ view app _ model =
                 Just
                     (Theme.Page.Partner.viewInfo model
                         { partner = aPartner
-                        , events = eventsFromPartnerId aPartner.id app.sharedData.events
+                        , events = eventsFromPartnerId aPartner.id app.data.events
                         }
                     )
             , outerContent = Just (Theme.Global.viewBackButton (Helpers.TransRoutes.toAbsoluteUrl Partners) (t BackToPartnersLinkText))

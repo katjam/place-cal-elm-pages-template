@@ -1,4 +1,4 @@
-module Data.PlaceCal.Events exposing (Event, EventPartner, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsOnDate, eventsFromRegionId, eventsWithPartners, nextNEvents, onOrBeforeDate)
+module Data.PlaceCal.Events exposing (Event, EventLocation, EventPartner, EventPartnerContact, Geo, afterDate, eventFromSlug, eventPartnerFromId, eventsData, eventsFromRegionId, eventsOnDate, eventsWithPartners, nextEventStartTime, nextNEvents, onOrBeforeDate, singleEventData)
 
 import BackendTask
 import BackendTask.Custom
@@ -153,6 +153,15 @@ eventsWithPartners eventList partnerList =
         eventList
 
 
+nextEventStartTime : List Event -> Int -> Time.Posix -> Maybe Time.Posix
+nextEventStartTime eventList tagId nowTime =
+    eventsFromRegionId (afterDate eventList nowTime) tagId
+        |> List.map (\event -> Time.posixToMillis event.startDatetime)
+        |> List.sort
+        |> List.head
+        |> Maybe.map Time.millisToPosix
+
+
 
 ----------------------------
 -- DataSource query & decode
@@ -177,6 +186,14 @@ eventsData =
         |> BackendTask.map (\eventList -> { allEvents = eventList })
 
 
+singleEventData : String -> BackendTask.BackendTask { fatal : FatalError.FatalError, recoverable : BackendTask.Custom.Error } Event
+singleEventData eventId =
+    Data.PlaceCal.Api.fetchSinglePlaceCalData
+        eventId
+        (singleEventQuery eventId)
+        (singleEventDecoder 0)
+
+
 sortEventsByDate : List Event -> List Event
 sortEventsByDate events =
     List.sortBy
@@ -193,7 +210,7 @@ allEventsQuery partnershipTag =
                 ("query { eventsByFilter(tagId: "
                     ++ partnershipTag
                     ++ """
-            , fromDate: "2024-01-01 00:00", toDate: "2025-06-15 00:00") {
+            , fromDate: "2024-06-01 00:00", toDate: "2025-10-15 00:00") {
               id
               name
               summary
@@ -210,10 +227,50 @@ allEventsQuery partnershipTag =
         ]
 
 
+singleEventQuery : String -> Json.Encode.Value
+singleEventQuery eventId =
+    Json.Encode.object
+        [ ( "query"
+          , Json.Encode.string
+                """
+                query Event($id: ID!) {
+                  event(id: $id) {
+                    id
+                    name
+                    summary
+                    description
+                    startDate
+                    endDate
+                    address {
+                      streetAddress
+                      postalCode
+                      addressLocality
+                      addressRegion
+                    }
+                    organizer {
+                      id
+                      name
+                    }
+                  }
+                }
+                """
+          )
+        , ( "variables"
+          , Json.Encode.object
+                [ ( "id", Json.Encode.string eventId ) ]
+          )
+        ]
+
+
 eventsDecoder : Int -> Json.Decode.Decoder AllEventsResponse
 eventsDecoder partnershipTagInt =
     Json.Decode.succeed AllEventsResponse
         |> Json.Decode.Pipeline.requiredAt [ "data", "eventsByFilter" ] (Json.Decode.list (decodeEvent partnershipTagInt))
+
+
+singleEventDecoder : Int -> Json.Decode.Decoder Event
+singleEventDecoder partnershipTagInt =
+    Json.Decode.at [ "data", "event" ] (decodeEvent partnershipTagInt)
 
 
 decodeEvent : Int -> Json.Decode.Decoder Event

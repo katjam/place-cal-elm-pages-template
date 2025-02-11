@@ -1,4 +1,4 @@
-module Data.PlaceCal.Partners exposing (Address, Contact, Partner, ServiceArea, filterFromQueryString, partnerFromSlug, partnerNamesFromIds, partnersData, partnersFromRegionId, partnershipTagIdList, partnershipTagList, PartnershipTag, getTagInfoById)
+module Data.PlaceCal.Partners exposing (Address, Contact, Geo, Partner, PartnershipTag, ServiceArea, filterFromQueryString, getTagInfoById, partnerFromSlug, partnerNamesFromIds, partnersData, partnersFromRegionId, partnershipTagIdList, partnershipTagList)
 
 import BackendTask
 import BackendTask.Custom
@@ -136,6 +136,7 @@ maybeMatchTagId maybeTagInfo =
         Nothing ->
             Nothing
 
+
 getTagInfoById : Int -> Maybe PartnershipTag
 getTagInfoById tagId =
     partnershipTagList
@@ -158,6 +159,14 @@ partnersData =
         |> BackendTask.map (List.map .allPartners)
         |> BackendTask.map List.concat
         |> BackendTask.map (\partnerList -> { allPartners = partnerList })
+
+
+singlePartnerData : String -> BackendTask.BackendTask { fatal : FatalError.FatalError, recoverable : BackendTask.Custom.Error } Partner
+singlePartnerData partnerId =
+    Data.PlaceCal.Api.fetchSinglePlaceCalData
+        partnerId
+        (singlePartnerQuery partnerId)
+        (singlePartnerDecoder 0)
 
 
 allPartnersQuery : String -> Json.Encode.Value
@@ -186,10 +195,44 @@ allPartnersQuery partnershipTag =
         ]
 
 
+singlePartnerQuery : String -> Json.Encode.Value
+singlePartnerQuery partnerId =
+    Json.Encode.object
+        [ ( "query"
+          , Json.Encode.string
+                """
+                query Partner($id: ID!) {
+                  partner(id: $id) {
+                    id
+                    name
+                    description
+                    summary
+                    contact { email, telephone }
+                    url
+                    instagramUrl
+                    address { streetAddress, postalCode, addressRegion, geo { latitude, longitude } }
+                    areasServed { name abbreviatedName }
+                    logo
+                  }
+                }
+                """
+          )
+        , ( "variables"
+          , Json.Encode.object
+                [ ( "id", Json.Encode.string partnerId ) ]
+          )
+        ]
+
+
 partnersDecoder : Int -> Json.Decode.Decoder AllPartnersResponse
 partnersDecoder partnershipTagInt =
     Json.Decode.succeed AllPartnersResponse
         |> Json.Decode.Pipeline.requiredAt [ "data", "partnersByTag" ] (Json.Decode.list (decodePartner partnershipTagInt))
+
+
+singlePartnerDecoder : Int -> Json.Decode.Decoder Partner
+singlePartnerDecoder partnershipTagInt =
+    Json.Decode.at [ "data", "partner" ] (decodePartner partnershipTagInt)
 
 
 decodePartner : Int -> Json.Decode.Decoder Partner
