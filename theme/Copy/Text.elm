@@ -13,10 +13,10 @@ t : Key -> String
 t key =
     case key of
         SiteTitle ->
-            "The Trans Dimension"
+            "My site title"
 
         SiteStrapline ->
-            "Space and spaces for us"
+            "My strapline"
 
         TransDimensionDescription ->
             -- Note this is also in content/about/main.md

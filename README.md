@@ -1,13 +1,11 @@
-# The Trans Dimension
+# PlaceCal template
 
 ## A [PlaceCal](https://placecal.org/) community site
 
-Front-end for [The Trans Dimension](http://transdimension.uk/), an online community hub which will connect trans communities across the UK by collating news, events and services by and for trans people in one easy-to-reach place. A collaboration between [Gendered Intelligence](https://genderedintelligence.co.uk/) and [Geeks for Social Change](https://gfsc.studio/).
+Front-end for a PlaceCal instance, an online community hub.
 
-Funded by the [Comic Relief Tech for Good “Build” fund](https://techforgoodhub.co.uk/build-fund-2021). Read more about the project [here](https://gfsc.studio/2021/12/14/enter-trans-dimension.html).
-
--  Staging url: https://transdimension.pages.dev
--  Production URL: http://transdimension.uk/
+-  Staging url: 
+-  Production URL:
 
 # Development
 
@@ -22,6 +20,8 @@ Funded by the [Comic Relief Tech for Good “Build” fund](https://techforgoodh
 - install with `npm install`
 
 Copy `.env.example` over into `.env` and edit as appropriate! This must be done before any of the following will work as it generates `src/Constants.elm` which is used in a number of places in the code.
+
+Edit `elm-pages.config.mjs` to include the meta information for your site.
 
 ## Build
 
@@ -56,26 +56,30 @@ We're using [elm-test-rs](https://github.com/mpizenberg/elm-test-rs) to run [elm
 - `.nvmrc` contains project node version
 - `package.json` for node scripts and packages
 - `package-lock.json` for current versions of node packages
-- `public/*` contains static files to be copied direct to build
 - `app/*` contains core files required by `elm-pages`. These are boilerplate altered for this project.
-- `src/*` contains custom files. These are authoured from scratch for this project.
+- `src/*` contains custom files. These were authoured specifically for this template.
   - `src/Data/PlaceCal` contains code for fetching, caching and decoding data from PlaceCal
   - `src/Helpers/` contains utility code (e.g. for handling dates)
   - `src/Theme/` contains view code like templates and shared styling
 - `tests/*` contains test files
 
-### Content & Pages
+### Pages
 
 - Routes in `app/Route/` automatically generate route based on file name
 - New routes can be generated via CLI
   - e.g. create a new stateless route by running `npx elm-pages run AddStaticStatelessRoute MyRouteName`
 - Page templates are in `src/Theme/Page/`
-- About and Privacy pages are generated from markdown in `content/`
-- Copy is not from a datasource (e.g. UI or SEO text) is in `src/Copy/Text.elm`
 
 ### Styling & layouts
 
 - We are using [elm-css](https://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css) for styling
+
+### Customisable content and styles
+
+- `theme/*` contains the files with the content and theme information specific to your site
+- UI & SEO meta copy are in `theme/Copy/Text.elm`
+- About and Privacy pages are generated from markdown in `theme/content/`
+- `public/*` contains static files to be copied direct to build like image assets and css
 
 ## Deployment
 
