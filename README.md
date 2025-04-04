@@ -58,7 +58,8 @@ We're using [elm-test-rs](https://github.com/mpizenberg/elm-test-rs) to run [elm
 - `package-lock.json` for current versions of node packages
 - `public/*` contains static files to be copied direct to build
 - `app/*` contains core files required by `elm-pages`. These are boilerplate altered for this project.
-- `src/*` contains custom files. These are authoured from scratch for this project.
+- `src/*` contains custom files. These were authoured specifically for this template.
+- `theme/*` contains the custom files for theming your site
   - `src/Data/PlaceCal` contains code for fetching, caching and decoding data from PlaceCal
   - `src/Helpers/` contains utility code (e.g. for handling dates)
   - `src/Theme/` contains view code like templates and shared styling
@@ -71,7 +72,7 @@ We're using [elm-test-rs](https://github.com/mpizenberg/elm-test-rs) to run [elm
   - e.g. create a new stateless route by running `npx elm-pages run AddStaticStatelessRoute MyRouteName`
 - Page templates are in `src/Theme/Page/`
 - About and Privacy pages are generated from markdown in `content/`
-- Copy is not from a datasource (e.g. UI or SEO text) is in `src/Copy/Text.elm`
+- Copy is not from a datasource (e.g. UI or SEO text) is in `theme/Copy/Text.elm`
 
 ### Styling & layouts
 
