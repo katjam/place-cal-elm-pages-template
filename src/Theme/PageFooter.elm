@@ -9,7 +9,8 @@ import Helpers.TransRoutes as TransRoutes exposing (Route(..))
 import Html.Styled exposing (Html, a, button, div, footer, form, img, input, label, li, nav, p, span, text, ul)
 import Html.Styled.Attributes exposing (action, alt, attribute, css, for, href, id, method, name, placeholder, src, target, type_, value)
 import List exposing (append, concat)
-import Theme.Global exposing (colorTransition, darkBlue, darkPurple, pink, pinkButtonOnDarkBackgroundStyle, smallInlineTitleStyle, textInputStyle, white, withMediaCanHover, withMediaMediumDesktopUp, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Skin.Global exposing (darkBlue, darkPurple, pink, pinkButtonOnDarkBackgroundStyle, smallInlineTitleStyle, textInputStyle, white)
+import Theme.GlobalLayout exposing (colorTransition, withMediaCanHover, withMediaMediumDesktopUp, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.Logo
 import Time
 

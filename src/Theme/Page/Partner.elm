@@ -7,7 +7,13 @@ import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
 import Html.Styled exposing (Html, a, address, div, h3, hr, p, section, span, text)
 import Html.Styled.Attributes exposing (css, href, id, target)
-import Theme.Global exposing (hrStyle, introTextLargeStyle, linkStyle, normalFirstParagraphStyle, pink, smallInlineTitleStyle, white, withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Skin.Global exposing (hrStyle, introTextLargeStyle, linkStyle, mapImage, normalFirstParagraphStyle, pink, smallInlineTitleStyle, white)
+import Theme.GlobalLayout
+    exposing
+        ( withMediaMediumDesktopUp
+        , withMediaTabletLandscapeUp
+        , withMediaTabletPortraitUp
+        )
 import Theme.Page.Events
 import Theme.Paginator
 import Theme.TransMarkdown
@@ -33,11 +39,11 @@ viewInfo localModel { partner, events } =
         , hr [ css [ hrStyle ] ] []
         , section [ css [ contactWrapperStyle ] ]
             [ div [ css [ contactSectionStyle ] ]
-                [ h3 [ css [ contactHeadingStyle, Theme.Global.smallInlineTitleStyle ] ] [ text (t PartnerContactsHeading) ]
+                [ h3 [ css [ contactHeadingStyle, smallInlineTitleStyle ] ] [ text (t PartnerContactsHeading) ]
                 , viewContactDetails partner.maybeUrl partner.maybeContactDetails partner.maybeInstagramUrl
                 ]
             , div [ css [ contactSectionStyle ] ]
-                [ h3 [ css [ contactHeadingStyle, Theme.Global.smallInlineTitleStyle ] ] [ text (t PartnerAddressHeading) ]
+                [ h3 [ css [ contactHeadingStyle, smallInlineTitleStyle ] ] [ text (t PartnerAddressHeading) ]
                 , viewAddress partner.maybeAddress
                 ]
             ]
@@ -47,7 +53,7 @@ viewInfo localModel { partner, events } =
             Just geo ->
                 div [ css [ mapContainerStyle ] ]
                     [ p []
-                        [ Theme.Global.mapImage
+                        [ mapImage
                             (t (MapImageAltText partner.name))
                             { latitude = geo.latitude, longitude = geo.longitude }
                         ]
@@ -232,7 +238,7 @@ contactSectionStyle =
 
 contactHeadingStyle : Style
 contactHeadingStyle =
-    batch [ color Theme.Global.pink ]
+    batch [ color pink ]
 
 
 contactItemStyle : Style

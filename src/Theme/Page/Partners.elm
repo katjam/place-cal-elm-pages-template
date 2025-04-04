@@ -9,7 +9,8 @@ import Data.PlaceCal.Partners
 import Helpers.TransRoutes as TransRoutes exposing (Route(..))
 import Html.Styled exposing (Html, a, div, h3, h4, li, p, section, span, styled, text, ul)
 import Html.Styled.Attributes exposing (css, href)
-import Theme.Global as Theme exposing (darkPurple, pink, purple, white, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Skin.Global exposing (darkPurple, mapImageMulti, pink, purple, white)
+import Theme.GlobalLayout exposing (borderTransition, colorTransition, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.RegionSelector
 
 
@@ -80,7 +81,7 @@ viewMap partnerList =
                     }
     in
     div [ css [ featurePlaceholderStyle ] ]
-        [ Theme.mapImageMulti
+        [ mapImageMulti
             (t PartnersMapAltText)
             (List.filter allowOnlyPartnersWithLocation partnerList
                 |> List.map partnerToGeo
@@ -213,7 +214,7 @@ partnerTopRowStyle =
         , borderBottomWidth (px 2)
         , borderBottomStyle solid
         , withMediaTabletLandscapeUp [ padding2 (rem 0.75) (rem 0) ]
-        , transition [ Theme.borderTransition ]
+        , transition [ borderTransition ]
         ]
 
 
@@ -232,7 +233,7 @@ partnerLink =
     batch
         [ textDecoration none
         , color white
-        , transition [ Theme.colorTransition ]
+        , transition [ colorTransition ]
         ]
 
 
@@ -242,7 +243,7 @@ partnerNameStyle =
         [ fontSize (rem 1.2)
         , fontStyle italic
         , color white
-        , transition [ Theme.colorTransition ]
+        , transition [ colorTransition ]
         , withMediaTabletPortraitUp [ fontSize (rem 1.5) ]
         ]
 

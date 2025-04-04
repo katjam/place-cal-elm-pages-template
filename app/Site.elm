@@ -9,7 +9,7 @@ import Pages.Manifest as Manifest
 import Pages.Url
 import Route
 import SiteConfig exposing (SiteConfig)
-import Theme.Global
+import Skin.Global
 import UrlPath
 
 
@@ -53,8 +53,8 @@ manifest =
               }
             ]
         }
-        |> Manifest.withBackgroundColor Theme.Global.darkBlueRgbColor
-        |> Manifest.withThemeColor Theme.Global.pinkRgbColor
+        |> Manifest.withBackgroundColor Skin.Global.darkBlueRgbColor
+        |> Manifest.withThemeColor Skin.Global.pinkRgbColor
 
 
 pathFromString srcString =

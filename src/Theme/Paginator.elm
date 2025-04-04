@@ -11,8 +11,9 @@ import Helpers.TransDate as TransDate
 import Html.Styled exposing (Html, button, div, img, li, text, ul)
 import Html.Styled.Attributes exposing (css, id, src)
 import Html.Styled.Events
+import Skin.Global exposing (darkBlue, darkPurple, pink, white)
 import Task exposing (Task)
-import Theme.Global exposing (backgroundColorTransition, borderTransition, colorTransition, darkBlue, darkPurple, pink, white, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Theme.GlobalLayout exposing (backgroundColorTransition, borderTransition, colorTransition, maxMobile, maxTabletPortrait, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Time
 
 
@@ -157,10 +158,10 @@ scrollPagination direction viewportWidth =
                 let
                     scrollXAmount : Float
                     scrollXAmount =
-                        if viewportWidth < Theme.Global.maxMobile then
+                        if viewportWidth < maxMobile then
                             buttonWidthMobile + (buttonMarginMobile * 2)
 
-                        else if viewportWidth < Theme.Global.maxTabletPortrait then
+                        else if viewportWidth < maxTabletPortrait then
                             buttonWidthTablet + (buttonMarginTablet * 2)
 
                         else

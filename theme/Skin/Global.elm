@@ -1,13 +1,13 @@
-module Theme.Global exposing (backgroundColorTransition, borderTransition, buttonFloatingWrapperStyle, colorTransition, containerPage, contentContainerStyle, contentWrapperStyle, darkBlue, darkBlueBackgroundStyle, darkBlueButtonStyle, darkBlueRgbColor, darkPurple, globalStyles, hrStyle, introTextLargeStyle, introTextSmallStyle, linkStyle, mapImage, mapImageMulti, maxMobile, maxTabletPortrait, normalFirstParagraphStyle, pink, pinkBackgroundStyle, pinkButtonOnDarkBackgroundStyle, pinkButtonOnLightBackgroundStyle, pinkRgbColor, purple, screenReaderOnly, smallFloatingTitleStyle, smallInlineTitleStyle, textBoxInvisibleStyle, textBoxPinkStyle, textInputErrorStyle, textInputStyle, viewBackButton, viewCheckbox, white, whiteButtonStyle, withMediaCanHover, withMediaMediumDesktopUp, withMediaMobileOnly, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+module Skin.Global exposing (contentWrapperStyle, darkBlue, darkBlueBackgroundStyle, darkBlueButtonStyle, darkBlueRgbColor, darkPurple, globalStyles, hrStyle, introTextLargeStyle, introTextSmallStyle, linkStyle, mapImage, mapImageMulti, normalFirstParagraphStyle, pink, pinkBackgroundStyle, pinkButtonOnDarkBackgroundStyle, pinkButtonOnLightBackgroundStyle, pinkRgbColor, purple, smallFloatingTitleStyle, smallInlineTitleStyle, textBoxInvisibleStyle, textBoxPinkStyle, textInputErrorStyle, textInputStyle, viewBackButton, viewCheckbox, white, whiteButtonStyle)
 
 import Color
 import Css exposing (Color, Style, absolute, active, alignItems, auto, backgroundColor, backgroundImage, backgroundRepeat, backgroundSize, batch, block, borderBottomColor, borderBottomStyle, borderBottomWidth, borderBox, borderColor, borderRadius, borderStyle, borderWidth, bottom, boxSizing, calc, center, color, cursor, display, displayFlex, em, firstChild, fitContent, flexDirection, focus, fontFamilies, fontSize, fontStyle, fontWeight, height, hex, hidden, hover, inlineBlock, int, italic, justifyContent, left, letterSpacing, lineHeight, margin, margin2, margin4, marginBlockEnd, marginBlockStart, marginTop, maxContent, maxWidth, minus, none, outline, overflow, padding, padding2, padding4, paddingBottom, paddingLeft, paddingRight, pct, pointer, position, property, px, relative, rem, repeat, row, sansSerif, solid, textAlign, textDecoration, textTransform, top, uppercase, url, width, zero)
 import Css.Global exposing (adjacentSiblings, descendants, global, typeSelector)
-import Css.Media as Media exposing (fine, only, screen, withMedia)
 import Css.Transitions exposing (Transition, linear, transition)
 import Html.Styled exposing (Html, a, div, img, input, label, p, text)
 import Html.Styled.Attributes exposing (alt, css, for, href, id, src, type_)
 import Html.Styled.Events exposing (onCheck)
+import Theme.GlobalLayout exposing (withMediaCanHover, withMediaMediumDesktopUp, withMediaMobileOnly, withMediaSmallDesktopUp, withMediaTabletLandscapeUp)
 
 
 
@@ -55,110 +55,19 @@ white =
 
 
 
--- Accent colours
--- Text and background colours
--- Breakpoints
-
-
-maxMobile : Float
-maxMobile =
-    600
-
-
-withMediaMobileOnly : List Style -> Style
-withMediaMobileOnly =
-    withMedia [ only screen [ Media.maxWidth (px (maxMobile - 1)) ] ]
-
-
-withMediaTabletPortraitUp : List Style -> Style
-withMediaTabletPortraitUp =
-    withMedia [ only screen [ Media.minWidth (px maxMobile) ] ]
-
-
-maxTabletPortrait : Float
-maxTabletPortrait =
-    900
-
-
-withMediaTabletLandscapeUp : List Style -> Style
-withMediaTabletLandscapeUp =
-    withMedia [ only screen [ Media.minWidth (px maxTabletPortrait) ] ]
-
-
-maxTabletLandscape : Float
-maxTabletLandscape =
-    1200
-
-
-withMediaSmallDesktopUp : List Style -> Style
-withMediaSmallDesktopUp =
-    withMedia [ only screen [ Media.minWidth (px maxTabletLandscape) ] ]
-
-
-maxSmallDesktop : Float
-maxSmallDesktop =
-    1500
-
-
-withMediaMediumDesktopUp : List Style -> Style
-withMediaMediumDesktopUp =
-    withMedia [ only screen [ Media.minWidth (px maxSmallDesktop) ] ]
-
-
-withMediaCanHover : List Style -> Style
-withMediaCanHover =
-    withMedia [ only screen [ Media.hover Media.canHover, Media.pointer fine ] ]
-
-
-
--- Transitions
-
-
-borderTransition : Transition
-borderTransition =
-    Css.Transitions.border3 500 0 linear
-
-
-colorTransition : Transition
-colorTransition =
-    Css.Transitions.color3 500 0 linear
-
-
-backgroundColorTransition : Transition
-backgroundColorTransition =
-    Css.Transitions.backgroundColor3 500 0 linear
-
-
-
--- Buttons (components)
+-- Buttons
 
 
 viewBackButton : String -> String -> Html msg
 viewBackButton link buttonText =
-    p [ css [ backButtonStyle ] ]
+    p [ css [ Theme.GlobalLayout.backButtonStyle ] ]
         [ a [ href link, css [ darkBlueButtonStyle ] ] [ text buttonText ] ]
-
-
-
--- Buttons (styles)
-
-
-buttonFloatingWrapperStyle : Style
-buttonFloatingWrapperStyle =
-    batch
-        [ margin2 (rem 1) auto
-        , display block
-        , position absolute
-        , bottom (rem -2)
-        , textAlign center
-        , width (pct 100)
-        ]
 
 
 whiteButtonStyle : Style
 whiteButtonStyle =
     batch
-        [ baseButtonStyle
+        [ Theme.GlobalLayout.baseButtonStyle
         , backgroundColor white
         , color darkBlue
         , borderColor white
@@ -171,11 +80,11 @@ whiteButtonStyle =
 darkBlueButtonStyle : Style
 darkBlueButtonStyle =
     batch
-        [ baseButtonStyle
+        [ Theme.GlobalLayout.baseButtonStyle
         , backgroundColor darkBlue
         , color white
         , borderColor pink
-        , withMediaCanHover [ hover [ backgroundColor purple, color white, borderColor white ] ]
+        , Theme.GlobalLayout.withMediaCanHover [ hover [ backgroundColor purple, color white, borderColor white ] ]
         , active [ backgroundColor pink, color darkBlue, borderColor white ]
         , focus [ backgroundColor pink, color darkBlue, borderColor white ]
         ]
@@ -184,7 +93,7 @@ darkBlueButtonStyle =
 pinkButtonOnDarkBackgroundStyle : Style
 pinkButtonOnDarkBackgroundStyle =
     batch
-        [ baseButtonStyle
+        [ Theme.GlobalLayout.baseButtonStyle
         , backgroundColor pink
         , color darkBlue
         , borderColor pink
@@ -197,39 +106,13 @@ pinkButtonOnDarkBackgroundStyle =
 pinkButtonOnLightBackgroundStyle : Style
 pinkButtonOnLightBackgroundStyle =
     batch
-        [ baseButtonStyle
+        [ Theme.GlobalLayout.baseButtonStyle
         , backgroundColor pink
         , color darkBlue
         , borderColor pink
         , withMediaCanHover [ hover [ backgroundColor purple, borderColor white, color white ] ]
         , active [ backgroundColor darkBlue, borderColor white, color white ]
         , focus [ backgroundColor darkBlue, borderColor white, color white ]
-        ]
-
-
-baseButtonStyle : Style
-baseButtonStyle =
-    batch
-        [ textDecoration none
-        , padding4 (rem 0.375) (rem 1.25) (rem 0.5) (rem 1.25)
-        , borderRadius (rem 0.3)
-        , fontWeight (int 600)
-        , fontSize (rem 1.2)
-        , display block
-        , textAlign center
-        , maxWidth maxContent
-        , margin2 (rem 0) auto
-        , borderWidth (rem 0.2)
-        , borderStyle solid
-        , transition [ backgroundColorTransition, borderTransition, colorTransition ]
-        ]
-
-
-backButtonStyle : Style
-backButtonStyle =
-    batch
-        [ textAlign center
-        , margin4 (rem 3) (rem 2) (rem 0) (rem 2)
         ]
 
 
@@ -289,6 +172,17 @@ smallInlineTitleStyle =
 -- Page Elements
 
 
+contentWrapperStyle : Style
+contentWrapperStyle =
+    batch
+        [ borderRadius (rem 0.3)
+        , backgroundColor darkBlue
+        , borderColor pink
+        , borderStyle solid
+        , borderWidth (px 1)
+        ]
+
+
 textBoxStyle : Style
 textBoxStyle =
     batch
@@ -297,7 +191,7 @@ textBoxStyle =
         , padding2 (rem 1) (rem 0.75)
         , withMediaMediumDesktopUp
             [ paddingBottom (rem 2) ]
-        , withMediaTabletPortraitUp
+        , Theme.GlobalLayout.withMediaTabletPortraitUp
             [ paddingLeft (rem 1.5), paddingRight (rem 1.5) ]
         ]
 
@@ -319,29 +213,9 @@ textBoxInvisibleStyle =
         , textBoxStyle
         , paddingBottom (rem 0)
         , descendants
-            [ typeSelector "h3" [ batch [ color pink, withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
-            , typeSelector "p" [ batch [ color pink, withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
+            [ typeSelector "h3" [ batch [ color pink, Theme.GlobalLayout.withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
+            , typeSelector "p" [ batch [ color pink, Theme.GlobalLayout.withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
             ]
-        ]
-
-
-contentWrapperStyle : Style
-contentWrapperStyle =
-    batch
-        [ borderRadius (rem 0.3)
-        , backgroundColor darkBlue
-        , borderColor pink
-        , borderStyle solid
-        , borderWidth (px 1)
-        ]
-
-
-contentContainerStyle : Style
-contentContainerStyle =
-    batch
-        [ margin (rem 0.75)
-        , withMediaMediumDesktopUp [ margin (rem 1.5) ]
-        , withMediaTabletPortraitUp [ margin2 (rem 0) (rem 2) ]
         ]
 
 
@@ -368,9 +242,9 @@ introTextLargeStyle =
         , fontStyle italic
         , fontWeight (int 500)
         , margin2 (rem 1) (rem 0.5)
-        , withMediaTabletLandscapeUp
+        , Theme.GlobalLayout.withMediaTabletLandscapeUp
             [ fontSize (rem 2.5), lineHeight (rem 3.1), maxWidth (px 838), margin2 (rem 3) auto ]
-        , withMediaTabletPortraitUp
+        , Theme.GlobalLayout.withMediaTabletPortraitUp
             [ fontSize (rem 1.9), lineHeight (rem 2.1), margin2 (rem 1) (rem 1.5) ]
         ]
 
@@ -380,9 +254,9 @@ introTextSmallStyle =
     batch
         [ textAlign center
         , margin2 (rem 1.5) (rem 0)
-        , withMediaTabletLandscapeUp
+        , Theme.GlobalLayout.withMediaTabletLandscapeUp
             [ fontSize (rem 1.2), margin2 (rem 1.5) (rem 6.5) ]
-        , withMediaTabletPortraitUp
+        , Theme.GlobalLayout.withMediaTabletPortraitUp
             [ margin2 (rem 1.5) (rem 3.5) ]
         ]
 
@@ -396,19 +270,7 @@ linkStyle =
         , borderBottomWidth (px 1)
         , textDecoration none
         , withMediaCanHover [ hover [ color pink, borderBottomColor white ] ]
-        , transition [ borderTransition, colorTransition ]
-        ]
-
-
-screenReaderOnly : Style
-screenReaderOnly =
-    batch
-        [ position absolute
-        , left (px -10000)
-        , top auto
-        , width (px 1)
-        , height (px 1)
-        , overflow hidden
+        , transition [ Theme.GlobalLayout.borderTransition, Theme.GlobalLayout.colorTransition ]
         ]
 
 
@@ -426,8 +288,8 @@ normalFirstParagraphStyle =
                         [ fontSize (rem 1)
                         , marginBlockEnd (em 1)
                         , lineHeight (em 1.5)
-                        , withMediaSmallDesktopUp [ fontSize (rem 1.2) ]
-                        , withMediaTabletPortraitUp [ marginBlockStart (em 0) ]
+                        , Theme.GlobalLayout.withMediaSmallDesktopUp [ fontSize (rem 1.2) ]
+                        , Theme.GlobalLayout.withMediaTabletPortraitUp [ marginBlockStart (em 0) ]
                         ]
                     ]
                 ]
@@ -499,7 +361,7 @@ checkboxLabelStyle =
         , position relative
         , cursor pointer
         , maxWidth fitContent
-        , withMediaTabletPortraitUp [ maxWidth (pct 100) ]
+        , Theme.GlobalLayout.withMediaTabletPortraitUp [ maxWidth (pct 100) ]
         , focus [ color white ]
         ]
 
@@ -552,8 +414,8 @@ globalStyles =
             , backgroundImage (url "/images/backgrounds/starfield-small-800.png")
             , backgroundRepeat repeat
             , backgroundSize (px 800)
-            , withMediaMediumDesktopUp [ backgroundImage (url "/images/backgrounds/starfield-largest-1920.png"), backgroundSize (px 1920) ]
-            , withMediaTabletLandscapeUp [ backgroundImage (url "/images/backgrounds/starfield-medium-1080.png"), backgroundSize (px 1080) ]
+            , Theme.GlobalLayout.withMediaMediumDesktopUp [ backgroundImage (url "/images/backgrounds/starfield-largest-1920.png"), backgroundSize (px 1920) ]
+            , Theme.GlobalLayout.withMediaTabletLandscapeUp [ backgroundImage (url "/images/backgrounds/starfield-medium-1080.png"), backgroundSize (px 1080) ]
             ]
         , typeSelector "h1"
             [ color darkBlue
@@ -681,6 +543,6 @@ mapStyle =
         [ height (px 318)
         , width (pct 100)
         , property "object-fit" "cover"
-        , withMediaTabletLandscapeUp [ height (px 400) ]
+        , Theme.GlobalLayout.withMediaTabletLandscapeUp [ height (px 400) ]
         , borderRadius (rem 0.3)
         ]

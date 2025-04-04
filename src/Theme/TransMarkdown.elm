@@ -8,7 +8,8 @@ import Markdown.Block
 import Markdown.Html
 import Markdown.Parser
 import Markdown.Renderer
-import Theme.Global exposing (linkStyle, pink, withMediaSmallDesktopUp, withMediaTabletLandscapeUp)
+import Skin.Global exposing (linkStyle, pink)
+import Theme.GlobalLayout exposing (withMediaSmallDesktopUp, withMediaTabletLandscapeUp)
 
 
 fromResult : Result String value -> Json.Decode.Decoder value
