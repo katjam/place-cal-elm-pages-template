@@ -10,9 +10,9 @@ Front-end for a PlaceCal instance, an online community hub.
 ### To use this template
 
 - [ ] Copy `.env.example` to `.env` and change `CANONICAL_URL`, `JOIN_US_FUNCTION_URL` and `PARTNERSHIP_TAG_LIST`
-- [ ] Edit `elm-pages.config.mjs` with your site's meta information
+- [ ] Edit `elm-pages.config.mjs` to add scripts fonts or stylesheets to you the html `<head>` of your site's template
 - [ ] Edit the markdown in `theme/content` to generate your About and Privacy information
-- [ ] Edit `theme/Copy/Text` to generate your UI & SEO information
+- [ ] Edit `theme/Copy/Text` to generate your UI & SEO text
 - [ ] Add your images, like logos and background to `public/images`
 - [ ] Edit the reset and core css styles like fonts in `public/css`
 
