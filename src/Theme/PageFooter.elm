@@ -85,7 +85,7 @@ viewPageFooterLogos =
             [ li [ css [ logoListItemStyle ] ]
                 [ a [ href (t GeeksForSocialChangeHomeUrl), target "_blank", css [ Theme.Logo.logoParentStyle ] ] [ Theme.Logo.viewGFSC ] ]
             , li [ css [ logoListItemStyle ] ]
-                [ a [ href (t GenderedIntelligenceHomeUrl), target "_blank", css [ logoGIStyle ], attribute "aria-label" (t GenderedIntelligenceLogoTxt) ] [] ]
+                [ a [ href (t PartnerOrganisationHomeUrl), target "_blank", css [ logoGIStyle ], attribute "aria-label" (t PartnerOrganisationLogoTxt) ] [] ]
             ]
         ]
 

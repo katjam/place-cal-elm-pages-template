@@ -1,7 +1,8 @@
 module Theme.Page.Event exposing (viewButtons, viewEventInfo)
 
 import Copy.Keys exposing (Key(..))
-import Copy.Text exposing (isValidUrl, t)
+import Copy.Text exposing (t)
+import Copy.Utils exposing (isValidUrl, urlToDisplay)
 import Css exposing (Style, auto, batch, calc, center, color, displayFlex, em, fontSize, fontStyle, fontWeight, int, justifyContent, letterSpacing, margin2, margin4, marginBlockEnd, marginBlockStart, marginBottom, marginTop, maxWidth, minus, normal, pct, px, rem, textAlign, textTransform, uppercase, width)
 import Data.PlaceCal.Events
 import Helpers.TransDate
@@ -88,7 +89,7 @@ viewAddressSection event =
                     if isValidUrl url then
                         p [ css [ contactItemStyle ] ]
                             [ a [ href url, target "_blank", css [ linkStyle ] ]
-                                [ text (Copy.Text.urlToDisplay url) ]
+                                [ text (urlToDisplay url) ]
                             ]
 
                     else

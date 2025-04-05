@@ -2,6 +2,7 @@ module Theme.Page.Partner exposing (viewInfo)
 
 import Copy.Keys exposing (Key(..))
 import Copy.Text exposing (t)
+import Copy.Utils exposing (urlToDisplay)
 import Css exposing (Style, auto, batch, calc, center, color, displayFlex, fontStyle, important, margin2, margin4, marginBlockEnd, marginBlockStart, marginTop, maxWidth, minus, normal, pct, px, rem, textAlign, width)
 import Data.PlaceCal.Events
 import Data.PlaceCal.Partners
@@ -153,13 +154,13 @@ viewContactDetails maybeUrl maybeContactDetails maybeInstagramUrl =
                     text ""
             , case maybeUrl of
                 Just url ->
-                    p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (Copy.Text.urlToDisplay url) ] ]
+                    p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (urlToDisplay url) ] ]
 
                 Nothing ->
                     text ""
             , case maybeInstagramUrl of
                 Just url ->
-                    p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (Copy.Text.urlToDisplay url) ] ]
+                    p [ css [ contactItemStyle ] ] [ a [ href url, target "_blank", css [ linkStyle ] ] [ text (urlToDisplay url) ] ]
 
                 Nothing ->
                     text ""
