@@ -21,12 +21,12 @@ Front-end for a PlaceCal instance, an online community hub.
 #### Adding your images and logos
 Add your images, like logos and background to `public/images`
 
--[] `backgrounds` should be tiling. They are sized at 800px (small screens), 1080px (medium screens), 1920px (largest screens)
--[] `characters` should be `.png` are used on the frame of some text boxes. They can be objects, symbols or people - anything that helps illustrate the character of your community. There is one `primary` and 4 used only on the `about` page.
--[] `icons` are the right and left arrows used for pagination of events
--[] `illustrations` are a selection of `.png`s used a bit like stickers to populate the background at various screen sizes. Like characters, these should communicate your community vibe.
--[] `logos` Please do not replace `_gfsc` and `_placecal` logos used in the footer and about page to help people find out who we are. You can replace the social icons (`_facebook`, `_instagram`, `_twitter`). `partnership_` and `site_` logos are yours. They all need to exist by name, but can be the same image copied if the aspect ratio & colour works well in situ.
--[] `news` article images are used as placeholders for your partners' articles if they supply any in PlaceCal (TODO these may not be in use currently)
+- [ ] `backgrounds` should be tiling. They are sized at 800px (small screens), 1080px (medium screens), 1920px (largest screens)
+- [ ] `characters` should be `.png` are used on the frame of some text boxes. They can be objects, symbols or people - anything that helps illustrate the character of your community. There is one `primary` and 4 used only on the `about` page.
+- [ ] `icons` are the right and left arrows used for pagination of events
+- [ ] `illustrations` are a selection of `.png`s used a bit like stickers to populate the background at various screen sizes. Like characters, these should communicate your community vibe.
+- [ ] `logos` Please do not replace `_gfsc` and `_placecal` logos used in the footer and about page to help people find out who we are. You can replace the social icons (`_facebook`, `_instagram`, `_twitter`). `partnership_` and `site_` logos are yours. They all need to exist by name, but can be the same image copied if the aspect ratio & colour works well in situ.
+- [ ] `news` article images are used as placeholders for your partners' articles if they supply any in PlaceCal (TODO these may not be in use currently)
 
 # Development
 
