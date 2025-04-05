@@ -8,7 +8,8 @@ import Helpers.TransDate
 import Helpers.TransRoutes
 import Html.Styled exposing (Html, a, div, h4, hr, p, section, text, time)
 import Html.Styled.Attributes exposing (css, href, target)
-import Theme.Global exposing (linkStyle, normalFirstParagraphStyle, pink, smallInlineTitleStyle, withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Skin.Global exposing (hrStyle, linkStyle, mapImage, normalFirstParagraphStyle, pink, smallInlineTitleStyle, viewBackButton)
+import Theme.GlobalLayout exposing (withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.TransMarkdown
 
 
@@ -16,15 +17,15 @@ viewEventInfo : Data.PlaceCal.Events.Event -> Html msg
 viewEventInfo event =
     div []
         [ viewDateTimeSection event
-        , hr [ css [ Theme.Global.hrStyle ] ] []
+        , hr [ css [ hrStyle ] ] []
         , viewInfoSection event
-        , hr [ css [ Theme.Global.hrStyle, marginTop (rem 2.5) ] ] []
+        , hr [ css [ hrStyle, marginTop (rem 2.5) ] ] []
         , viewAddressSection event
         , case event.maybeGeo of
             Just geo ->
                 div [ css [ mapContainerStyle ] ]
                     [ p []
-                        [ Theme.Global.mapImage
+                        [ mapImage
                             (t (MapImageAltText event.name))
                             { latitude = geo.latitude, longitude = geo.longitude }
                         ]
@@ -74,7 +75,7 @@ viewAddressSection event =
                           else
                             text ""
                         , if contact.email /= "" then
-                            p [ css [ contactItemStyle ] ] [ a [ href ("mailto:" ++ contact.email), css [ Theme.Global.linkStyle ] ] [ text contact.email ] ]
+                            p [ css [ contactItemStyle ] ] [ a [ href ("mailto:" ++ contact.email), css [ linkStyle ] ] [ text contact.email ] ]
 
                           else
                             text ""
@@ -86,7 +87,7 @@ viewAddressSection event =
                 Just url ->
                     if isValidUrl url then
                         p [ css [ contactItemStyle ] ]
-                            [ a [ href url, target "_blank", css [ Theme.Global.linkStyle ] ]
+                            [ a [ href url, target "_blank", css [ linkStyle ] ]
                                 [ text (Copy.Text.urlToDisplay url) ]
                             ]
 
@@ -125,10 +126,10 @@ viewAddressSection event =
 viewButtons : Data.PlaceCal.Events.Event -> Html msg
 viewButtons event =
     section [ css [ buttonsStyle ] ]
-        [ Theme.Global.viewBackButton
+        [ viewBackButton
             (Helpers.TransRoutes.toAbsoluteUrl (Helpers.TransRoutes.Partner event.partner.id) ++ "#events")
             (t (BackToPartnerEventsLinkText event.partner.name))
-        , Theme.Global.viewBackButton
+        , viewBackButton
             (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
             (t BackToEventsLinkText)
         ]
@@ -140,8 +141,8 @@ publisherUrlSection event =
         Just publisherUrl ->
             if isValidUrl publisherUrl then
                 div [ css [ publisherSectionStyle ] ]
-                    [ hr [ css [ Theme.Global.hrStyle, marginTop (rem 2.5) ] ] []
-                    , a [ href publisherUrl, css [ Theme.Global.linkStyle ] ] [ text (t (EventVisitPublisherUrlText event.partner.name)) ]
+                    [ hr [ css [ hrStyle, marginTop (rem 2.5) ] ] []
+                    , a [ href publisherUrl, css [ linkStyle ] ] [ text (t (EventVisitPublisherUrlText event.partner.name)) ]
                     ]
 
             else
@@ -233,7 +234,7 @@ addressItemStyle =
 addressItemTitleStyle : Style
 addressItemTitleStyle =
     batch
-        [ color Theme.Global.pink
+        [ color pink
         , smallInlineTitleStyle
         , withMediaTabletPortraitUp [ marginTop (rem 1) ]
         ]

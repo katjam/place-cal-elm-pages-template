@@ -7,6 +7,16 @@ Front-end for a PlaceCal instance, an online community hub.
 -  Staging url: 
 -  Production URL:
 
+### To use this template
+
+- [ ] Copy `.env.example` to `.env` and change `CANONICAL_URL`, `JOIN_US_FUNCTION_URL` and `PARTNERSHIP_TAG_LIST`
+- [ ] Edit `elm-pages.config.mjs` to add scripts fonts or stylesheets to you the html `<head>` of your site's template
+- [ ] Edit the markdown in `theme/content` to generate your About and Privacy information
+- [ ] Edit `theme/Copy/Text` to generate your UI & SEO text
+- [ ] Add your images, like logos and background to `public/images`
+- [ ] Edit the reset and core css styles like fonts in `public/css`
+
+
 # Development
 
 ## Prerequisites
@@ -61,6 +71,8 @@ We're using [elm-test-rs](https://github.com/mpizenberg/elm-test-rs) to run [elm
   - `src/Data/PlaceCal` contains code for fetching, caching and decoding data from PlaceCal
   - `src/Helpers/` contains utility code (e.g. for handling dates)
   - `src/Theme/` contains view code like templates and shared styling
+- `theme/*` contains stuff specific to your site
+- `public/*` contains static files to be copied direct to build like image assets and css
 - `tests/*` contains test files
 
 ### Pages
@@ -73,13 +85,6 @@ We're using [elm-test-rs](https://github.com/mpizenberg/elm-test-rs) to run [elm
 ### Styling & layouts
 
 - We are using [elm-css](https://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css) for styling
-
-### Customisable content and styles
-
-- `theme/*` contains the files with the content and theme information specific to your site
-- UI & SEO meta copy are in `theme/Copy/Text.elm`
-- About and Privacy pages are generated from markdown in `theme/content/`
-- `public/*` contains static files to be copied direct to build like image assets and css
 
 ## Deployment
 

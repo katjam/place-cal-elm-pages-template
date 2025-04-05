@@ -9,7 +9,8 @@ import Data.PlaceCal.Partners
 import Html.Styled exposing (Html, button, div, li, text, ul)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events
-import Theme.Global exposing (backgroundColorTransition, borderTransition, colorTransition, darkBlue, darkPurple, white, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Skin.Global exposing (darkBlue, darkPurple, white)
+import Theme.GlobalLayout exposing (backgroundColorTransition, borderTransition, colorTransition, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 
 
 type Msg

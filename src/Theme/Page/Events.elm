@@ -12,7 +12,8 @@ import Helpers.TransRoutes as TransRoutes exposing (Route(..))
 import Html.Styled exposing (Html, a, article, button, div, h4, li, p, section, span, text, time, ul)
 import Html.Styled.Attributes exposing (css, href)
 import Html.Styled.Events
-import Theme.Global exposing (borderTransition, colorTransition, darkBlue, introTextLargeStyle, pink, white, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
+import Skin.Global exposing (darkBlue, introTextLargeStyle, pink, white)
+import Theme.GlobalLayout exposing (borderTransition, colorTransition, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.Paginator exposing (buttonWidthFullWidth, buttonWidthMobile, buttonWidthTablet, paginationButtonStyle)
 import Theme.RegionSelector
 import Time

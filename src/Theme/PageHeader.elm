@@ -10,7 +10,8 @@ import Html.Styled.Attributes exposing (attribute, css, href)
 import Html.Styled.Events exposing (onClick)
 import Messages exposing (Msg(..))
 import Route exposing (Route)
-import Theme.Global exposing (darkBlue, pink, screenReaderOnly, white, withMediaCanHover, withMediaTabletPortraitUp)
+import Skin.Global exposing (darkBlue, pink, white)
+import Theme.GlobalLayout exposing (screenReaderOnly, withMediaCanHover, withMediaTabletPortraitUp)
 import Theme.Logo
 import UrlPath exposing (UrlPath)
 
