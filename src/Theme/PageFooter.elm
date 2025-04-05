@@ -52,7 +52,7 @@ viewPageFooterLogo : Html msg
 viewPageFooterLogo =
     div [ css [ footerLogoStyle ] ]
         [ img
-            [ src "/images/logos/TDD_Logo_Footer.svg"
+            [ src "/images/logos/site_logo_footer.svg"
             , alt (t SiteTitle)
             , css [ footerLogoImageStyle ]
             ]

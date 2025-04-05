@@ -24,7 +24,7 @@ t key =
             "The Trans Dimension is an online community hub connecting trans communities in London and Manchester. We collate news, events and services by and for trans people."
 
         SiteLogoSrc ->
-            canonicalUrl ++ "images/logos/tdd_logo_with_strapline_on_darkBlue.png"
+            canonicalUrl ++ "images/logos/site_logo_on_primary_background.png"
 
         GeeksForSocialChangeHomeUrl ->
             "https://gfsc.studio/"
