@@ -9,7 +9,7 @@ type Prefix
 type Key
     = SiteTitle
     | SiteStrapline
-    | CommunityDescription
+    | PartnershipDescription
     | SiteLogoSrc
     | PageMetaTitle String
     | GeeksForSocialChangeHomeUrl

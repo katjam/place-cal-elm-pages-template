@@ -18,7 +18,7 @@ t key =
         SiteStrapline ->
             "My strapline"
 
-        CommunityDescription ->
+        PartnershipDescription ->
             -- Note this is also in content/about/main.md
             -- If they should remain in sync, we should remove from there
             "The Trans Dimension is an online community hub connecting trans communities in London and Manchester. We collate news, events and services by and for trans people."
@@ -146,7 +146,7 @@ t key =
             "Trusted, accessible, trans-friendly spaces. Always expanding."
 
         IndexIntroMessage ->
-            t CommunityDescription
+            t PartnershipDescription
 
         IndexIntroButtonText ->
             "See what's on"
@@ -168,7 +168,7 @@ t key =
             "About"
 
         AboutMetaDescription ->
-            t CommunityDescription
+            t PartnershipDescription
 
         --- Events Page
         EventsTitle ->
