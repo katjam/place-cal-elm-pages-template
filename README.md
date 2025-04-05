@@ -15,7 +15,9 @@ Front-end for a PlaceCal instance, an online community hub.
 - [ ] Edit `theme/Copy/Text` to generate your UI & SEO text
 - [ ] Add your images, like logos and background to `public/images`
     - `backgrounds` should be tiling. They are sized at 800px (small screens), 1080px (medium screens), 1920px (largest screens)
-    - `characters` should be `.png` and are used kind of like stickers and can be objects, symbols or people - anything that helps illustrate the character of your community. There is one `primary` and 4 used only on the `about` page.
+    - `characters` should be `.png` are used on the frame of some text boxes. They can be objects, symbols or people - anything that helps illustrate the character of your community. There is one `primary` and 4 used only on the `about` page.
+    - `icons` are the right and left arrows used for pagination of events
+    - `illustrations` are a selection of `.png`s used a bit like stickers to populate the background at various screen sizes. Like characters, these should communicate your community vibe. (TODO - should verify that all of them are in use)
 - [ ] Edit the reset and core css styles like fonts in `public/css`
 - [ ] Add your brand colors to `theme/Global/Skin` following guidence there
 
