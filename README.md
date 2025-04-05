@@ -9,14 +9,23 @@ Front-end for a PlaceCal instance, an online community hub.
 
 ### To use this template
 
-- [ ] Copy `.env.example` to `.env` and change `CANONICAL_URL`, `JOIN_US_FUNCTION_URL` and `PARTNERSHIP_TAG_LIST`
-- [ ] Edit `elm-pages.config.mjs` to add scripts fonts or stylesheets to you the html `<head>` of your site's template
-- [ ] Edit the markdown in `theme/content` to generate your About and Privacy information
-- [ ] Edit `theme/Copy/Text` to generate your UI & SEO text
-- [ ] Add your images, like logos and background to `public/images`
-- [ ] Edit the reset and core css styles like fonts in `public/css`
-- [ ] Add your brand colors to `theme/Global/Skin` following guidence there
+#### Adding your copy and styles
+-[] Copy `.env.example` to `.env` and change `CANONICAL_URL`, `JOIN_US_FUNCTION_URL` and `PARTNERSHIP_TAG_LIST`
+-[] Edit `elm-pages.config.mjs` to add scripts fonts or stylesheets to you the html `<head>` of your site's template
+-[] Edit the markdown in `theme/content` to generate your About and Privacy information
+-[] Edit `theme/Copy/Text` to generate your UI & SEO text
+-[] Edit the reset and core css styles like fonts in `public/css`
+-[] Add your brand colors to `theme/Global/Skin` following guidence there
 
+#### Adding your images and logos
+Add your images, like logos and background to `public/images`
+
+-[] `backgrounds` should be tiling. They are sized at 800px (small screens), 1080px (medium screens), 1920px (largest screens)
+-[] `characters` should be `.png` are used on the frame of some text boxes. They can be objects, symbols or people - anything that helps illustrate the character of your community. There is one `primary` and 4 used only on the `about` page.
+-[] `icons` are the right and left arrows used for pagination of events
+-[] `illustrations` are a selection of `.png`s used a bit like stickers to populate the background at various screen sizes. Like characters, these should communicate your community vibe.
+-[] `logos` Please do not replace `_gfsc` and `_placecal` logos used in the footer and about page to help people find out who we are. You can replace the social icons (`_facebook`, `_instagram`, `_twitter`). `partnership_` and `site_` logos are yours. They all need to exist by name, but can be the same image copied if the aspect ratio & colour works well in situ.
+-[] `news` article images are used as placeholders for your partners' articles if they supply any in PlaceCal (TODO these may not be in use currently)
 
 # Development
 

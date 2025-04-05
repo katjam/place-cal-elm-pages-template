@@ -52,7 +52,7 @@ viewPageFooterLogo : Html msg
 viewPageFooterLogo =
     div [ css [ footerLogoStyle ] ]
         [ img
-            [ src "/images/logos/TDD_Logo_Footer.svg"
+            [ src "/images/logos/site_logo_footer.svg"
             , alt (t SiteTitle)
             , css [ footerLogoImageStyle ]
             ]
@@ -85,7 +85,7 @@ viewPageFooterLogos =
             [ li [ css [ logoListItemStyle ] ]
                 [ a [ href (t GeeksForSocialChangeHomeUrl), target "_blank", css [ Theme.Logo.logoParentStyle ] ] [ Theme.Logo.viewGFSC ] ]
             , li [ css [ logoListItemStyle ] ]
-                [ a [ href (t PartnerOrganisationHomeUrl), target "_blank", css [ logoGIStyle ], attribute "aria-label" (t PartnerOrganisationLogoTxt) ] [] ]
+                [ a [ href (t PartnerOrganisationHomeUrl), target "_blank", css [ partnershipLogoStyle ], attribute "aria-label" (t PartnerOrganisationLogoTxt) ] [] ]
             ]
         ]
 
@@ -374,16 +374,16 @@ logoListItemStyle =
         ]
 
 
-logoGIStyle : Style
-logoGIStyle =
+partnershipLogoStyle : Style
+partnershipLogoStyle =
     batch
         [ width (px 138.184)
         , height (px 48)
-        , backgroundImage (url "/images/logos/GI_pink.svg")
+        , backgroundImage (url "/images/logos/partnership_secondary.svg")
         , backgroundSize (px 138.184)
-        , withMediaCanHover [ hover [ backgroundImage (url "/images/logos/GI_pink_rollover.svg") ] ]
-        , focus [ backgroundImage (url "/images/logos/GI_white.svg") ]
-        , active [ backgroundImage (url "/images/logos/GI_white.svg") ]
+        , withMediaCanHover [ hover [ backgroundImage (url "/images/logos/partnership_secondary_rollover.svg") ] ]
+        , focus [ backgroundImage (url "/images/logos/partnership_white.svg") ]
+        , active [ backgroundImage (url "/images/logos/partnership_white.svg") ]
         , alignSelf center
         ]
 

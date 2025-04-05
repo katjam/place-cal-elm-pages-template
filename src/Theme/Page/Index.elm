@@ -50,7 +50,7 @@ viewIntro introTitle introMsg eventButtonText =
     section [ css [ sectionStyle, secondaryBackgroundStyle, introSectionStyle ] ]
         [ h1 [ css [ logoStyle ] ]
             [ img
-                [ src "/images/logos/tdd_logo_with_strapline.svg"
+                [ src "/images/logos/site_logo_main.svg"
                 , alt (t SiteTitle ++ ", " ++ t SiteStrapline)
                 , css [ logoImageStyle ]
                 ]

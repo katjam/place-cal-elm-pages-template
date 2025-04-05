@@ -131,7 +131,7 @@ viewHeader pageInfo =
     section []
         [ h1 [ css [ headerLogoStyle ] ]
             [ img
-                [ src "/images/logos/tdd_logo_with_strapline.svg"
+                [ src "/images/logos/site_logo_main.svg"
                 , alt (t SiteTitle ++ ", " ++ t SiteStrapline)
                 , css [ headerLogoImageStyle ]
                 ]
@@ -366,7 +366,7 @@ pageHeadingAboutStyle =
                 , position absolute
                 , zIndex (int 2)
                 , backgroundRepeat noRepeat
-                , backgroundImage (url "/images/characters/girl_with_afro.png")
+                , backgroundImage (url "/images/characters/primary-character.png")
                 , bottom (px -90)
                 ]
             ]

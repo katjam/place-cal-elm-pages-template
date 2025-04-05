@@ -420,11 +420,11 @@ globalStyles =
             , color colorWhite
             , fontFamilies [ "covik-sans", sansSerif.value ]
             , fontWeight (int 400)
-            , backgroundImage (url "/images/backgrounds/starfield-small-800.png")
+            , backgroundImage (url "/images/backgrounds/background-small-800.png")
             , backgroundRepeat repeat
             , backgroundSize (px 800)
-            , Theme.GlobalLayout.withMediaMediumDesktopUp [ backgroundImage (url "/images/backgrounds/starfield-largest-1920.png"), backgroundSize (px 1920) ]
-            , Theme.GlobalLayout.withMediaTabletLandscapeUp [ backgroundImage (url "/images/backgrounds/starfield-medium-1080.png"), backgroundSize (px 1080) ]
+            , Theme.GlobalLayout.withMediaMediumDesktopUp [ backgroundImage (url "/images/backgrounds/background-largest-1920.png"), backgroundSize (px 1920) ]
+            , Theme.GlobalLayout.withMediaTabletLandscapeUp [ backgroundImage (url "/images/backgrounds/background-medium-1080.png"), backgroundSize (px 1080) ]
             ]
         , typeSelector "h1"
             [ color colorPrimary
