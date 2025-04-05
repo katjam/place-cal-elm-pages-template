@@ -366,7 +366,7 @@ pageHeadingAboutStyle =
                 , position absolute
                 , zIndex (int 2)
                 , backgroundRepeat noRepeat
-                , backgroundImage (url "/images/characters/girl_with_afro.png")
+                , backgroundImage (url "/images/characters/primary-character.png")
                 , bottom (px -90)
                 ]
             ]

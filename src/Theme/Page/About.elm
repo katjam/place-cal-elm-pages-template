@@ -104,7 +104,7 @@ introTextStyle =
                 , height (px 541)
                 , bottom (px -160)
                 , right (px -350)
-                , backgroundImage (url "/images/characters/flag_holder.png")
+                , backgroundImage (url "/images/characters/about-character-2.png")
                 ]
             ]
         ]
@@ -219,7 +219,7 @@ accessibilityCharactersStyle =
                 , position absolute
                 , zIndex (int 2)
                 , backgroundRepeat noRepeat
-                , backgroundImage (url "/images/characters/person_in_wheelchair.png")
+                , backgroundImage (url "/images/characters/about-character-1.png")
                 , top (px -190)
                 , left (px 10)
                 ]
@@ -242,7 +242,7 @@ accessibilityCharactersStyle =
                 , position absolute
                 , zIndex (int 2)
                 , backgroundRepeat noRepeat
-                , backgroundImage (url "/images/characters/nb_helmet_person.png")
+                , backgroundImage (url "/images/characters/about-character-3.png")
                 , bottom (px -50)
                 , right (px -10)
                 ]
@@ -435,7 +435,7 @@ placeCalStyle =
                 , height (px 516)
                 , left (px -80)
                 , top (px -70)
-                , backgroundImage (url "/images/characters/space_princess.png")
+                , backgroundImage (url "/images/characters/about-character-4.png")
                 ]
             ]
         , withMediaMediumDesktopUp
