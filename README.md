@@ -14,6 +14,7 @@ Front-end for a PlaceCal instance, an online community hub.
 - [ ] Edit the markdown in `theme/content` to generate your About and Privacy information
 - [ ] Edit `theme/Copy/Text` to generate your UI & SEO text
 - [ ] Add your images, like logos and background to `public/images`
+    - Background images should be tiling. They are sized at 800px (small screens), 1080px (medium screens), 1920px (largest screens)
 - [ ] Edit the reset and core css styles like fonts in `public/css`
 - [ ] Add your brand colors to `theme/Global/Skin` following guidence there
 
