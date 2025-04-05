@@ -9,7 +9,7 @@ import Helpers.TransDate
 import Helpers.TransRoutes
 import Html.Styled exposing (Html, a, div, h4, hr, p, section, text, time)
 import Html.Styled.Attributes exposing (css, href, target)
-import Skin.Global exposing (hrStyle, linkStyle, mapImage, normalFirstParagraphStyle, pink, smallInlineTitleStyle, viewBackButton)
+import Skin.Global exposing (colorSecondary, hrStyle, linkStyle, mapImage, normalFirstParagraphStyle, smallInlineTitleStyle, viewBackButton)
 import Theme.GlobalLayout exposing (withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.TransMarkdown
 
@@ -182,7 +182,7 @@ timeStyle =
         , textAlign center
         , textTransform uppercase
         , letterSpacing (px 1.9)
-        , color pink
+        , color colorSecondary
         , marginBlockStart (em 0)
         ]
 
@@ -235,7 +235,7 @@ addressItemStyle =
 addressItemTitleStyle : Style
 addressItemTitleStyle =
     batch
-        [ color pink
+        [ color colorSecondary
         , smallInlineTitleStyle
         , withMediaTabletPortraitUp [ marginTop (rem 1) ]
         ]

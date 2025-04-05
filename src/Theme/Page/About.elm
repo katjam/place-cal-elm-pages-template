@@ -5,7 +5,7 @@ import Css.Global exposing (descendants, typeSelector)
 import Html.Styled exposing (Html, a, div, h3, h4, img, p, section, text)
 import Html.Styled.Attributes exposing (alt, css, href, src)
 import Markdown.Block
-import Skin.Global exposing (contentWrapperStyle, introTextLargeStyle, normalFirstParagraphStyle, smallFloatingTitleStyle, textBoxPinkStyle, whiteButtonStyle)
+import Skin.Global exposing (contentWrapperStyle, introTextLargeStyle, normalFirstParagraphStyle, smallFloatingTitleStyle, textBoxSecondaryStyle, whiteButtonStyle)
 import Theme.GlobalLayout exposing (buttonFloatingWrapperStyle, contentContainerStyle, withMediaMediumDesktopUp, withMediaMobileOnly, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.PageTemplate
 import Theme.TransMarkdown
@@ -34,7 +34,7 @@ viewAccessibility : Theme.PageTemplate.SectionWithTextHeader -> Html msg
 viewAccessibility { title, subtitle, body } =
     section [ css [ contentWrapperStyle, accessibilityStyle ] ]
         [ h3 [ css [ smallFloatingTitleStyle, withMediaMobileOnly [ top (rem -4.5) ] ] ] [ text title ]
-        , div [ css [ textBoxPinkStyle, accessibilityCharactersStyle ] ] [ p [ css [ introTextLargeStyle ] ] [ text subtitle ] ]
+        , div [ css [ textBoxSecondaryStyle, accessibilityCharactersStyle ] ] [ p [ css [ introTextLargeStyle ] ] [ text subtitle ] ]
         , div [ css [ contentContainerStyle, aboutAccessibilityTextStyle ] ] (Theme.TransMarkdown.markdownBlocksToHtml body)
         ]
 
@@ -51,7 +51,7 @@ viewMakers makersList =
 
 viewMaker : { name : String, url : String, logo : String, body : List Markdown.Block.Block } -> Html msg
 viewMaker { name, url, logo, body } =
-    div [ css [ makerStyle, textBoxPinkStyle ] ]
+    div [ css [ makerStyle, textBoxSecondaryStyle ] ]
         [ h4 [ css [ makerHeaderStyle ] ] [ img [ src logo, alt name, css [ makerLogoStyle ] ] [] ]
         , div [ css [ normalFirstParagraphStyle ] ] (Theme.TransMarkdown.markdownBlocksToHtml body)
         , p [ css [ buttonFloatingWrapperStyle ] ] [ a [ href url, css [ whiteButtonStyle ] ] [ text "Find out more" ] ]
@@ -62,7 +62,7 @@ viewAboutPlaceCal : Theme.PageTemplate.SectionWithImageHeader -> Html msg
 viewAboutPlaceCal { title, subtitleimg, subtitleimgalt, body } =
     section [ css [ contentWrapperStyle, placeCalStyle ] ]
         [ h3 [ css [ smallFloatingTitleStyle ] ] [ text title ]
-        , div [ css [ textBoxPinkStyle ] ]
+        , div [ css [ textBoxSecondaryStyle ] ]
             [ img
                 [ src subtitleimg
                 , alt subtitleimgalt

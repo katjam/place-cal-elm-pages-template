@@ -9,7 +9,7 @@ import Data.PlaceCal.Partners
 import Helpers.TransRoutes
 import Html.Styled exposing (Html, a, div, h1, h2, img, p, section, text)
 import Html.Styled.Attributes exposing (alt, css, href, src)
-import Skin.Global exposing (darkBlue, darkBlueBackgroundStyle, darkBlueButtonStyle, pink, pinkBackgroundStyle, pinkButtonOnDarkBackgroundStyle, smallFloatingTitleStyle, whiteButtonStyle)
+import Skin.Global exposing (colorPrimary, colorSecondary, primaryBackgroundStyle, primaryButtonStyle, secondaryBackgroundStyle, secondaryButtonOnDarkBackgroundStyle, smallFloatingTitleStyle, whiteButtonStyle)
 import Theme.GlobalLayout
     exposing
         ( buttonFloatingWrapperStyle
@@ -47,7 +47,7 @@ view sharedData localModel =
 
 viewIntro : String -> String -> String -> Html msg
 viewIntro introTitle introMsg eventButtonText =
-    section [ css [ sectionStyle, pinkBackgroundStyle, introSectionStyle ] ]
+    section [ css [ sectionStyle, secondaryBackgroundStyle, introSectionStyle ] ]
         [ h1 [ css [ logoStyle ] ]
             [ img
                 [ src "/images/logos/tdd_logo_with_strapline.svg"
@@ -70,7 +70,7 @@ viewIntro introTitle introMsg eventButtonText =
 
 viewFeatured : Time.Posix -> List Data.PlaceCal.Events.Event -> Int -> Html Msg
 viewFeatured fromTime eventList regionId =
-    section [ css [ sectionStyle, darkBlueBackgroundStyle, eventsSectionStyle ] ]
+    section [ css [ sectionStyle, primaryBackgroundStyle, eventsSectionStyle ] ]
         [ h2 [ css [ smallFloatingTitleStyle ] ] [ text (t IndexFeaturedHeader) ]
         , if List.length Data.PlaceCal.Partners.partnershipTagList > 1 then
             Theme.RegionSelector.viewRegionSelector { filterBy = regionId } |> Html.Styled.map fromRegionSelectorMsg
@@ -87,7 +87,7 @@ viewAllEventsButton =
     p [ css [ buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
         [ a
             [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.Events)
-            , css [ pinkButtonOnDarkBackgroundStyle ]
+            , css [ secondaryButtonOnDarkBackgroundStyle ]
             ]
             [ text (t IndexFeaturedButtonText) ]
         ]
@@ -95,7 +95,7 @@ viewAllEventsButton =
 
 viewLatestNews : Maybe Data.PlaceCal.Articles.Article -> String -> String -> Html msg
 viewLatestNews maybeNewsItem title buttonText =
-    section [ css [ sectionStyle, darkBlueBackgroundStyle, newsSectionStyle ] ]
+    section [ css [ sectionStyle, primaryBackgroundStyle, newsSectionStyle ] ]
         [ h2 [ css [ smallFloatingTitleStyle ] ] [ text title ]
         , case maybeNewsItem of
             Just news ->
@@ -106,7 +106,7 @@ viewLatestNews maybeNewsItem title buttonText =
         , p [ css [ buttonFloatingWrapperStyle, bottom (rem -6), width (calc (pct 100) minus (rem 2)) ] ]
             [ a
                 [ href (Helpers.TransRoutes.toAbsoluteUrl Helpers.TransRoutes.News)
-                , css [ darkBlueButtonStyle ]
+                , css [ primaryButtonStyle ]
                 ]
                 [ text buttonText ]
             ]
@@ -210,7 +210,7 @@ sectionSubtitleStyle =
         , fontSize (rem 2.1)
         , lineHeight (em 1.1)
         , fontWeight (int 500)
-        , color darkBlue
+        , color colorPrimary
         , withMediaSmallDesktopUp
             [ margin2 (rem 0.5) (rem 1) ]
         , withMediaTabletPortraitUp
@@ -226,7 +226,7 @@ sectionTextStyle : Style
 sectionTextStyle =
     batch
         [ textAlign center
-        , color darkBlue
+        , color colorPrimary
         , withMediaSmallDesktopUp
             [ margin2 (rem 2) (rem 8) ]
         , withMediaTabletPortraitUp

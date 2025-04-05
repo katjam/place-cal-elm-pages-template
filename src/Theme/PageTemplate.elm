@@ -10,7 +10,7 @@ import Html.Styled.Attributes exposing (alt, css, src)
 import List exposing (append)
 import Markdown.Block
 import Pages.Url
-import Skin.Global exposing (contentWrapperStyle, introTextLargeStyle, introTextSmallStyle, textBoxInvisibleStyle, textBoxPinkStyle, white)
+import Skin.Global exposing (colorWhite, contentWrapperStyle, introTextLargeStyle, introTextSmallStyle, textBoxInvisibleStyle, textBoxSecondaryStyle)
 import Theme.GlobalLayout exposing (contentContainerStyle, withMediaMediumDesktopUp, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 
 
@@ -46,7 +46,7 @@ type alias BigText =
 
 
 type HeaderType
-    = PinkHeader
+    = SecondaryHeader
     | InvisibleHeader
     | AboutHeader
 
@@ -54,8 +54,8 @@ type HeaderType
 stringToHeaderType : Maybe String -> HeaderType
 stringToHeaderType maybeTypeString =
     case maybeTypeString of
-        Just "pink" ->
-            PinkHeader
+        Just "secondary" ->
+            SecondaryHeader
 
         Just "invisible" ->
             InvisibleHeader
@@ -64,10 +64,10 @@ stringToHeaderType maybeTypeString =
             AboutHeader
 
         Just _ ->
-            PinkHeader
+            SecondaryHeader
 
         Nothing ->
-            PinkHeader
+            SecondaryHeader
 
 
 pageMetaTags : { title : Key, description : Key, imageSrc : Maybe String } -> List Head.Tag
@@ -175,12 +175,12 @@ viewIntro bigText smallText =
         [ css
             (case smallText of
                 Nothing ->
-                    [ textBoxPinkStyle ]
+                    [ textBoxSecondaryStyle ]
 
                 Just _ ->
                     [ withMediaTabletPortraitUp
                         [ paddingTop (rem 1.5) ]
-                    , textBoxPinkStyle
+                    , textBoxSecondaryStyle
                     ]
             )
         ]
@@ -246,7 +246,7 @@ pageHeadingStyle =
     batch
         [ fontSize (rem 2.1)
         , outline none
-        , color white
+        , color colorWhite
         , fontStyle italic
         , fontWeight (int 500)
         , textAlign center
