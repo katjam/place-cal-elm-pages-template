@@ -154,7 +154,7 @@ data =
                             |> Theme.TransMarkdown.fromResult
                         )
                 )
-                "theme/content/about/makers/gi.md"
+                "theme/content/about/makers/partnership.md"
             )
         )
         (BackendTask.File.bodyWithFrontmatter
