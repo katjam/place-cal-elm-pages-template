@@ -223,7 +223,7 @@ view app _ model =
     { title = t (PageMetaTitle aPartner.name)
     , body =
         [ Theme.PageTemplate.view
-            { headerType = Just "pink"
+            { headerType = Just "secondary"
             , title = t PartnersTitle
             , bigText = { text = aPartner.name, node = "h3" }
             , smallText = Nothing

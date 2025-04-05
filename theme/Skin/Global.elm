@@ -1,4 +1,4 @@
-module Skin.Global exposing (contentWrapperStyle, darkBlue, darkBlueBackgroundStyle, darkBlueButtonStyle, darkBlueRgbColor, darkPurple, globalStyles, hrStyle, introTextLargeStyle, introTextSmallStyle, linkStyle, mapImage, mapImageMulti, normalFirstParagraphStyle, pink, pinkBackgroundStyle, pinkButtonOnDarkBackgroundStyle, pinkButtonOnLightBackgroundStyle, pinkRgbColor, purple, smallFloatingTitleStyle, smallInlineTitleStyle, textBoxInvisibleStyle, textBoxPinkStyle, textInputErrorStyle, textInputStyle, viewBackButton, viewCheckbox, white, whiteButtonStyle)
+module Skin.Global exposing (colorAccent, colorAccentDark, colorPrimary, colorPrimaryRgb, colorSecondary, colorSecondaryHexString, colorSecondaryRgb, colorWhite, contentWrapperStyle, globalStyles, hrStyle, introTextLargeStyle, introTextSmallStyle, linkStyle, mapImage, mapImageMulti, normalFirstParagraphStyle, primaryBackgroundStyle, primaryButtonStyle, secondaryBackgroundStyle, secondaryButtonOnDarkBackgroundStyle, secondaryButtonOnLightBackgroundStyle, smallFloatingTitleStyle, smallInlineTitleStyle, textBoxInvisibleStyle, textBoxSecondaryStyle, textInputErrorStyle, textInputStyle, viewBackButton, viewCheckbox, whiteButtonStyle)
 
 import Color
 import Css exposing (Color, Style, absolute, active, alignItems, auto, backgroundColor, backgroundImage, backgroundRepeat, backgroundSize, batch, block, borderBottomColor, borderBottomStyle, borderBottomWidth, borderBox, borderColor, borderRadius, borderStyle, borderWidth, bottom, boxSizing, calc, center, color, cursor, display, displayFlex, em, firstChild, fitContent, flexDirection, focus, fontFamilies, fontSize, fontStyle, fontWeight, height, hex, hidden, hover, inlineBlock, int, italic, justifyContent, left, letterSpacing, lineHeight, margin, margin2, margin4, marginBlockEnd, marginBlockStart, marginTop, maxContent, maxWidth, minus, none, outline, overflow, padding, padding2, padding4, paddingBottom, paddingLeft, paddingRight, pct, pointer, position, property, px, relative, rem, repeat, row, sansSerif, solid, textAlign, textDecoration, textTransform, top, uppercase, url, width, zero)
@@ -12,45 +12,54 @@ import Theme.GlobalLayout exposing (withMediaCanHover, withMediaMediumDesktopUp,
 
 
 -- Brand colours
+-- Primary and Secondary are used as text and background colours on each other.
+-- White is also used as text and background
+-- So make sure there is sufficient contrast between the three in all combinations.
+-- Supply both RGB and Hex values for primary and secondary
 
 
-darkBlueRgbColor : Color.Color
-darkBlueRgbColor =
+colorPrimaryRgb : Color.Color
+colorPrimaryRgb =
     Color.rgb255 4 15 57
 
 
-pinkRgbColor : Color.Color
-pinkRgbColor =
+colorSecondaryRgb : Color.Color
+colorSecondaryRgb =
     Color.rgb255 255 122 167
 
 
-darkBlue : Color
-darkBlue =
+colorSecondaryHexString : String
+colorSecondaryHexString =
+    "FF7AA7"
+
+
+colorPrimary : Color
+colorPrimary =
     hex "040F39"
 
 
-pink : Color
-pink =
-    hex "FF7AA7"
+colorSecondary : Color
+colorSecondary =
+    hex colorSecondaryHexString
 
 
-lightPink : Color
-lightPink =
+colorSecondaryLight : Color
+colorSecondaryLight =
     hex "FFBCD3"
 
 
-purple : Color
-purple =
+colorAccent : Color
+colorAccent =
     hex "814470"
 
 
-darkPurple : Color
-darkPurple =
+colorAccentDark : Color
+colorAccentDark =
     hex "432955"
 
 
-white : Color
-white =
+colorWhite : Color
+colorWhite =
     hex "FFFFFF"
 
 
@@ -61,71 +70,71 @@ white =
 viewBackButton : String -> String -> Html msg
 viewBackButton link buttonText =
     p [ css [ Theme.GlobalLayout.backButtonStyle ] ]
-        [ a [ href link, css [ darkBlueButtonStyle ] ] [ text buttonText ] ]
+        [ a [ href link, css [ primaryButtonStyle ] ] [ text buttonText ] ]
 
 
 whiteButtonStyle : Style
 whiteButtonStyle =
     batch
         [ Theme.GlobalLayout.baseButtonStyle
-        , backgroundColor white
-        , color darkBlue
-        , borderColor white
-        , withMediaCanHover [ hover [ backgroundColor purple, color white ] ]
-        , active [ backgroundColor darkBlue, color white ]
-        , focus [ backgroundColor darkBlue, color white ]
+        , backgroundColor colorWhite
+        , color colorPrimary
+        , borderColor colorWhite
+        , withMediaCanHover [ hover [ backgroundColor colorAccent, color colorWhite ] ]
+        , active [ backgroundColor colorPrimary, color colorWhite ]
+        , focus [ backgroundColor colorPrimary, color colorWhite ]
         ]
 
 
-darkBlueButtonStyle : Style
-darkBlueButtonStyle =
+primaryButtonStyle : Style
+primaryButtonStyle =
     batch
         [ Theme.GlobalLayout.baseButtonStyle
-        , backgroundColor darkBlue
-        , color white
-        , borderColor pink
-        , Theme.GlobalLayout.withMediaCanHover [ hover [ backgroundColor purple, color white, borderColor white ] ]
-        , active [ backgroundColor pink, color darkBlue, borderColor white ]
-        , focus [ backgroundColor pink, color darkBlue, borderColor white ]
+        , backgroundColor colorPrimary
+        , color colorWhite
+        , borderColor colorSecondary
+        , Theme.GlobalLayout.withMediaCanHover [ hover [ backgroundColor colorAccent, color colorWhite, borderColor colorWhite ] ]
+        , active [ backgroundColor colorSecondary, color colorPrimary, borderColor colorWhite ]
+        , focus [ backgroundColor colorSecondary, color colorPrimary, borderColor colorWhite ]
         ]
 
 
-pinkButtonOnDarkBackgroundStyle : Style
-pinkButtonOnDarkBackgroundStyle =
+secondaryButtonOnDarkBackgroundStyle : Style
+secondaryButtonOnDarkBackgroundStyle =
     batch
         [ Theme.GlobalLayout.baseButtonStyle
-        , backgroundColor pink
-        , color darkBlue
-        , borderColor pink
-        , withMediaCanHover [ hover [ backgroundColor lightPink, borderColor lightPink ] ]
-        , active [ backgroundColor white, borderColor white ]
-        , focus [ backgroundColor white, borderColor white ]
+        , backgroundColor colorSecondary
+        , color colorPrimary
+        , borderColor colorSecondary
+        , withMediaCanHover [ hover [ backgroundColor colorSecondaryLight, borderColor colorSecondaryLight ] ]
+        , active [ backgroundColor colorWhite, borderColor colorWhite ]
+        , focus [ backgroundColor colorWhite, borderColor colorWhite ]
         ]
 
 
-pinkButtonOnLightBackgroundStyle : Style
-pinkButtonOnLightBackgroundStyle =
+secondaryButtonOnLightBackgroundStyle : Style
+secondaryButtonOnLightBackgroundStyle =
     batch
         [ Theme.GlobalLayout.baseButtonStyle
-        , backgroundColor pink
-        , color darkBlue
-        , borderColor pink
-        , withMediaCanHover [ hover [ backgroundColor purple, borderColor white, color white ] ]
-        , active [ backgroundColor darkBlue, borderColor white, color white ]
-        , focus [ backgroundColor darkBlue, borderColor white, color white ]
+        , backgroundColor colorSecondary
+        , color colorPrimary
+        , borderColor colorSecondary
+        , withMediaCanHover [ hover [ backgroundColor colorAccent, borderColor colorWhite, color colorWhite ] ]
+        , active [ backgroundColor colorPrimary, borderColor colorWhite, color colorWhite ]
+        , focus [ backgroundColor colorPrimary, borderColor colorWhite, color colorWhite ]
         ]
 
 
-pinkBackgroundStyle : Style
-pinkBackgroundStyle =
-    backgroundColor pink
+secondaryBackgroundStyle : Style
+secondaryBackgroundStyle =
+    backgroundColor colorSecondary
 
 
-darkBlueBackgroundStyle : Style
-darkBlueBackgroundStyle =
+primaryBackgroundStyle : Style
+primaryBackgroundStyle =
     batch
-        [ backgroundColor darkBlue
-        , borderColor pink
+        [ backgroundColor colorPrimary
+        , borderColor colorSecondary
         , borderStyle solid
         , borderWidth (px 1)
         ]
@@ -154,7 +163,7 @@ smallFloatingTitleStyle =
         , width (calc (pct 100) minus (rem 2))
         , left (rem 1)
         , fontSize (rem 1.2)
-        , color white
+        , color colorWhite
         ]
 
 
@@ -176,8 +185,8 @@ contentWrapperStyle : Style
 contentWrapperStyle =
     batch
         [ borderRadius (rem 0.3)
-        , backgroundColor darkBlue
-        , borderColor pink
+        , backgroundColor colorPrimary
+        , borderColor colorSecondary
         , borderStyle solid
         , borderWidth (px 1)
         ]
@@ -196,25 +205,25 @@ textBoxStyle =
         ]
 
 
-textBoxPinkStyle : Style
-textBoxPinkStyle =
+textBoxSecondaryStyle : Style
+textBoxSecondaryStyle =
     batch
         [ textBoxStyle
-        , backgroundColor pink
-        , color darkBlue
+        , backgroundColor colorSecondary
+        , color colorPrimary
         ]
 
 
 textBoxInvisibleStyle : Style
 textBoxInvisibleStyle =
     batch
-        [ backgroundColor darkBlue
-        , color pink
+        [ backgroundColor colorPrimary
+        , color colorSecondary
         , textBoxStyle
         , paddingBottom (rem 0)
         , descendants
-            [ typeSelector "h3" [ batch [ color pink, Theme.GlobalLayout.withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
-            , typeSelector "p" [ batch [ color pink, Theme.GlobalLayout.withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
+            [ typeSelector "h3" [ batch [ color colorSecondary, Theme.GlobalLayout.withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
+            , typeSelector "p" [ batch [ color colorSecondary, Theme.GlobalLayout.withMediaTabletLandscapeUp [ margin4 (rem 2) auto (rem 0) auto ] ] ]
             ]
         ]
 
@@ -222,7 +231,7 @@ textBoxInvisibleStyle =
 hrStyle : Style
 hrStyle =
     batch
-        [ borderColor pink
+        [ borderColor colorSecondary
         , borderStyle solid
         , borderWidth (px 0.5)
         , margin2 (rem 2) (rem 0)
@@ -264,12 +273,12 @@ introTextSmallStyle =
 linkStyle : Style
 linkStyle =
     batch
-        [ color white
-        , borderBottomColor pink
+        [ color colorWhite
+        , borderBottomColor colorSecondary
         , borderBottomStyle solid
         , borderBottomWidth (px 1)
         , textDecoration none
-        , withMediaCanHover [ hover [ color pink, borderBottomColor white ] ]
+        , withMediaCanHover [ hover [ color colorSecondary, borderBottomColor colorWhite ] ]
         , transition [ Theme.GlobalLayout.borderTransition, Theme.GlobalLayout.colorTransition ]
         ]
 
@@ -326,15 +335,15 @@ viewCheckbox boxId labelText checkedValue update =
 textInputStyle : Style
 textInputStyle =
     batch
-        [ backgroundColor darkBlue
-        , borderColor pink
+        [ backgroundColor colorPrimary
+        , borderColor colorSecondary
         , borderWidth (px 2)
         , borderStyle solid
         , borderRadius (rem 0.3)
         , padding2 (rem 0.5) (rem 1)
-        , color white
+        , color colorWhite
         , outline none
-        , focus [ borderColor white ]
+        , focus [ borderColor colorWhite ]
         ]
 
 
@@ -342,16 +351,16 @@ textInputErrorStyle : Style
 textInputErrorStyle =
     batch
         [ textInputStyle
-        , backgroundColor pink
-        , color darkBlue
-        , borderColor white
+        , backgroundColor colorSecondary
+        , color colorPrimary
+        , borderColor colorWhite
         ]
 
 
 checkboxLabelStyle : Style
 checkboxLabelStyle =
     batch
-        [ color pink
+        [ color colorSecondary
         , fontWeight (int 500)
         , displayFlex
         , flexDirection row
@@ -362,7 +371,7 @@ checkboxLabelStyle =
         , cursor pointer
         , maxWidth fitContent
         , Theme.GlobalLayout.withMediaTabletPortraitUp [ maxWidth (pct 100) ]
-        , focus [ color white ]
+        , focus [ color colorWhite ]
         ]
 
 
@@ -370,7 +379,7 @@ checkboxLabelCheckedStyle : Style
 checkboxLabelCheckedStyle =
     batch
         [ checkboxLabelStyle
-        , color white
+        , color colorWhite
         ]
 
 
@@ -384,13 +393,13 @@ checkboxStyle =
         , height (em 1.25)
         , margin (em 0.75)
         , padding (em 0.75)
-        , backgroundColor darkBlue
-        , borderColor pink
+        , backgroundColor colorPrimary
+        , borderColor colorSecondary
         , borderWidth (px 2)
         , borderStyle solid
         , cursor pointer
         , Css.checked
-            [ backgroundColor pink
+            [ backgroundColor colorSecondary
             , borderRadius (em 1)
             ]
         ]
@@ -407,8 +416,8 @@ globalStyles : Html msg
 globalStyles =
     global
         [ typeSelector "body"
-            [ backgroundColor darkBlue
-            , color white
+            [ backgroundColor colorPrimary
+            , color colorWhite
             , fontFamilies [ "covik-sans", sansSerif.value ]
             , fontWeight (int 400)
             , backgroundImage (url "/images/backgrounds/starfield-small-800.png")
@@ -418,16 +427,16 @@ globalStyles =
             , Theme.GlobalLayout.withMediaTabletLandscapeUp [ backgroundImage (url "/images/backgrounds/starfield-medium-1080.png"), backgroundSize (px 1080) ]
             ]
         , typeSelector "h1"
-            [ color darkBlue
+            [ color colorPrimary
             ]
         , typeSelector "h2"
-            [ color darkBlue
+            [ color colorPrimary
             ]
         , typeSelector "h3"
-            [ color darkBlue
+            [ color colorPrimary
             ]
         , typeSelector "h4"
-            [ color darkBlue
+            [ color colorPrimary
             ]
         , typeSelector "b"
             [ fontWeight (int 700)

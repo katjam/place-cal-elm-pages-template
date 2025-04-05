@@ -12,7 +12,7 @@ import Helpers.TransRoutes as TransRoutes exposing (Route(..))
 import Html.Styled exposing (Html, a, article, button, div, h4, li, p, section, span, text, time, ul)
 import Html.Styled.Attributes exposing (css, href)
 import Html.Styled.Events
-import Skin.Global exposing (darkBlue, introTextLargeStyle, pink, white)
+import Skin.Global exposing (colorPrimary, colorSecondary, colorWhite, introTextLargeStyle)
 import Theme.GlobalLayout exposing (borderTransition, colorTransition, withMediaCanHover, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.Paginator exposing (buttonWidthFullWidth, buttonWidthMobile, buttonWidthTablet, paginationButtonStyle)
 import Theme.RegionSelector
@@ -113,7 +113,7 @@ viewEventsList localModel eventsList maybeListLength =
 
 viewEmptyEventText : Theme.Paginator.Filter -> Html Msg
 viewEmptyEventText filterBy =
-    p [ css [ introTextLargeStyle, color pink, important (maxWidth (px 636)) ] ]
+    p [ css [ introTextLargeStyle, color colorSecondary, important (maxWidth (px 636)) ] ]
         [ text
             (case filterBy of
                 Theme.Paginator.Day _ ->
@@ -196,11 +196,11 @@ eventsListItemStyle =
         [ withMediaCanHover
             [ hover
                 [ descendants
-                    [ typeSelector "a" [ color pink ]
-                    , typeSelector "h4" [ color pink, borderBottomColor white ]
+                    [ typeSelector "a" [ color colorSecondary ]
+                    , typeSelector "h4" [ color colorSecondary, borderBottomColor colorWhite ]
                     , typeSelector "span"
-                        [ firstChild [ color pink ]
-                        , lastChild [ color white ]
+                        [ firstChild [ color colorSecondary ]
+                        , lastChild [ color colorWhite ]
                         ]
                     ]
                 ]
@@ -233,7 +233,7 @@ eventDateStyle =
 eventDayStyle : Style
 eventDayStyle =
     batch
-        [ color white
+        [ color colorWhite
         , fontSize (rem 2.5)
         , display block
         , lineHeight (em 1)
@@ -245,7 +245,7 @@ eventDayStyle =
 eventMonthStyle : Style
 eventMonthStyle =
     batch
-        [ color pink
+        [ color colorSecondary
         , textTransform uppercase
         , fontSize (rem 1.2)
         , fontWeight (int 900)
@@ -263,7 +263,7 @@ eventDescriptionStyle =
 eventTitleStyle : Style
 eventTitleStyle =
     batch
-        [ color white
+        [ color colorWhite
         , fontStyle italic
         , fontSize (rem 1.2)
         , fontWeight (int 500)
@@ -271,7 +271,7 @@ eventTitleStyle =
         , paddingBottom (rem 0.5)
         , marginBottom (rem 0.5)
         , borderBottomWidth (px 2)
-        , borderBottomColor pink
+        , borderBottomColor colorSecondary
         , borderBottomStyle solid
         , transition [ colorTransition, borderTransition ]
         , withMediaTabletPortraitUp [ fontSize (rem 1.5), lineHeight (rem 1.877) ]
@@ -282,7 +282,7 @@ eventLinkStyle : Style
 eventLinkStyle =
     batch
         [ textDecoration none
-        , color white
+        , color colorWhite
         , transition [ colorTransition ]
         ]
 
@@ -314,7 +314,7 @@ goToNextEventButtonStyle =
         , fontWeight (int 600)
         , padding4 (rem 0.2) (rem 0.2) (rem 0.3) (rem 0.2)
         , width (px buttonWidthMobile)
-        , backgroundColor darkBlue
+        , backgroundColor colorPrimary
         , withMediaTabletLandscapeUp [ width (px buttonWidthFullWidth), fontSize (rem 1.2) ]
         , withMediaTabletPortraitUp [ width (px buttonWidthTablet), fontSize (rem 1) ]
         ]

@@ -1,14 +1,15 @@
 module Theme.Page.Event exposing (viewButtons, viewEventInfo)
 
 import Copy.Keys exposing (Key(..))
-import Copy.Text exposing (isValidUrl, t)
+import Copy.Text exposing (t)
+import Copy.Utils exposing (isValidUrl, urlToDisplay)
 import Css exposing (Style, auto, batch, calc, center, color, displayFlex, em, fontSize, fontStyle, fontWeight, int, justifyContent, letterSpacing, margin2, margin4, marginBlockEnd, marginBlockStart, marginBottom, marginTop, maxWidth, minus, normal, pct, px, rem, textAlign, textTransform, uppercase, width)
 import Data.PlaceCal.Events
 import Helpers.TransDate
 import Helpers.TransRoutes
 import Html.Styled exposing (Html, a, div, h4, hr, p, section, text, time)
 import Html.Styled.Attributes exposing (css, href, target)
-import Skin.Global exposing (hrStyle, linkStyle, mapImage, normalFirstParagraphStyle, pink, smallInlineTitleStyle, viewBackButton)
+import Skin.Global exposing (colorSecondary, hrStyle, linkStyle, mapImage, normalFirstParagraphStyle, smallInlineTitleStyle, viewBackButton)
 import Theme.GlobalLayout exposing (withMediaMediumDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 import Theme.TransMarkdown
 
@@ -88,7 +89,7 @@ viewAddressSection event =
                     if isValidUrl url then
                         p [ css [ contactItemStyle ] ]
                             [ a [ href url, target "_blank", css [ linkStyle ] ]
-                                [ text (Copy.Text.urlToDisplay url) ]
+                                [ text (urlToDisplay url) ]
                             ]
 
                     else
@@ -181,7 +182,7 @@ timeStyle =
         , textAlign center
         , textTransform uppercase
         , letterSpacing (px 1.9)
-        , color pink
+        , color colorSecondary
         , marginBlockStart (em 0)
         ]
 
@@ -234,7 +235,7 @@ addressItemStyle =
 addressItemTitleStyle : Style
 addressItemTitleStyle =
     batch
-        [ color pink
+        [ color colorSecondary
         , smallInlineTitleStyle
         , withMediaTabletPortraitUp [ marginTop (rem 1) ]
         ]

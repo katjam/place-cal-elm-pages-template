@@ -15,6 +15,7 @@ Front-end for a PlaceCal instance, an online community hub.
 - [ ] Edit `theme/Copy/Text` to generate your UI & SEO text
 - [ ] Add your images, like logos and background to `public/images`
 - [ ] Edit the reset and core css styles like fonts in `public/css`
+- [ ] Add your brand colors to `theme/Global/Skin` following guidence there
 
 
 # Development

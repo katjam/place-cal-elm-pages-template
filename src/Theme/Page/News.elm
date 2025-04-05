@@ -8,7 +8,7 @@ import Helpers.TransDate as TransDate
 import Helpers.TransRoutes as TransRoutes exposing (Route(..))
 import Html.Styled exposing (Html, a, article, div, h3, img, li, p, section, span, text, time, ul)
 import Html.Styled.Attributes exposing (alt, css, href, src)
-import Skin.Global exposing (darkBlueBackgroundStyle, linkStyle, pinkButtonOnLightBackgroundStyle)
+import Skin.Global exposing (linkStyle, primaryBackgroundStyle, secondaryButtonOnLightBackgroundStyle)
 import Theme.GlobalLayout exposing (buttonFloatingWrapperStyle, withMediaSmallDesktopUp, withMediaTabletLandscapeUp, withMediaTabletPortraitUp)
 
 
@@ -57,7 +57,7 @@ viewNewsArticle newsItem =
             ]
         , div [ css [ buttonFloatingWrapperStyle, width (calc (pct 100) minus (rem 2)) ] ]
             [ a
-                [ css [ pinkButtonOnLightBackgroundStyle ]
+                [ css [ secondaryButtonOnLightBackgroundStyle ]
                 , href
                     (TransRoutes.toAbsoluteUrl
                         (NewsItem (TransRoutes.stringToSlug newsItem.title))
@@ -87,7 +87,7 @@ newsArticleImage imageSrc =
 newsItemStyle : Style
 newsItemStyle =
     batch
-        [ darkBlueBackgroundStyle
+        [ primaryBackgroundStyle
         , margin4 (rem 2) (rem 0) (rem 3) (rem 0)
         , borderRadius (rem 0.2)
         , padding4 (rem 1.25) (rem 1.25) (rem 3) (rem 1.25)
