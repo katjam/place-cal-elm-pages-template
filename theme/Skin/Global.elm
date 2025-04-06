@@ -20,22 +20,22 @@ import Theme.GlobalLayout exposing (withMediaCanHover, withMediaMediumDesktopUp,
 
 colorPrimaryRgb : Color.Color
 colorPrimaryRgb =
-    Color.rgb255 4 15 57
+    Color.rgb255 41 47 54
 
 
 colorSecondaryRgb : Color.Color
 colorSecondaryRgb =
-    Color.rgb255 255 122 167
+    Color.rgb255 78 205 196
 
 
 colorSecondaryHexString : String
 colorSecondaryHexString =
-    "FF7AA7"
+    "4ECDC4"
 
 
 colorPrimary : Color
 colorPrimary =
-    hex "040F39"
+    hex "292F36"
 
 
 colorSecondary : Color
@@ -45,17 +45,17 @@ colorSecondary =
 
 colorSecondaryLight : Color
 colorSecondaryLight =
-    hex "FFBCD3"
+    hex "4ECDC4"
 
 
 colorAccent : Color
 colorAccent =
-    hex "814470"
+    hex "FF6B6B"
 
 
 colorAccentDark : Color
 colorAccentDark =
-    hex "432955"
+    hex "620000"
 
 
 colorWhite : Color
