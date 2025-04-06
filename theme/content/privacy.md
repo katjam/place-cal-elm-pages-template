@@ -1,9 +1,9 @@
 ---
 title: "Privacy Policy"
-subtitle: "My site is committed to protecting your privacy online."
+subtitle: "[Site title] is committed to protecting your privacy online."
 ---
 
-This page explains how we collect information via mysite.uk and what we do with it.
+This page explains how we collect information via [site.url.uk] and what we do with it.
 
 
 ## What data do we collect?
@@ -46,6 +46,6 @@ This site contains links to other sites. This site is not responsible for the pr
 
 
 ## Your acceptance of these terms
-By using this site, you consent to the collection and use of this information by This site and to This site privacy policy.
+By using this site, you consent to the collection and use of this information by this site and to this site privacy policy.
 
-If you have any questions or concerns about your privacy when using This site website, please contact us: our email address
+If you have any questions or concerns about your privacy when using [Site name] website, please contact us: [email address]
