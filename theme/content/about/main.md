@@ -1,6 +1,6 @@
 ---
 title: "About"
-subtitle: "Subtitle for about page"
+subtitle: "[About page subtitle]
 ---
 
 [Content for About page in markdown]
