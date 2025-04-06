@@ -1,9 +1,11 @@
 ---
-name: "Gendered Intelligence"
-logo: "/images/logos/partnership_white.svg"
-url: "https://genderedintelligence.co.uk"
+name: "[Partnership organisation name]"
+logo: "/images/logos/site_logo_footer.svg"
+url: "https://your-website.example.com"
 ---
 
-Gendered Intelligence is a registered charity that exists to increase understanding of gender diversity and improve trans people's quality of life.
+[Brief bit about your organisation]
 
-GI are a trans-led and trans-involving grassroots organisation with a wealth of lived experience and community connections.
+Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+
+Iaculis massa nisl malesuada lacinia integer nunc posuere. 
